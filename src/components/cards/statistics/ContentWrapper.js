@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 
 const ContentWrapper = ({ color }) => (
-  <Box sx={{ width: '650px', flex: 'wrap' }}>
+  <Box sx={{ flex: 'wrap', width: { xs: 320, sm: 480, md: 600, lg: 760, xl: 900 } }}>
     <Typography variant="h1" fontWeightBold color="textPrimary">
       Welcome! This is your Dashboard
     </Typography>
