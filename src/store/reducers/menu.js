@@ -5,7 +5,8 @@ const initialState = {
   defaultId: 'dashboard',
   openComponent: 'buttons',
   drawerOpen: false,
-  componentDrawerOpen: true
+  componentDrawerOpen: true,
+  itemCollapsed: false
 };
 
 const menu = createSlice({
@@ -26,10 +27,14 @@ const menu = createSlice({
 
     openComponentDrawer(state, action) {
       state.componentDrawerOpen = action.payload.componentDrawerOpen;
+    },
+
+    collapseItem(state, action) {
+      state.itemCollapsed = action.payload;
     }
   }
 });
 
 export default menu.reducer;
 
-export const { activeItem, activeComponent, openDrawer, openComponentDrawer } = menu.actions;
+export const { activeItem, activeComponent, openDrawer, openComponentDrawer, collapseItem } = menu.actions;

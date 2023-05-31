@@ -21,8 +21,8 @@ const dashboard = {
     {
       id: 'tests',
       title: 'Tests',
-      type: 'item',
-      url: '/tests',
+      type: 'collapse',
+      url: null,
       icon: icons.FolderOutlined,
       breadcrumbs: false
     }
