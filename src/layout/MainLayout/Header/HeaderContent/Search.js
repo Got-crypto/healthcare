@@ -12,8 +12,8 @@ const Search = () => (
       <OutlinedInput
         size="small"
         id="header-search"
-        startAdornment={
-          <InputAdornment position="start" sx={{ mr: -0.5 }}>
+        endAdornment={
+          <InputAdornment position="end" sx={{ mr: 0.5 }}>
             <SearchOutlined />
           </InputAdornment>
         }
@@ -21,7 +21,7 @@ const Search = () => (
         inputProps={{
           'aria-label': 'weight'
         }}
-        placeholder="Ctrl + K"
+        placeholder="Search..."
       />
     </FormControl>
   </Box>
