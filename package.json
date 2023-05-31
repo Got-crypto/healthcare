@@ -1,8 +1,7 @@
 {
-  "name": "mantis-free-react-admin-template",
+  "name": "healthcare",
   "version": "1.1.2",
   "private": true,
-  "homepage": "https://mantisdashboard.io/free",
   "dependencies": {
     "@ant-design/colors": "^6.0.0",
     "@ant-design/icons": "^4.7.0",
@@ -58,18 +57,6 @@
   "babel": {
     "presets": [
       "@babel/preset-react"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
     ]
   },
   "devDependencies": {
