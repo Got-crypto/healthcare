@@ -10,7 +10,7 @@ const Tests = () => {
       </Grid>
 
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <ContentWrapper title="Total Page Views" count="4,42,236" percentage={59.3} extra="35,000" />
+        <ContentWrapper title="Review your Tests!" isDashboard={false} content="Check your tests here..." />
       </Grid>
     </Grid>
   );
