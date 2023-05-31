@@ -63,16 +63,16 @@ const Notification = () => {
   const notifications = [
     {
       icon: <MailOutlined />,
-      notification: "It's Cristina Danny birthday today.",
+      notification: 'Your sample has been delivered',
       time1: '2 min ago',
       time2: '3:00 AM'
     },
     {
       icon: <MailOutlined />,
-      notification: 'Aida Burg commented your post.',
+      notification: 'Your test kits are on the way',
       time1: '5 August',
       time2: '6:00 PM'
-    },
+    }
   ];
 
   return (
