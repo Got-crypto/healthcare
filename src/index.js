@@ -10,15 +10,19 @@ import 'assets/third-party/apex-chart.css';
 
 import App from './App';
 import { store } from 'store';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
 root.render(
   <StrictMode>
-    <ReduxProvider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </ReduxProvider>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <ReduxProvider store={store}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ReduxProvider>
+    </LocalizationProvider>
   </StrictMode>
 );

@@ -38,14 +38,20 @@ const initialState = {
       reached: false,
       isActive: false,
       header: 'Planning',
-      collapse: false,
+      collapse: true,
       children: [
         {
           reached: false,
           isActive: false,
-          header: '',
+          header: 'Hormone Test',
           collapse: false
-        }
+        },
+        {
+          reached: false,
+          isActive: false,
+          header: 'Metabollic, Immune and Thyroid Test',
+          collapse: false
+        },
       ]
     },
     {

@@ -12,11 +12,30 @@ import { activeItem } from 'store/reducers/menu';
 import { Collapse, List, ListItem } from '../../../../../../node_modules/@mui/material/index';
 import { collapseItem } from 'store/reducers/menu';
 
-const Step = ({ step }) => (
+const StepChildren = ({ step }) => (
   <ListItem button>
-    <ListItemText primary={step.header} sx={{ color: step.isActive ? 'primary.main' : 'text.primary' }} />
+    <ListItemText primary={step.header} sx={{ color: step.isActive ? 'primary.main' : 'text.secondary', ml: 2, overflow: 'hidden' }} />
   </ListItem>
 );
+const Step = ({ step }) => {
+  const { itemCollapsed } = useSelector((state) => state.menu);
+  return (
+    <>
+      <ListItem button>
+        <ListItemText primary={step.header} sx={{ color: step.isActive ? 'primary.main' : 'text.primary' }} />
+      </ListItem>
+      {step.collapse && (
+        <Collapse in={itemCollapsed} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            {step.children.map((step, i) => (
+              <StepChildren step={step} key={`${step}-${i}`} />
+            ))}
+          </List>
+        </Collapse>
+      )}
+    </>
+  );
+};
 
 const NavItem = ({ item, level }) => {
   const theme = useTheme();

@@ -14,14 +14,14 @@ function KitArrival({ step, nextStep, prevStep }) {
   return (
     <>
       {step.reached && (
-        <Grid marginTop={10} item xs={12} sm={6} md={4} lg={3}>
+        <Grid marginTop={10} item xs={12}>
           <Box sx={{ flex: 'wrap', width: { xs: 320, sm: 480, md: 600, lg: 760, xl: 900 } }}>
             <Typography variant="h2" fontWeightBold color="textPrimary">
               Kit Arrival
             </Typography>
             {user ? (
               <Typography>
-                Your test kits are on thier way. Please{' '}
+                Your test kits are on their way. Please{' '}
                 <Typography component="span" sx={{ color: 'primary.main', cursor: 'pointer' }}>
                   Log in
                 </Typography>{' '}

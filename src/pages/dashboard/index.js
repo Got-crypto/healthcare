@@ -30,7 +30,7 @@ const DashboardDefault = () => {
         <Typography variant="h5">Main Dashboard</Typography>
       </Grid>
 
-      <Grid item xs={12} sm={6} md={4} lg={3}>
+      <Grid item xs={12}>
         <Instruction title="Welcome! This is your Dashboard" isDashboard={true} />
         <Button variant="contained" onClick={initSteps} sx={{ mt: 2 }} startIcon={<ThumbUp />}>
           Start
