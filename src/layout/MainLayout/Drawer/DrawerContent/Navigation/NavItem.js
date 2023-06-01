@@ -12,12 +12,18 @@ import { activeItem } from 'store/reducers/menu';
 import { Collapse, List, ListItem } from '../../../../../../node_modules/@mui/material/index';
 import { collapseItem } from 'store/reducers/menu';
 
+const Step = ({ step }) => (
+  <ListItem button>
+    <ListItemText primary={step.header} sx={{ color: step.isActive ? 'primary.main' : 'text.primary' }} />
+  </ListItem>
+);
+
 const NavItem = ({ item, level }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
 
-  const { drawerOpen, openItem, itemCollapsed } = useSelector((state) => state.menu);
+  const { drawerOpen, openItem, itemCollapsed, steps } = useSelector((state) => state.menu);
 
   let itemTarget = '_self';
   if (item.target) {
@@ -47,8 +53,6 @@ const NavItem = ({ item, level }) => {
 
   const textColor = 'text.primary';
   const iconSelectedColor = 'primary.main';
-
-  console.log('itemCollapsed', itemCollapsed);
 
   return (
     <>
@@ -228,15 +232,9 @@ const NavItem = ({ item, level }) => {
           </ListItemButton>
           <Collapse in={itemCollapsed} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem button>
-                <ListItemText primary="Hormone Test" />
-              </ListItem>
-              <ListItem button>
-                <ListItemText primary="Metabolic, immune, and thyroid test" />
-              </ListItem>
-              <ListItem button>
-                <ListItemText primary="Testing instructions" />
-              </ListItem>
+              {steps.map((step, i) => (
+                <Step step={step} key={`${step}-${i}`} />
+              ))}
             </List>
           </Collapse>
         </>
@@ -248,6 +246,10 @@ const NavItem = ({ item, level }) => {
 NavItem.propTypes = {
   item: PropTypes.object,
   level: PropTypes.number
+};
+
+Step.propTypes = {
+  step: PropTypes.object
 };
 
 export default NavItem;
