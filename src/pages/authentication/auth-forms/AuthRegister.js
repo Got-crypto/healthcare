@@ -26,6 +26,7 @@ import { strengthColor, strengthIndicator } from 'utils/password-strength';
 
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { MenuItem, Select } from '../../../../node_modules/@mui/material/index';
+// import { baseUrl } from 'store/beOneApi';
 
 const AuthRegister = () => {
   const [level, setLevel] = useState();
@@ -42,6 +43,10 @@ const AuthRegister = () => {
     const temp = strengthIndicator(value);
     setLevel(strengthColor(temp));
   };
+
+  // const registerUser = async (firstname, lastname, email, gender, password) => {
+  //   await fetch(`${baseUrl}/`)
+  // }
 
   useEffect(() => {
     changePassword('');
@@ -66,8 +71,10 @@ const AuthRegister = () => {
           password: Yup.string().max(255).required('Password is required')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+          const { firstname, lastname, email, gender, password } = values;
           try {
             setStatus({ success: false });
+            registerUser(firstname, lastname, email, gender, password);
             setSubmitting(false);
           } catch (err) {
             console.error(err);
@@ -130,12 +137,14 @@ const AuthRegister = () => {
                     fullWidth
                     error={Boolean(touched.gender && errors.gender)}
                     id="gender-signup"
-                    value="gender"
+                    value={values.gender}
                     name="gender"
                     onBlur={handleBlur}
                     onChange={handleChange}
                     inputProps={{}}
+                    placeholder="Gender"
                   >
+                    <MenuItem value="">Select Gender</MenuItem>
                     <MenuItem value="male">Male</MenuItem>
                     <MenuItem value="female">Female</MenuItem>
                     <MenuItem value="other">Other</MenuItem>
@@ -238,7 +247,7 @@ const AuthRegister = () => {
               )}
               <Grid item xs={12}>
                 <AnimateButton>
-                  <Button disableElevation onClick={handleSubmit} disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
+                  <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
                     Create Account
                   </Button>
                 </AnimateButton>

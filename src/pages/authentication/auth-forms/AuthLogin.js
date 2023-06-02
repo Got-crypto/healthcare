@@ -1,7 +1,6 @@
-import React from 'react';
+import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
-// material-ui
 import {
   Button,
   Checkbox,
@@ -18,23 +17,21 @@ import {
   Typography
 } from '@mui/material';
 
-// third party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 
-// project import
 import FirebaseSocial from './FirebaseSocial';
 import AnimateButton from 'components/@extended/AnimateButton';
 
-// assets
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
-
-// ============================|| FIREBASE - LOGIN ||============================ //
+import { baseUrl } from 'store/beOneApi';
+import axios from '../../../../node_modules/axios/index';
+import { useNavigate } from '../../../../node_modules/react-router-dom/dist/index';
 
 const AuthLogin = () => {
-  const [checked, setChecked] = React.useState(false);
+  const [checked, setChecked] = useState(false);
 
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -43,12 +40,31 @@ const AuthLogin = () => {
     event.preventDefault();
   };
 
+  const navigate = useNavigate();
+
+  async function loginUser(email, password) {
+    const response = await axios.post(
+      `${baseUrl}auth`,
+      { email, password },
+      {
+        headers: {
+          Authorization: `bearer ${process.env.REACT_PUBLIC_BEONE_API_TOKEN}`,
+          accept: 'application/json'
+        }
+      }
+    );
+    if (response?.status === 200) {
+      localStorage.setItem('authUser', JSON.stringify(response?.data));
+      return navigate('/');
+    }
+  }
+
   return (
     <>
       <Formik
         initialValues={{
-          email: 'info@codedthemes.com',
-          password: '123456',
+          email: '',
+          password: '',
           submit: null
         }}
         validationSchema={Yup.object().shape({
@@ -56,13 +72,16 @@ const AuthLogin = () => {
           password: Yup.string().max(255).required('Password is required')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+          const { email, password } = values;
           try {
             setStatus({ success: false });
+            await loginUser(email, password);
             setSubmitting(false);
           } catch (err) {
             setStatus({ success: false });
             setErrors({ submit: err.message });
             setSubmitting(false);
+            console.log('err', err);
           }
         }}
       >
