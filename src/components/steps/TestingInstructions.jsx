@@ -1,28 +1,51 @@
-import { Box, Grid, Typography } from '../../../node_modules/@mui/material/index';
+import { ThumbUp } from '../../../node_modules/@mui/icons-material/index';
+import { Box, Button, Grid, List, ListItem, ListItemButton, ListItemText, Typography } from '../../../node_modules/@mui/material/index';
 
-function TestingInstructions({step}) {
+function TestingInstructions({ step, nextStep }) {
   return (
     <>
       {step.reached && (
-        <Grid marginTop={10} item xs={12} sm={6} md={4} lg={3}>
-          <Box sx={{ flex: 'wrap', width: { xs: 320, sm: 480, md: 600, lg: 760, xl: 900 } }}>
-            <Typography variant="h2" fontWeightBold color="textPrimary">
+        <Grid marginTop={10} item xs={12}>
+          <Box sx={{ flex: 'wrap' }}>
+            <Typography variant="h2" color="textPrimary">
               Testing Instructions
             </Typography>
-            <Typography>Here you will find all the steps on your journey with us.</Typography>
-            Every time you log on here you will find an arrow pointing to the{' '}
-            <Typography component="span" variant="body1" sx={{ color: 'primary.main' }}>
-              current step
-            </Typography>{' '}
-            as well as see what the next step is. Double click anywhere on the{' '}
-            <Typography component="span" variant="body1" sx={{ color: 'primary.main' }}>
-              current step
-            </Typography>{' '}
-            to move on to the next step. You can always scroll up to see previous steps. To come back to the{' '}
-            <Typography component="span" variant="body1" sx={{ color: 'primary.main' }}>
-              current step
-            </Typography>{' '}
-            simply press the current task button on the menu bar on the left
+            <Typography sx={{ mt: 2 }}>
+              The kits you received come with fully comprehensive instructions. For practicality we are providing a digital version of them{' '}
+              <Typography component="span" sx={{ cursor: 'pointer', ':hover': { textDecoration: 'underline' }, color: 'primary.main' }}>
+                HERE
+              </Typography>
+            </Typography>
+            <Typography sx={{ mt: 2 }}>And in addition we have made video companions to the instructions.</Typography>
+            <Typography sx={{ mt: 2, color: 'warning.main' }}>
+              Read the instructions and watch the videos at least a few days before starting the preparation to ensure that everything is
+              clear
+            </Typography>
+            <List>
+              <ListItem disablePadding>
+                <ListItemButton component="a" href="#">
+                  <ListItemText primary="Hormone Test video instructions" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton component="a" href="#">
+                  <ListItemText primary="Metabolic Test video instructions" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton component="a" href="#">
+                  <ListItemText primary="Thyroid Test video instructions" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton component="a" href="#">
+                  <ListItemText primary="Immune Test video instructions" />
+                </ListItemButton>
+              </ListItem>
+            </List>
+            <Button variant="contained" onClick={nextStep} sx={{ mt: 2 }} startIcon={<ThumbUp />}>
+              Next
+            </Button>
           </Box>
         </Grid>
       )}

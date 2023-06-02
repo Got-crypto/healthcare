@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
-// material-ui
 import {
   Box,
   Button,
@@ -18,19 +17,15 @@ import {
   Typography
 } from '@mui/material';
 
-// third party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 
-// project import
 import FirebaseSocial from './FirebaseSocial';
 import AnimateButton from 'components/@extended/AnimateButton';
 import { strengthColor, strengthIndicator } from 'utils/password-strength';
 
-// assets
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
-
-// ============================|| FIREBASE - REGISTER ||============================ //
+import { MenuItem, Select } from '../../../../node_modules/@mui/material/index';
 
 const AuthRegister = () => {
   const [level, setLevel] = useState();
@@ -59,13 +54,14 @@ const AuthRegister = () => {
           firstname: '',
           lastname: '',
           email: '',
-          company: '',
+          gender: '',
           password: '',
           submit: null
         }}
         validationSchema={Yup.object().shape({
           firstname: Yup.string().max(255).required('First Name is required'),
           lastname: Yup.string().max(255).required('Last Name is required'),
+          gender: Yup.string().max(255).required('Gender is required'),
           email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
           password: Yup.string().max(255).required('Password is required')
         })}
@@ -129,21 +125,24 @@ const AuthRegister = () => {
               </Grid>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="company-signup">Company</InputLabel>
-                  <OutlinedInput
+                  <InputLabel htmlFor="gender-signup">Gender</InputLabel>
+                  <Select
                     fullWidth
-                    error={Boolean(touched.company && errors.company)}
-                    id="company-signup"
-                    value={values.company}
-                    name="company"
+                    error={Boolean(touched.gender && errors.gender)}
+                    id="gender-signup"
+                    value="gender"
+                    name="gender"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    placeholder="Demo Inc."
                     inputProps={{}}
-                  />
-                  {touched.company && errors.company && (
-                    <FormHelperText error id="helper-text-company-signup">
-                      {errors.company}
+                  >
+                    <MenuItem value="male">Male</MenuItem>
+                    <MenuItem value="female">Female</MenuItem>
+                    <MenuItem value="other">Other</MenuItem>
+                  </Select>
+                  {touched.gender && errors.gender && (
+                    <FormHelperText error id="helper-text-gender-signup">
+                      {errors.gender}
                     </FormHelperText>
                   )}
                 </Stack>
@@ -239,7 +238,7 @@ const AuthRegister = () => {
               )}
               <Grid item xs={12}>
                 <AnimateButton>
-                  <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
+                  <Button disableElevation onClick={handleSubmit} disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
                     Create Account
                   </Button>
                 </AnimateButton>

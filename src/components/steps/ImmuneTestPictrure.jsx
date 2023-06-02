@@ -1,28 +1,59 @@
 import { Box, Grid, Typography } from '../../../node_modules/@mui/material/index';
+import React, { useState } from 'react';
 
-function ImmuneTestPicture({step}) {
+const FileInput = () => {
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileInputChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    setSelectedFile(file);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
+  return (
+    <Box>
+      <Box
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+        onClick={handleFileInputChange}
+        sx={{
+          border: '2px dashed #aaa',
+          borderRadius: '5px',
+          padding: '20px',
+          textAlign: 'center',
+          cursor: 'pointer',
+          height: '300px',
+          display: 'flex',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          alignItems: 'center'
+        }}
+      >
+        {selectedFile ? <Typography>Selected File: {selectedFile.name}</Typography> : <Typography>Drag and drop a file here, or click to select a file.</Typography>}
+      </Box>
+    </Box>
+  );
+};
+
+function ImmuneTestPicture({ step }) {
   return (
     <>
       {step.reached && (
-        <Grid marginTop={10} item xs={12} sm={6} md={4} lg={3}>
-          <Box sx={{ flex: 'wrap', width: { xs: 320, sm: 480, md: 600, lg: 760, xl: 900 } }}>
-            <Typography variant="h2" fontWeightBold color="textPrimary">
-              Immune Test Picture
+        <Grid marginTop={10} item xs={12}>
+          <Box sx={{ flex: 'wrap' }}>
+            <Typography variant="h2" color="textPrimary">
+              Health Questionare
             </Typography>
-            <Typography>Here you will find all the steps on your journey with us.</Typography>
-            Every time you log on here you will find an arrow pointing to the{' '}
-            <Typography component="span" variant="body1" sx={{ color: 'primary.main' }}>
-              current step
-            </Typography>{' '}
-            as well as see what the next step is. Double click anywhere on the{' '}
-            <Typography component="span" variant="body1" sx={{ color: 'primary.main' }}>
-              current step
-            </Typography>{' '}
-            to move on to the next step. You can always scroll up to see previous steps. To come back to the{' '}
-            <Typography component="span" variant="body1" sx={{ color: 'primary.main' }}>
-              current step
-            </Typography>{' '}
-            simply press the current task button on the menu bar on the left
+            <FileInput />
           </Box>
         </Grid>
       )}

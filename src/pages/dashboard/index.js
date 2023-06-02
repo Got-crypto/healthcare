@@ -25,12 +25,12 @@ const DashboardDefault = () => {
   };
 
   return (
-    <Grid container rowSpacing={4.5} columnSpacing={2.75}>
-      <Grid item xs={12} sx={{ mb: -2.25 }}>
+    <Grid sx={{ width: { xl: 1100 } }} container rowSpacing={4.5} columnSpacing={2.75}>
+      <Grid item xs={12} sx={{ mb: -2.25, flex: 'wrap' }}>
         <Typography variant="h5">Main Dashboard</Typography>
       </Grid>
 
-      <Grid item xs={12}>
+      <Grid item xs={12} sx={{ flex: 'wrap' }}>
         <Instruction title="Welcome! This is your Dashboard" isDashboard={true} />
         <Button variant="contained" onClick={initSteps} sx={{ mt: 2 }} startIcon={<ThumbUp />}>
           Start

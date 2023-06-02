@@ -16,7 +16,7 @@ function KitArrival({ step, nextStep, prevStep }) {
       {step.reached && (
         <Grid marginTop={10} item xs={12}>
           <Box sx={{ flex: 'wrap', width: { xs: 320, sm: 480, md: 600, lg: 760, xl: 900 } }}>
-            <Typography variant="h2" fontWeightBold color="textPrimary">
+            <Typography variant="h2" color="textPrimary">
               Kit Arrival
             </Typography>
             {user ? (

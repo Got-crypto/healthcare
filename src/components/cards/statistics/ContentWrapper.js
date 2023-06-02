@@ -1,8 +1,8 @@
 import { Box, Typography } from '@mui/material';
 
 const ContentWrapper = ({ color, title }) => (
-  <Box sx={{ flex: 'wrap', width: { xs: 320, sm: 480, md: 600, lg: 760, xl: 900 } }}>
-    <Typography variant="h1" fontWeightBold color="textPrimary">
+  <Box sx={{ flex: 'wrap' }}>
+    <Typography variant="h1" color="textPrimary">
       {title}
     </Typography>
     <Typography>Here you will find all the steps on your journey with us.</Typography>
