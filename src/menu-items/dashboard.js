@@ -1,8 +1,8 @@
-import { DashboardOutlined, FolderOutlined } from '@ant-design/icons';
+import { DashboardOutlined, UserOutlined } from '@ant-design/icons';
 
 const icons = {
   DashboardOutlined,
-  FolderOutlined
+  UserOutlined
 };
 
 const dashboard = {
@@ -19,11 +19,11 @@ const dashboard = {
       breadcrumbs: false
     },
     {
-      id: 'tests',
-      title: 'Tests',
-      type: 'collapse',
-      url: null,
-      icon: icons.FolderOutlined,
+      id: 'profile',
+      title: 'Profile',
+      type: 'item',
+      url: '/profile',
+      icon: icons.UserOutlined,
       breadcrumbs: false
     }
   ]

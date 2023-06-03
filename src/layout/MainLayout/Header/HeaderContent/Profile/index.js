@@ -23,9 +23,9 @@ import Transitions from 'components/@extended/Transitions';
 import ProfileTab from './ProfileTab';
 import SettingTab from './SettingTab';
 
-import avatar1 from 'assets/images/users/avatar-1.png';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
+import { useNavigate } from '../../../../../../node_modules/react-router-dom/dist/index';
 
 function TabPanel({ children, value, index, ...other }) {
   return (
@@ -53,8 +53,10 @@ const Profile = () => {
 
   const { authUser } = useSelector((state) => state.menu);
 
-  const handleLogout = async () => {
-    // logout
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem('authUser');
+    navigate('/login');
   };
 
   const anchorRef = useRef(null);
@@ -94,13 +96,10 @@ const Profile = () => {
         onClick={handleToggle}
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
-          {authUser ? (
-            <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
-          ) : (
-            <Avatar alt="profile user" sx={{ width: 32, height: 32 }} />
-          )}
+          <Avatar alt="profile user" src={authUser?.user?.profilePic} sx={{ width: 32, height: 32 }} />
+
           <Typography variant="subtitle1">
-            {authUser ? `${authUser?.user?.firstName} ${authUser?.user?.lastName}` : 'Please Login'}
+            {authUser?.user?.firstName} {authUser?.user?.lastName}
           </Typography>
         </Stack>
       </ButtonBase>
@@ -142,11 +141,13 @@ const Profile = () => {
                       <Grid container justifyContent="space-between" alignItems="center">
                         <Grid item>
                           <Stack direction="row" spacing={1.25} alignItems="center">
-                            <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
+                            <Avatar alt="profile user" src={authUser?.user?.profilePic} sx={{ width: 32, height: 32 }} />
                             <Stack>
-                              <Typography variant="h6">John Doe</Typography>
+                              <Typography variant="h6">
+                                {authUser?.user?.firstName} {authUser?.user?.lastName}
+                              </Typography>
                               <Typography variant="body2" color="textSecondary">
-                                client
+                                {authUser?.user?.email}
                               </Typography>
                             </Stack>
                           </Stack>

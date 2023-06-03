@@ -43,19 +43,14 @@ const AuthLogin = () => {
   const navigate = useNavigate();
 
   async function loginUser(email, password) {
-    const response = await axios.post(
-      `${baseUrl}auth`,
-      { email, password },
-      {
-        headers: {
-          Authorization: `bearer ${process.env.REACT_PUBLIC_BEONE_API_TOKEN}`,
-          accept: 'application/json'
-        }
+    try {
+      const response = await axios.post(`${baseUrl}/auth`, { email, password });
+      if (response?.status === 200) {
+        localStorage.setItem('authUser', JSON.stringify(response?.data));
+        return navigate('/');
       }
-    );
-    if (response?.status === 200) {
-      localStorage.setItem('authUser', JSON.stringify(response?.data));
-      return navigate('/');
+    } catch (error) {
+      console.log('error', error);
     }
   }
 
