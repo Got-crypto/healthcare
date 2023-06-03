@@ -26,12 +26,11 @@ import AnimateButton from 'components/@extended/AnimateButton';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { baseUrl } from 'store/beOneApi';
 import axios from '../../../../node_modules/axios/index';
-import { useNavigate } from '../../../../node_modules/react-router-dom/dist/index';
 
 const AuthLogin = () => {
   const [checked, setChecked] = useState(false);
-
   const [showPassword, setShowPassword] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -40,16 +39,16 @@ const AuthLogin = () => {
     event.preventDefault();
   };
 
-  const navigate = useNavigate();
-
   async function loginUser(email, password) {
     try {
+      setDisableButton(true);
       const response = await axios.post(`${baseUrl}/auth`, { email, password });
       localStorage.setItem('authUser', JSON.stringify(response?.data));
       if (response?.status === 200) {
-        navigate('/');
+        location.reload();
       }
     } catch (error) {
+      setDisableButton(false);
       console.log('error', error);
     }
   }
@@ -80,7 +79,7 @@ const AuthLogin = () => {
           }
         }}
       >
-        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
+        {({ errors, handleBlur, handleChange, handleSubmit, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
             <Grid container spacing={3}>
               <Grid item xs={12}>
@@ -165,7 +164,15 @@ const AuthLogin = () => {
               )}
               <Grid item xs={12}>
                 <AnimateButton>
-                  <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
+                  <Button
+                    disableElevation
+                    disabled={disableButton}
+                    fullWidth
+                    size="large"
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                  >
                     Login
                   </Button>
                 </AnimateButton>

@@ -5,18 +5,14 @@ import { Button } from '../../../node_modules/@mui/material/index';
 import { ThumbUp } from '../../../node_modules/@mui/icons-material/index';
 import { collapseItem, setActiveStep } from 'store/reducers/menu';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { useNavigate } from '../../../node_modules/react-router-dom/dist/index';
 
 const StepComponent = ({ Component, step, nextStep, prevStep }) => <Component prevStep={prevStep} nextStep={nextStep} step={step} />;
 
 const DashboardDefault = () => {
   const dispatch = useDispatch();
-  const { activeStep, steps, authUser } = useSelector((state) => state.menu);
+  const { activeStep, steps } = useSelector((state) => state.menu);
 
-  console.log('authUser', authUser);
-
-  const navigate = useNavigate();
+  // const authUser = localStorage.getItem('authUser');
 
   const initSteps = () => {
     dispatch(collapseItem(true));
@@ -29,13 +25,6 @@ const DashboardDefault = () => {
       dispatch(setActiveStep(activeStep - 1));
     }
   };
-
-  useEffect(() => {
-    if (!authUser) navigate('/login');
-
-    // eslint-disable-next-line
-  }, []);
-
   return (
     <Grid sx={{ width: { xl: 1100 } }} container rowSpacing={4.5} columnSpacing={2.75}>
       <Grid item xs={12} sx={{ mb: -2.25, flex: 'wrap' }}>
