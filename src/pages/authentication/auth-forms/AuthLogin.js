@@ -45,9 +45,9 @@ const AuthLogin = () => {
   async function loginUser(email, password) {
     try {
       const response = await axios.post(`${baseUrl}/auth`, { email, password });
+      localStorage.setItem('authUser', JSON.stringify(response?.data));
       if (response?.status === 200) {
-        localStorage.setItem('authUser', JSON.stringify(response?.data));
-        return navigate('/');
+        navigate('/');
       }
     } catch (error) {
       console.log('error', error);

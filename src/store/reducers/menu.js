@@ -10,7 +10,8 @@ import {
 } from '../../components/steps';
 
 const initialState = {
-  authUser: localStorage.getItem('authUser') && JSON.parse(localStorage.getItem('authUser')),
+  authUser: localStorage.getItem('authUser') ? JSON.parse(localStorage.getItem('authUser')) : false,
+  authorize: localStorage.getItem('authUser') ? 'auth' : 'no auth',
   openItem: ['dashboard'],
   defaultId: 'dashboard',
   openComponent: 'buttons',
