@@ -1,18 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 
-// material-ui
 import { useTheme } from '@mui/material/styles';
 import { AppBar, Box, ClickAwayListener, IconButton, Paper, Popper, Toolbar } from '@mui/material';
 
-// project import
-import Search from './Search';
+import OrderInfo from './OrderInfo';
 import Profile from './Profile';
 import Transitions from 'components/@extended/Transitions';
 
-// assets
 import { MoreOutlined } from '@ant-design/icons';
-
-// ==============================|| HEADER CONTENT - MOBILE ||============================== //
 
 const MobileSection = () => {
   const theme = useTheme();
@@ -86,7 +81,7 @@ const MobileSection = () => {
               <ClickAwayListener onClickAway={handleClose}>
                 <AppBar color="inherit">
                   <Toolbar>
-                    <Search />
+                    <OrderInfo />
                     <Profile />
                   </Toolbar>
                 </AppBar>

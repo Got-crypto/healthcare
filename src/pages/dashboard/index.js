@@ -3,21 +3,29 @@ import { Grid, Typography } from '@mui/material';
 import Instruction from 'components/cards/statistics/ContentWrapper';
 import { Button } from '../../../node_modules/@mui/material/index';
 import { ThumbUp } from '../../../node_modules/@mui/icons-material/index';
-import { collapseItem, setActiveStep } from 'store/reducers/menu';
+import { collapseItem, setActiveStep, setOrderDetails } from 'store/reducers/main';
 import { useDispatch, useSelector } from 'react-redux';
+import { handleGetCustomerOrderById } from 'services/BeOne';
 
-const StepComponent = ({ Component, step, nextStep, prevStep }) => <Component prevStep={prevStep} nextStep={nextStep} step={step} />;
+const StepComponent = ({ Component, step, order, nextStep, prevStep }) => (
+  <Component order={order} prevStep={prevStep} nextStep={nextStep} step={step} />
+);
 
 const DashboardDefault = () => {
   const dispatch = useDispatch();
-  const { activeStep, steps } = useSelector((state) => state.menu);
+  const { activeStep, steps, selectedOrder } = useSelector((state) => state.main);
 
-  // const authUser = localStorage.getItem('authUser');
-
-  const initSteps = () => {
+  const initSteps = async () => {
     dispatch(collapseItem(true));
 
     dispatch(setActiveStep(activeStep + 1));
+
+    try {
+      const response = await handleGetCustomerOrderById(selectedOrder?.orderId);
+      dispatch(setOrderDetails(response?.data));
+    } catch (error) {
+      console.log('error fetching order details', error);
+    }
   };
 
   const prevStep = () => {
@@ -32,15 +40,17 @@ const DashboardDefault = () => {
       </Grid>
 
       <Grid item xs={12} sx={{ flex: 'wrap' }}>
-        <Instruction title="Welcome! This is your Dashboard" isDashboard={true} />
-        <Button variant="contained" onClick={initSteps} sx={{ mt: 2 }} startIcon={<ThumbUp />}>
+        <Instruction title="Welcome! This is your Dashboard" isDashboard={true} order={selectedOrder} />
+        <Button variant="contained" disabled={selectedOrder ? false : true} onClick={initSteps} sx={{ mt: 2 }} startIcon={<ThumbUp />}>
           Start
         </Button>
 
         {steps.map((step, index) => {
           const { component } = step;
 
-          return <StepComponent prevStep={prevStep} nextStep={initSteps} step={step} Component={component} key={index} />;
+          return (
+            <StepComponent order={selectedOrder} prevStep={prevStep} nextStep={initSteps} step={step} Component={component} key={index} />
+          );
         })}
       </Grid>
     </Grid>

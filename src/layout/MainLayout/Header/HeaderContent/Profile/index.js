@@ -51,7 +51,7 @@ function a11yProps(index) {
 const Profile = () => {
   const theme = useTheme();
 
-  const { authUser } = useSelector((state) => state.menu);
+  const { authUser } = useSelector((state) => state.main);
 
   const navigate = useNavigate();
   const handleLogout = () => {

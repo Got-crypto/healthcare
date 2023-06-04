@@ -23,7 +23,6 @@ function Planning({ step }) {
   const [three, setThree] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  console.log('three', three);
   const handleClick = () => [setIsClicked(true)];
 
   const [checked, setChecked] = useState(false);
@@ -169,7 +168,7 @@ function Planning({ step }) {
                               </Typography>
                               <FormGroup sx={{ width: 'fit-content' }}>
                                 <FormControlLabel
-                                  control={<Switch checked={checked} onChange={handleChange} defaultUnChecked />}
+                                  control={<Switch checked={checked} onChange={handleChange} defaultChecked={!1} />}
                                   label={checked ? 'Yes' : 'No'}
                                 />
                               </FormGroup>
@@ -339,7 +338,7 @@ function Planning({ step }) {
                               </Typography>
                               <FormGroup sx={{ width: 'fit-content' }}>
                                 <FormControlLabel
-                                  control={<Switch checked={checked} onChange={handleChange} defaultUnChecked />}
+                                  control={<Switch checked={checked} onChange={handleChange} defaultChecked={!1} />}
                                   label={checked ? 'Yes' : 'No'}
                                 />
                               </FormGroup>

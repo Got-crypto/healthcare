@@ -1,25 +1,53 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Button, FormControlLabel, FormGroup, Grid, Switch, Typography } from '../../../node_modules/@mui/material/index';
-import { ThumbUp, Undo } from '../../../node_modules/@mui/icons-material/index';
+import { ThumbUp } from '../../../node_modules/@mui/icons-material/index';
+import { useDispatch, useSelector } from 'react-redux';
+import { handleConfirmPackageReceived, handleGetCustomerOrderById } from 'services/BeOne';
+import { setOrderDetails } from 'store/reducers/main';
 
-function KitArrival({ step, nextStep, prevStep }) {
-  const user = null;
-
+function KitArrival({ step, nextStep }) {
+  const { orderDetails, selectedOrder } = useSelector((state) => state.main);
   const [checked, setChecked] = useState(false);
+  const dispatch = useDispatch();
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
   };
+  const stepTwoData = orderDetails && orderDetails[1];
+  console.log('orderDetails', stepTwoData);
+
+  const confirmPackageReceived = async () => {
+    try {
+      await handleConfirmPackageReceived(selectedOrder?.orderId);
+    } catch (error) {
+      console.log('error confirming delivery', error)
+    }
+  };
+
+  useEffect(() => {
+    const getNewOrderDetails = async () => {
+      try {
+        const response = await handleGetCustomerOrderById(selectedOrder?.orderId);
+        dispatch(setOrderDetails(response?.data));
+      } catch (error) {
+        console.log('error', error);
+      }
+    };
+    if (selectedOrder) {
+      getNewOrderDetails();
+    }
+  }, [selectedOrder, dispatch]);
 
   return (
     <>
       {step.reached && (
         <Grid marginTop={10} item xs={12}>
-          <Box sx={{ flex: 'wrap', width: { xs: 320, sm: 480, md: 600, lg: 760, xl: 900 } }}>
+          <span id="kit-arrival" />
+          <Box sx={{ flex: 'wrap', height: '80vh' }}>
             <Typography variant="h2" color="textPrimary">
               Kit Arrival
             </Typography>
-            {user ? (
+            {!stepTwoData?.data?.packageReceiptStatus && (
               <Typography>
                 Your test kits are on their way. Please{' '}
                 <Typography component="span" sx={{ color: 'primary.main', cursor: 'pointer' }}>
@@ -27,23 +55,37 @@ function KitArrival({ step, nextStep, prevStep }) {
                 </Typography>{' '}
                 when they have arrived so together we can plan your testing steps
               </Typography>
-            ) : (
-              <>
-                <Typography>The package should be with you now</Typography>
-                <FormGroup sx={{ width: 'fit-content' }}>
-                  <FormControlLabel
-                    control={<Switch checked={checked} onChange={handleChange} defaultUnChecked />}
-                    label={checked ? 'Yes' : 'No'}
-                  />
-                </FormGroup>
-                <Button variant="contained" onClick={nextStep} disabled={!checked} sx={{ mt: 2 }} startIcon={<ThumbUp />}>
-                  Next
-                </Button>
-                <Button variant="outlined" onClick={prevStep} color="error" sx={{ mt: 2, ml: 2 }} startIcon={<Undo />}>
-                  back
-                </Button>
-              </>
             )}
+            <>
+              {stepTwoData?.status.toLowerCase() === 'pending' ? (
+                <>
+                  <Typography sx={{ color: !checked ? 'warning.main' : 'success.main' }}>
+                    {checked ? 'Great! Confirm and proceed to planning tests.' : 'The package should be with you now?'}
+                  </Typography>
+                  <FormGroup sx={{ width: 'fit-content' }}>
+                    <FormControlLabel
+                      control={<Switch checked={checked} onChange={handleChange} defaultChecked={!1} />}
+                      label={checked ? 'Yes' : 'No'}
+                    />
+                  </FormGroup>
+                  {!checked && (
+                    <Typography variant="subtitle2" sx={{ color: 'error.main' }}>
+                      The Package Should be with you soon. Please be Patient
+                    </Typography>
+                  )}
+                  <Button variant="contained" onClick={confirmPackageReceived} disabled={!checked} sx={{ mt: 2 }} startIcon={<ThumbUp />}>
+                    Confirm
+                  </Button>
+                </>
+              ) : stepTwoData?.status.toLowerCase() === 'done' ? (
+                <>
+                  <Typography sx={{ color: 'success.main' }}>Packages delivered!</Typography>
+                  <Button variant="contained" sx={{mt: 2}} onClick={nextStep} startIcon={<ThumbUp />}>
+                    Proceed to Planning
+                  </Button>
+                </>
+              ) : null}
+            </>
           </Box>
         </Grid>
       )}

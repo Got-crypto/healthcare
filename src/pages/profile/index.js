@@ -23,7 +23,7 @@ import handleArrayBuffer from 'utils/handleArrayBuffer';
 import { LoadingButton } from '../../../node_modules/@mui/lab/index';
 
 const Profile = () => {
-  const { authUser } = useSelector((state) => state.menu);
+  const { authUser } = useSelector((state) => state.main);
   const [isMobile, setIsMobile] = useState(false);
   const [columns, setColumns] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);

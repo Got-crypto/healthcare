@@ -15,6 +15,8 @@ const initialState = {
   defaultId: 'dashboard',
   openComponent: 'buttons',
   drawerOpen: false,
+  selectedOrder: null,
+  orderDetails: null,
   componentDrawerOpen: true,
   itemCollapsed: false,
   activeStep: -1,
@@ -22,6 +24,7 @@ const initialState = {
     {
       component: KitArrival,
       header: 'Kit Arrival',
+      id: 'kit-arrival',
       collapse: false,
       isActive: false,
       reached: false,
@@ -35,6 +38,7 @@ const initialState = {
       ]
     },
     {
+      id: 'testing-intructions',
       component: TestingInstructions,
       reached: false,
       isActive: false,
@@ -50,6 +54,7 @@ const initialState = {
       ]
     },
     {
+      id: 'planning',
       component: Planning,
       reached: false,
       isActive: false,
@@ -67,10 +72,11 @@ const initialState = {
           isActive: false,
           header: 'Metabollic, Immune and Thyroid Test',
           collapse: false
-        },
+        }
       ]
     },
     {
+      id: 'immune-test-picture',
       component: ImmuneTestPictrure,
       reached: false,
       isActive: false,
@@ -86,6 +92,7 @@ const initialState = {
       ]
     },
     {
+      id: 'health-questionare',
       component: HealthQuestionare,
       reached: false,
       isActive: false,
@@ -101,6 +108,7 @@ const initialState = {
       ]
     },
     {
+      id: 'lifestyle',
       component: LifestyleProgram,
       reached: false,
       isActive: false,
@@ -116,6 +124,7 @@ const initialState = {
       ]
     },
     {
+      id: 'results',
       component: Results,
       reached: false,
       isActive: false,
@@ -134,7 +143,7 @@ const initialState = {
 };
 
 const menu = createSlice({
-  name: 'menu',
+  name: 'main',
   initialState,
   reducers: {
     activeItem(state, action) {
@@ -170,10 +179,17 @@ const menu = createSlice({
           step.isActive = false;
         }
       });
+    },
+    selectOrder(state, action) {
+      state.selectedOrder = action.payload;
+    },
+    setOrderDetails(state, action) {
+      state.orderDetails = action.payload;
     }
   }
 });
 
 export default menu.reducer;
 
-export const { activeItem, activeComponent, openDrawer, openComponentDrawer, collapseItem, setActiveStep } = menu.actions;
+export const { activeItem, activeComponent, openDrawer, openComponentDrawer, collapseItem, setActiveStep, selectOrder, setOrderDetails } =
+  menu.actions;

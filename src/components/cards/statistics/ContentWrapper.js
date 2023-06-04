@@ -1,25 +1,67 @@
 import { Box, Typography } from '@mui/material';
 
-const ContentWrapper = ({ color, title }) => (
-  <Box sx={{ flex: 'wrap' }}>
-    <Typography variant="h1" color="textPrimary">
-      {title}
-    </Typography>
-    <Typography>Here you will find all the steps on your journey with us.</Typography>
-    Every time you log on here you will find an arrow pointing to the{' '}
-    <Typography component="span" variant="body1" sx={{ color: `${color || 'primary'}.main` }}>
-      current step
-    </Typography>{' '}
-    as well as see what the next step is. Double click anywhere on the{' '}
-    <Typography component="span" variant="body1" sx={{ color: `${color || 'primary'}.main` }}>
-      current step
-    </Typography>{' '}
-    to move on to the next step. You can always scroll up to see previous steps. To come back to the{' '}
-    <Typography component="span" variant="body1" sx={{ color: `${color || 'primary'}.main` }}>
-      current step
-    </Typography>{' '}
-    simply press the current task button on the menu bar on the left
-  </Box>
-);
+const ContentWrapper = ({ color, order, title }) => {
+  
+  return (
+    <Box
+      sx={{
+        flex: 'wrap',
+        '@media (max-width: 686px)': {
+          textAlign: 'justify'
+        },
+        '@media (max-width: 414px)': {
+          fontWeight: 400,
+          fontSize: '0.875rem',
+          lineHeight: 1.57
+        },
+      }}
+    >
+      <Typography
+        sx={{
+          textAlign: 'left',
+          fontWeight: 600,
+          fontSize: '2.375rem',
+          lineHeight: 1.21,
+          '@media (max-width: 620px)': {
+            fontSize: '1.875rem',
+            lineHeight: 1.27
+          },
+          '@media (max-width: 536px)': {
+            fontSize: '1.5rem',
+            lineHeight: 1.33
+          },
+          '@media (max-width: 414px)': {
+            fontSize: '1.25rem',
+            lineHeight: 1.4
+          },
+          '@media (max-width: 348px)': {
+            fontSize: '1rem',
+            lineHeight: 1.5
+          }
+        }}
+        color="textPrimary"
+      >
+        {title}
+      </Typography>
+      Here you will find all the steps on your journey with us. Every time you log on here the{' '}
+      <Typography component="span" variant="body1" sx={{ color: `primary.main` }}>
+        tests
+      </Typography>{' '}
+      section on the sidebar will be pointing to the{' '}
+      <Typography component="span" variant="body1" sx={{ color: `${color || 'primary'}.main` }}>
+        current step
+      </Typography>{' '}
+      as well as see what the next step is. {order ? 'Click' : 'Please select an order from the page header then click'} the{' '}
+      <Typography component="span" variant="body1" sx={{ color: `${color || 'primary'}.main` }}>
+        Start
+      </Typography>{' '}
+      button to move on to the next step. You can always scroll up to see previous steps. To come back to the{' '}
+      <Typography component="span" variant="body1" sx={{ color: `${color || 'primary'}.main` }}>
+        current step
+      </Typography>{' '}
+      simply press the current task button on the menu bar on the left
+    </Box>
+  );
+};
 
 export default ContentWrapper;

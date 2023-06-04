@@ -4,10 +4,10 @@ import { useSelector } from 'react-redux';
 import { Box, List, Typography } from '@mui/material';
 
 import NavItem from './NavItem';
-import { collapseItem } from '../../../../../store/reducers/menu';
+import { collapseItem } from '../../../../../store/reducers/main';
 
 const NavGroup = ({ item }) => {
-  const menu = useSelector((state) => state.menu);
+  const menu = useSelector((state) => state.main);
   const { drawerOpen } = menu;
 
   const navCollapse = item.children?.map((menuItem) => {

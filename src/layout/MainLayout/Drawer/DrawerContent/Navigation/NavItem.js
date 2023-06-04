@@ -6,9 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
 import { Avatar, Chip, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 
-import { activeItem } from 'store/reducers/menu';
+import { activeItem } from 'store/reducers/main';
 import { Collapse, List, ListItem } from '../../../../../../node_modules/@mui/material/index';
-import { collapseItem } from 'store/reducers/menu';
+import { collapseItem } from 'store/reducers/main';
 
 const StepChildren = ({ step }) => (
   <ListItem button>
@@ -16,7 +16,7 @@ const StepChildren = ({ step }) => (
   </ListItem>
 );
 const Step = ({ step }) => {
-  const { itemCollapsed } = useSelector((state) => state.menu);
+  const { itemCollapsed } = useSelector((state) => state.main);
   return (
     <>
       <ListItem button>
@@ -40,7 +40,7 @@ const NavItem = ({ item, level }) => {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
 
-  const { drawerOpen, openItem, itemCollapsed, steps } = useSelector((state) => state.menu);
+  const { drawerOpen, openItem, itemCollapsed, steps } = useSelector((state) => state.main);
 
   let itemTarget = '_self';
   if (item.target) {
