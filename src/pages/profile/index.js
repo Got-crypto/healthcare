@@ -21,6 +21,7 @@ import axios from '../../../node_modules/axios/index';
 import { baseUrl } from 'store/beOneApi';
 import handleArrayBuffer from 'utils/handleArrayBuffer';
 import { LoadingButton } from '../../../node_modules/@mui/lab/index';
+import { resizeImage } from 'utils/File-Controller';
 
 const Profile = () => {
   const { authUser } = useSelector((state) => state.main);
@@ -110,11 +111,19 @@ const Profile = () => {
 
     fileInput.addEventListener('change', (event) => {
       const file = event.target.files[0];
+      console.log('file', file);
       const allowedTypes = ['image/jpeg', 'image/png'];
 
       if (file && allowedTypes.includes(file.type)) {
         setSelectedFile(URL.createObjectURL(file));
-        setFileToUpload(file);
+        if (file.size > 10000) {
+          resizeImage(file, 800, 800, 0.7)
+            .then((resizedImage) => setFileToUpload(resizedImage))
+            .catch((error) => {
+              setErrorMessage('Failed to get image');
+              console.log('error', error);
+            });
+        } else setFileToUpload(file);
         setErrorMessage(null);
         setUpdatedProfilePicture(null);
       } else {
