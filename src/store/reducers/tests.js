@@ -20,7 +20,8 @@ const initialState = {
     StandardPackageMetabolic__testDate2: null,
     hormoneTestSamplingDate: null,
     metabolicTestDate: null
-  }
+  },
+  hormorneTestComplete: false
 };
 
 const tests = createSlice({
@@ -29,10 +30,13 @@ const tests = createSlice({
   reducers: {
     addPrepDates(state, action) {
       state.prepDates = action.payload;
+    },
+    setCompleteHormoneTest(state, action) {
+      state.hormorneTestComplete = action.payload;
     }
   }
 });
 
 export default tests.reducer;
 
-export const { addPrepDates } = tests.actions;
+export const { addPrepDates, setCompleteHormoneTest } = tests.actions;

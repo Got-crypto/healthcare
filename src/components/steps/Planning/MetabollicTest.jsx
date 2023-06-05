@@ -5,49 +5,63 @@ import {
   Box,
   Button,
   Collapse,
-  FormControlLabel,
-  FormGroup,
   Grid,
-  Switch,
   Typography
 } from '../../../../node_modules/@mui/material/index';
 import { ExpandMore, ThumbUp } from '../../../../node_modules/@mui/icons-material/index';
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import dayjs from 'dayjs';
+import { addPrepDates } from 'store/reducers/tests';
+import { handleFinishPlanning } from 'services/BeOne';
+import { LoadingButton } from '../../../../node_modules/@mui/lab/index';
 
 export default function MetabollicTest() {
   const [one, setOne] = useState(false);
   const [two, setTwo] = useState(false);
   const [three, setThree] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [date2, setDate2] = useState();
+  const [metabollicPlanningComplete, setMetabollicPlanningComplete] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
 
-  const { orderDetails } = useSelector((state) => state.main);
+  const { orderDetails, selectedOrder } = useSelector((state) => state.main);
+  const { prepDates, hormorneTestComplete } = useSelector((state) => state.tests);
+  const dispatch = useDispatch();
+  const planningData = orderDetails && orderDetails[2];
+  const planningComplete = planningData?.status.toLowerCase() === 'done' ? !0 : !1;
 
-  const [checked, setChecked] = useState(false);
+  const handleChangeMetabollicTestDate = (date) => {
+    const testDate = dayjs(`${date?.$y}-${date?.$M + 1}-${date?.$D}`).format('MMMM DD, YYYY');
 
-  console.log('orderDetails', orderDetails);
-  const date = new Date('2023-05-17T00:00:00');
-  console.log('date', date);
-
-  const handleChange = (event) => {
-    setChecked(event.target.checked);
+    dispatch(addPrepDates({ ...prepDates, metabolicTestDate: testDate }));
+    setMetabollicPlanningComplete(true);
   };
 
-  const handleResize = () => {
-    if (window.innerWidth < 767) {
-      setIsMobile(true);
-    } else setIsMobile(false);
+  const finishPlanning = async () => {
+    try {
+      setIsLoading(true);
+      const response = await handleFinishPlanning(selectedOrder?.orderId, {
+        hormoneSkipReminder1: true,
+        hormoneSkipReminder2: true,
+        hormoneTestSamplingDate: prepDates?.hormoneTestSamplingDat,
+        hormoneTestWindowStartDate: prepDates?.StandardPackageHormone__PrepDate1,
+        metabolismSkipReminder1: true,
+        metabolismSkipReminder2: true,
+        metabolismTestSamplingDate: prepDates?.metabolicTestDate,
+        periodCycleLength: 10,
+        testOption: 'OPTION_1'
+      });
+      setIsLoading(false);
+      console.log('response', response);
+    } catch (error) {
+      setError('Something went wrong');
+      setIsLoading(false);
+      console.log('error finishing planning', error);
+    }
   };
 
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
   return (
     <>
       <Accordion sx={{ width: 'auto', p: 2 }}>
@@ -60,7 +74,7 @@ export default function MetabollicTest() {
               Aim to schedule this test as close as possible to the previous one – ideally within the same week. Please note that the
               sampling process will take two days and testing cannot happen during mensuration
             </Typography>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <Typography variant="body1">Instructions</Typography>
               <Typography variant="body2">
                 There are{' '}
@@ -94,9 +108,6 @@ export default function MetabollicTest() {
                 </Typography>
                 <Typography variant="body2" sx={{ ml: 1 }}>
                   If you are not menstruating Testing can happen at any time of the month
-                </Typography>
-                <Typography variant="body2" sx={{ ml: 1, mt: 1, color: 'warning.main' }}>
-                  Enter when your testing window starts
                 </Typography>
               </Collapse>
               <Typography
@@ -148,12 +159,6 @@ export default function MetabollicTest() {
                 <Typography variant="body2" sx={{ ml: 2 }}>
                   Fast starting at least 8 hours prior to the morning collection
                 </Typography>
-                <FormGroup sx={{ width: 'fit-content' }}>
-                  <FormControlLabel
-                    control={<Switch checked={checked} onChange={handleChange} defaultChecked={!1} />}
-                    label={checked ? 'Yes' : 'No'}
-                  />
-                </FormGroup>
               </Collapse>
               <Typography
                 onClick={() => {
@@ -212,22 +217,61 @@ export default function MetabollicTest() {
                 <Typography variant="body2" sx={{ ml: 2 }}>
                   - A freezer for at least 2 hours to ensure the samples are frozen before sending
                 </Typography>
-                <Typography variant="body2" sx={{ ml: 1, mt: 1, color: 'warning.main' }}>
-                  Taking into account your menstruation, preparation and sampling requirements, Confirm the first day of the two consecutive
-                  sampling dates n.2
-                </Typography>
+                {!planningComplete && (
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      gap: 1,
+                      flexDirection: 'column',
+                      justifyContent: 'flex-start',
+                      width: '100%',
+                      alignItems: 'start'
+                    }}
+                  >
+                    <Typography variant="body2" sx={{ ml: 1, mt: 1, color: 'warning.main' }}>
+                      Taking into account your menstruation, preparation and sampling requirements, Confirm the first day of the two
+                      consecutive sampling dates.
+                    </Typography>
+                    <DatePicker onChange={(date) => setDate2(date)} />
+                    <Button onClick={handleChangeMetabollicTestDate} startIcon={<ThumbUp />} variant="contained">
+                      Confirm Date
+                    </Button>
+                  </Box>
+                )}
               </Collapse>
-              <Button startIcon={<ThumbUp />} sx={{ mx: 'auto', mt: 5 }} variant="contained">
-                Proceed
-              </Button>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography variant="body1">Select a Date</Typography>
-              <Box sx={{ width: 'full', height: 'full', position: 'relative' }}>
-                {isMobile ? <DatePicker /> : <DateCalendar sx={{ positions: 'relative' }} dayOfWeekFormatter={(day) => day} />}
-              </Box>
             </Grid>
           </Grid>
+          {metabollicPlanningComplete && (
+            <Typography variant="body1" sx={{ mt: 2 }}>{`Hormone Metebolic Test Date: ${dayjs(date2).format('MMMM DD, YYYY')}`}</Typography>
+          )}
+          {planningComplete && (
+            <Typography variant="body1" sx={{ mt: 2, color: 'success.main' }}>{`Hormone Metebolic Test Date was done at: ${dayjs(
+              prepDates?.metabolicTestDate
+            ).format('MMMM DD, YYYY')}`}</Typography>
+          )}
+          <LoadingButton
+            fullWidth
+            loading={isLoading}
+            disabled={planningComplete ? false : metabollicPlanningComplete && hormorneTestComplete ? false : true}
+            startIcon={<ThumbUp />}
+            sx={{ mx: 'auto', mt: 5 }}
+            variant="contained"
+            onClick={finishPlanning}
+          >
+            Finish Planning
+          </LoadingButton>
+          <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+            {planningComplete && (
+              <Typography variant="body1" sx={{ color: 'success.main' }}>
+                Plannning tests complete
+              </Typography>
+            )}
+            {error && (
+              <Typography variant="body1" sx={{ color: 'error.main' }}>
+                {error}
+              </Typography>
+            )}
+          </Box>
         </AccordionDetails>
       </Accordion>
     </>

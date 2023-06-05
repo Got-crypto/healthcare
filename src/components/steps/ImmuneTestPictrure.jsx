@@ -4,9 +4,13 @@ import React, { useState } from 'react';
 const FileInput = () => {
   const [selectedFile, setSelectedFile] = useState(null);
 
-  const handleFileInputChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedFile(file);
+  const handleFileInputChange = () => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.click();
+    // const file = event.target.files[0];
+    // setSelectedFile(file);
   };
 
   const handleDrop = (event) => {
@@ -51,7 +55,7 @@ function ImmuneTestPicture({ step }) {
         <Grid marginTop={10} item xs={12}>
           <Box sx={{ flex: 'wrap' }}>
             <Typography variant="h2" color="textPrimary">
-              Health Questionare
+              Immune Test Picture
             </Typography>
             <FileInput />
           </Box>

@@ -19,7 +19,7 @@ function KitArrival({ step, nextStep }) {
     try {
       await handleConfirmPackageReceived(selectedOrder?.orderId);
     } catch (error) {
-      console.log('error confirming delivery', error)
+      console.log('error confirming delivery', error);
     }
   };
 

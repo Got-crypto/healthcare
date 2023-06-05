@@ -25,7 +25,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import dayjs from 'dayjs';
 
-import { addPrepDates } from 'store/reducers/tests';
+import { addPrepDates, setCompleteHormoneTest } from 'store/reducers/tests';
 
 export default function HormoneTest() {
   const [one, setOne] = useState(false);
@@ -40,6 +40,10 @@ export default function HormoneTest() {
   const [isDelayed, setisDelayed] = useState();
 
   const hormoneTestComplete = oneComplete && twoComplete && threeComplete;
+
+  const checkHormoneComplete = () => {
+    dispatch(setCompleteHormoneTest(hormoneTestComplete));
+  };
 
   const handleDelays = (event) => {
     setDelay(event.target.value);
@@ -56,10 +60,10 @@ export default function HormoneTest() {
       );
       setisDelayed(false);
     } else {
-      const day = dayjs(`${date1.$y}-${date1.$M + 2}-${date1.$D}`).format('MMMM DD, YYYY');
-      const day1 = dayjs(`${date1.$y}-${date1.$M + 2}-${date1.$D + 1}`).format('MMMM DD, YYYY');
-      const day2 = dayjs(`${date1.$y}-${date1.$M + 2}-${date1.$D + 2}`).format('MMMM DD, YYYY');
-      const day3 = dayjs(`${date1.$y}-${date1.$M + 2}-${date1.$D + 3}`).format('MMMM DD, YYYY');
+      const day = dayjs(`${date1?.$y}-${date1?.$M + 2}-${date1?.$D}`).format('MMMM DD, YYYY');
+      const day1 = dayjs(`${date1?.$y}-${date1?.$M + 2}-${date1?.$D + 1}`).format('MMMM DD, YYYY');
+      const day2 = dayjs(`${date1?.$y}-${date1?.$M + 2}-${date1?.$D + 2}`).format('MMMM DD, YYYY');
+      const day3 = dayjs(`${date1?.$y}-${date1?.$M + 2}-${date1?.$D + 3}`).format('MMMM DD, YYYY');
 
       dispatch(
         addPrepDates({
@@ -76,7 +80,7 @@ export default function HormoneTest() {
   };
 
   const handleChangeSamplingDate = (date) => {
-    const samplingDate = dayjs(`${date.$y}-${date.$M + 1}-${date.$D}`).format('MMMM DD, YYYY');
+    const samplingDate = dayjs(`${date?.$y}-${date?.$M + 1}-${date?.$D}`).format('MMMM DD, YYYY');
 
     dispatch(addPrepDates({ ...prepDates, hormoneTestSamplingDate: samplingDate }));
     setThreeComplete(true);
@@ -93,13 +97,11 @@ export default function HormoneTest() {
 
   const [checked, setChecked] = useState(false);
 
-  console.log('orderDetails', orderDetails);
-
   const handleSamplingDate = () => {
-    const day = dayjs(`${date1.$y}-${date1.$M + 1}-${date1.$D}`).format('MMMM DD, YYYY');
-    const day1 = dayjs(`${date1.$y}-${date1.$M + 1}-${date1.$D + 1}`).format('MMMM DD, YYYY');
-    const day2 = dayjs(`${date1.$y}-${date1.$M + 1}-${date1.$D + 2}`).format('MMMM DD, YYYY');
-    const day3 = dayjs(`${date1.$y}-${date1.$M + 1}-${date1.$D + 3}`).format('MMMM DD, YYYY');
+    const day = dayjs(`${date1?.$y}-${date1?.$M + 1}-${date1?.$D}`).format('MMMM DD, YYYY');
+    const day1 = dayjs(`${date1?.$y}-${date1?.$M + 1}-${date1?.$D + 1}`).format('MMMM DD, YYYY');
+    const day2 = dayjs(`${date1?.$y}-${date1?.$M + 1}-${date1?.$D + 2}`).format('MMMM DD, YYYY');
+    const day3 = dayjs(`${date1?.$y}-${date1?.$M + 1}-${date1?.$D + 3}`).format('MMMM DD, YYYY');
 
     dispatch(
       addPrepDates({
@@ -138,7 +140,6 @@ export default function HormoneTest() {
     if (planningComplete) {
       dispatch(addPrepDates(orderDetails?.data));
     }
-    console.log('called');
   }, [dispatch, orderDetails?.data, planningComplete]);
   return (
     <>
@@ -222,11 +223,15 @@ export default function HormoneTest() {
                               prepDates?.StandardPackageHormone__PrepDate2,
                               prepDates?.StandardPackageHormone__PrepDate3,
                               prepDates?.StandardPackageHormone__PrepDate4
-                            ].map((date, index) => (
-                              <ListItem key={index}>
-                                <Typography>{`Day ${index + 1}: ${dayjs(date).format('MMMM DD, YYYY')}`}</Typography>
-                              </ListItem>
-                            ))}
+                            ].map((date, index) => {
+                              return (
+                                <ListItem key={index}>
+                                  <Typography>
+                                    {date ? `Day ${index + 1}: ${dayjs(date).format('MMMM DD, YYYY')}` : 'Choose proper dates'}
+                                  </Typography>
+                                </ListItem>
+                              );
+                            })}
                           </List>
                         </>
                       ) : !planningComplete && !oneComplete ? (
@@ -334,9 +339,9 @@ export default function HormoneTest() {
                             <FormHelperText>This month or Next month</FormHelperText>
                           </FormControl>
                           {isDelayed === true ? (
-                            <Typography variant="body2">Please choose another date</Typography>
+                            <Typography variant="body2">Please choose another testing window</Typography>
                           ) : isDelayed === false ? (
-                            <Typography variant="body2">Check new dates set for next month</Typography>
+                            <Typography variant="body2">Check new testing window set for next month</Typography>
                           ) : null}
                         </Box>
                       ) : null}
@@ -428,8 +433,8 @@ export default function HormoneTest() {
                           </ListItem>
                         ))}
                         {planningComplete && (
-                        <Typography>{`Completed on: ${dayjs(prepDates?.completedAt).format('MMMM DD, YYYY')}`}</Typography>
-                      )}
+                          <Typography>{`Completed on: ${dayjs(prepDates?.completedAt).format('MMMM DD, YYYY')}`}</Typography>
+                        )}
                       </List>
                     </>
                   ) : oneComplete && !isDelayed ? (
@@ -443,7 +448,7 @@ export default function HormoneTest() {
                           prepDates?.StandardPackageHormone__PrepDate4
                         ].map((date, index) => (
                           <ListItem key={index}>
-                            <Typography>{`Day ${index + 1}: ${dayjs(date).format('MMMM DD, YYYY')}`}</Typography>
+                            {date ? `Day ${index + 1}: ${dayjs(date).format('MMMM DD, YYYY')}` : 'Choose proper dates'}
                           </ListItem>
                         ))}
                         {prepDates.hormoneTestSamplingDate && (
@@ -458,16 +463,19 @@ export default function HormoneTest() {
               </Grid>
             )}
           </Grid>
-          <Button fullWidth disabled={!hormoneTestComplete} startIcon={<ThumbUp />} sx={{ mx: 'auto', mt: 5 }} variant="contained">
+          <Button
+            fullWidth
+            disabled={!hormoneTestComplete}
+            onClick={checkHormoneComplete}
+            startIcon={<ThumbUp />}
+            sx={{ mx: 'auto', mt: 5 }}
+            variant="contained"
+          >
             Proceed
           </Button>
           <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
             <Typography sx={{ color: hormoneTestComplete || planningComplete ? 'success.main' : 'warning.main' }} variant="caption">
-              {planningComplete
-                ? 'Complete'
-                : hormoneTestComplete
-                ? 'Great now lets plan the next tests'
-                : 'Please finish all steps to proceed'}
+              {planningComplete ? 'Complete' : !hormoneTestComplete ? 'Please finish all steps to proceed' : null}
             </Typography>
           </Box>
         </AccordionDetails>
