@@ -55,11 +55,11 @@ const ContentWrapper = ({ color, order, title }) => {
       <Typography component="span" variant="body1" sx={{ color: `${color || 'primary'}.main` }}>
         Start
       </Typography>{' '}
-      button to move on to the next step. You can always scroll up to see previous steps. To come back to the{' '}
+      button to start the tests. You can always scroll up to see previous steps. To come back to the{' '}
       <Typography component="span" variant="body1" sx={{ color: `${color || 'primary'}.main` }}>
         current step
       </Typography>{' '}
-      simply press the current task button on the menu bar on the left
+      simply press the current task button on the menu bar on the left.
     </Box>
   );
 };

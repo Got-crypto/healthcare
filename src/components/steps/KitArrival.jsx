@@ -14,7 +14,6 @@ function KitArrival({ step, nextStep }) {
     setChecked(event.target.checked);
   };
   const stepTwoData = orderDetails && orderDetails[1];
-  console.log('orderDetails', stepTwoData);
 
   const confirmPackageReceived = async () => {
     try {
@@ -43,7 +42,7 @@ function KitArrival({ step, nextStep }) {
       {step.reached && (
         <Grid marginTop={10} item xs={12}>
           <span id="kit-arrival" />
-          <Box sx={{ flex: 'wrap', height: '80vh' }}>
+          <Box sx={{ flex: 'wrap', height: '20vh' }}>
             <Typography variant="h2" color="textPrimary">
               Kit Arrival
             </Typography>

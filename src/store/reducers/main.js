@@ -38,22 +38,6 @@ const initialState = {
       ]
     },
     {
-      id: 'testing-intructions',
-      component: TestingInstructions,
-      reached: false,
-      isActive: false,
-      header: 'Testing instructions',
-      collapse: false,
-      children: [
-        {
-          reached: false,
-          isActive: false,
-          header: '',
-          collapse: false
-        }
-      ]
-    },
-    {
       id: 'planning',
       component: Planning,
       reached: false,
@@ -71,6 +55,22 @@ const initialState = {
           reached: false,
           isActive: false,
           header: 'Metabollic, Immune and Thyroid Test',
+          collapse: false
+        }
+      ]
+    },
+    {
+      id: 'testing-intructions',
+      component: TestingInstructions,
+      reached: false,
+      isActive: false,
+      header: 'Testing instructions',
+      collapse: false,
+      children: [
+        {
+          reached: false,
+          isActive: false,
+          header: '',
           collapse: false
         }
       ]

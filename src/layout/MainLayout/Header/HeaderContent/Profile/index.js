@@ -25,7 +25,6 @@ import SettingTab from './SettingTab';
 
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
-import { useNavigate } from '../../../../../../node_modules/react-router-dom/dist/index';
 
 function TabPanel({ children, value, index, ...other }) {
   return (
@@ -53,10 +52,9 @@ const Profile = () => {
 
   const { authUser } = useSelector((state) => state.main);
 
-  const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem('authUser');
-    navigate('/login');
+    location.reload();
   };
 
   const anchorRef = useRef(null);
