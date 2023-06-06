@@ -19,8 +19,9 @@ const ContentWrapper = ({ color, order, title }) => {
       <Typography
         sx={{
           textAlign: 'left',
-          fontWeight: 600,
+          fontWeight: 400,
           fontSize: '2.375rem',
+          fontFamily: "'Comfortaa', cursive",
           lineHeight: 1.21,
           '@media (max-width: 620px)': {
             fontSize: '1.875rem',
