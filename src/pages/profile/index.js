@@ -157,6 +157,17 @@ const Profile = () => {
           setUpdatedProfilePicture(base64Url);
           setUserCredentials({ ...userCredentials, formProfilePic: base64Url });
           setSuccessMessage('Profile picture updated');
+          const userData = user;
+          const update = { ...userData, profilePic: base64Url };
+          const accessToken = JSON.parse(localStorage.getItem('authUser')).accessToken;
+          localStorage.setItem(
+            'authUser',
+            JSON.stringify({
+              accessToken,
+              user: update
+            })
+          );
+
           setIsUpdating(false);
         }
       }

@@ -7,9 +7,9 @@ import { setOrderDetails } from 'store/reducers/main';
 
 function KitArrival({ step, nextStep }) {
   const { orderDetails, selectedOrder } = useSelector((state) => state.main);
-  const [checked, setChecked] = useState(false);
   const dispatch = useDispatch();
-
+  
+  const [checked, setChecked] = useState(false);
   const handleChange = (event) => {
     setChecked(event.target.checked);
   };

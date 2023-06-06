@@ -26,7 +26,7 @@ export default function MetabollicTest() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
 
-  const { orderDetails, selectedOrder } = useSelector((state) => state.main);
+  const { orderDetails, selectedOrder } = useSelector((state) => state.orders);
   const { prepDates, hormorneTestComplete } = useSelector((state) => state.tests);
   const dispatch = useDispatch();
   const planningData = orderDetails && orderDetails[2];
