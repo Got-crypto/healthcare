@@ -1,19 +1,28 @@
 import { Box, FormControl } from '@mui/material';
 import { InputLabel, MenuItem, Select } from '../../../../../node_modules/@mui/material/index';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { handleGetCustomerOrders } from 'services/BeOne';
-import { selectOrder } from '../../../../store/reducers/main';
+import { handleGetCustomerOrderById, handleGetCustomerOrders } from 'services/BeOne';
+import { getUnlockedSteps, selectOrder, setOrderDetails } from '../../../../store/reducers/main';
 
 const Orders = () => {
   const [order, setOrder] = useState('');
   const [customerOrders, setCustomerOrders] = useState([]);
   const dispatch = useDispatch();
+  const { selectedOrder } = useSelector((state) => state.main);
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     setOrder(e.target.value);
     dispatch(selectOrder(JSON.parse(e.target.value)));
+    try {
+      console.log('selectedOrder', selectedOrder);
+      const response = await handleGetCustomerOrderById(JSON.parse(e.target.value).orderId);
+      dispatch(setOrderDetails(response?.data));
+      dispatch(getUnlockedSteps());
+    } catch (error) {
+      console.log('error fetching order details', error);
+    }
   };
 
   useEffect(() => {

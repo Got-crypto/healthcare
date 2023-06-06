@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { LoadingButton } from '../../../node_modules/@mui/lab/index';
 import { resizeImage } from 'utils/File-Controller';
 import { Delete } from '../../../node_modules/@mui/icons-material/index';
+import SectionWrapper from 'layout/MainLayout/HOC/SectionWrapper';
 
 const FileInput = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -86,7 +87,7 @@ const FileInput = () => {
           <img alt="immune-test" src={selectedFile && URL.createObjectURL(selectedFile)} style={{ height: '250px', width: 'auto' }} />
         </Box>
       )}
-      <Button variant="outline" sx={{ backgroundColor: 'error.main', mt: 1, color: 'white' }} onClick={()=>setSelectedFile(null)}>
+      <Button variant="outline" sx={{ backgroundColor: 'error.main', mt: 1, color: 'white' }} onClick={() => setSelectedFile(null)}>
         <Delete />
       </Button>
       <LoadingButton loading={isLoading} sx={{ mt: 2 }} fullWidth onClick={uploadImmuneTestPicture} variant="contained">
@@ -96,21 +97,19 @@ const FileInput = () => {
   );
 };
 
-function ImmuneTestPicture({ step }) {
+function ImmuneTestPicture() {
   return (
     <>
-      {step.reached && (
-        <Grid marginTop={10} item xs={12}>
-          <Box sx={{ flex: 'wrap' }}>
-            <Typography variant="h2" color="textPrimary">
-              Immune Test Picture
-            </Typography>
-            <FileInput />
-          </Box>
-        </Grid>
-      )}
+      <Grid marginTop={10} item xs={12}>
+        <Box sx={{ flex: 'wrap' }}>
+          <Typography variant="h2" color="textPrimary">
+            Immune Test Picture
+          </Typography>
+          <FileInput />
+        </Box>
+      </Grid>
     </>
   );
 }
 
-export default ImmuneTestPicture;
+export default SectionWrapper(ImmuneTestPicture);

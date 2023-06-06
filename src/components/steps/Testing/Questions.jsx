@@ -20,7 +20,6 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 import { QuestionsUtils } from 'utils/TestingQuestions';
 
-
 export function ToggleReplies() {
   const [reply, setReply] = useState('Yes');
 
@@ -77,7 +76,7 @@ export default function Testing() {
                 sx={{ width: '100%', gap: 1, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
               >
                 <ListItemIcon>
-                  <Info sx={{color: 'info.main'}}/>
+                  <Info sx={{ color: 'info.main' }} />
                 </ListItemIcon>
                 <ListItemText primary={content} />
                 <ToggleReplies />
@@ -101,13 +100,13 @@ export default function Testing() {
       )}
       {checked && (
         <List elevation={1} fullWidth sx={{ width: '100%', bgcolor: 'background.paper' }}>
-          {['Hormone Test', 'Metabolic Test', 'Thyroid Test', 'Immune Test'].map((packadge, index) => {
-            const packadgeId = `${packadge}-${index}`;
+          {['Hormone Test', 'Metabolic Test', 'Thyroid Test', 'Immune Test'].map((kitPackage, index) => {
+            const kitPackageId = `${kitPackage}-${index}`;
 
             return (
               <ListItem
-              sx={{mx:'auto'}}
-                key={packadgeId}
+                sx={{ mx: 'auto' }}
+                key={kitPackageId}
                 secondaryAction={
                   <IconButton edge="end">
                     <Inventory />
@@ -115,17 +114,17 @@ export default function Testing() {
                 }
                 disablePadding
               >
-                <ListItemButton fullWidth onClick={handleToggle(packadge)} dense>
+                <ListItemButton fullWidth onClick={handleToggle(kitPackage)} dense>
                   <ListItemIcon>
                     <Checkbox
                       edge="start"
-                      checked={marked.indexOf(packadge) !== -1}
+                      checked={marked.indexOf(kitPackage) !== -1}
                       tabIndex={-1}
                       disableRipple
-                      inputProps={{ 'aria-labelledby': packadgeId }}
+                      inputProps={{ 'aria-labelledby': kitPackageId }}
                     />
                   </ListItemIcon>
-                  <ListItemText sx={{mx: 'auto'}} id={packadgeId} primary={packadge} />
+                  <ListItemText sx={{ mx: 'auto' }} id={kitPackageId} primary={kitPackage} />
                 </ListItemButton>
               </ListItem>
             );

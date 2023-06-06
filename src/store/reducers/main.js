@@ -19,12 +19,13 @@ const initialState = {
   orderDetails: null,
   componentDrawerOpen: true,
   itemCollapsed: false,
+  unlockedSteps: [],
   activeStep: -1,
   steps: [
     {
       component: KitArrival,
       header: 'Kit Arrival',
-      id: 'kit-arrival',
+      id: 'kitarrival',
       collapse: false,
       isActive: false,
       reached: false,
@@ -60,7 +61,7 @@ const initialState = {
       ]
     },
     {
-      id: 'testing-intructions',
+      id: 'testingInstructions',
       component: TestingInstructions,
       reached: false,
       isActive: false,
@@ -76,7 +77,7 @@ const initialState = {
       ]
     },
     {
-      id: 'immune-test-picture',
+      id: 'immuneTestPictureUpload',
       component: ImmuneTestPictrure,
       reached: false,
       isActive: false,
@@ -92,7 +93,7 @@ const initialState = {
       ]
     },
     {
-      id: 'health-questionare',
+      id: 'healthQuestionnaire',
       component: HealthQuestionare,
       reached: false,
       isActive: false,
@@ -108,7 +109,7 @@ const initialState = {
       ]
     },
     {
-      id: 'lifestyle',
+      id: 'beginLifestyleProgram',
       component: LifestyleProgram,
       reached: false,
       isActive: false,
@@ -124,7 +125,7 @@ const initialState = {
       ]
     },
     {
-      id: 'results',
+      id: 'resultsAndPersonalizedProtocol',
       component: Results,
       reached: false,
       isActive: false,
@@ -166,15 +167,22 @@ const menu = createSlice({
       state.itemCollapsed = action.payload;
     },
 
+    getUnlockedSteps(state) {
+      state.unlockedSteps = state.steps?.filter((step, index) => {
+        if (state.orderDetails) {
+          console.log('called');
+          if (state.orderDetails[index]?.status === 'Done' || state.orderDetails[index]?.status === 'Active') return step;
+        }
+      });
+    },
+
     setActiveStep(state, action) {
       if (action.payload < state.steps.length) {
         state.activeStep = action.payload;
       }
-
       state.steps.forEach((step, index) => {
         if (index === state.activeStep) {
           step.isActive = true;
-          step.reached = true;
         } else {
           step.isActive = false;
         }
@@ -191,5 +199,14 @@ const menu = createSlice({
 
 export default menu.reducer;
 
-export const { activeItem, activeComponent, openDrawer, openComponentDrawer, collapseItem, setActiveStep, selectOrder, setOrderDetails } =
-  menu.actions;
+export const {
+  activeItem,
+  activeComponent,
+  openDrawer,
+  openComponentDrawer,
+  collapseItem,
+  setActiveStep,
+  selectOrder,
+  setOrderDetails,
+  getUnlockedSteps
+} = menu.actions;
