@@ -142,6 +142,7 @@ const Profile = () => {
       setIsUpdating(true);
       console.log('test');
       const response = await API.post('api/files?purpose=PROFILE_PIC', formData);
+      console.log('response', response)
       console.log('passed');
       setErrorMessage(null);
       if (response?.status === 200) {

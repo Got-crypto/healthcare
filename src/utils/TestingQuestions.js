@@ -6,9 +6,10 @@ dayjs.extend(isSameOrAfter);
 
 export function QuestionsUtils() {
   const today = new Date();
-  const { orderDetails } = useSelector((state) => state.main);
-  const testingData = orderDetails[3]?.data;
-
+  const { orderDetails, selectedOrder } = useSelector((state) => state.main);
+  const testingData = orderDetails && orderDetails[3]?.data;
+  console.log('orderDetails', orderDetails);
+  console.log('selctedOrder', selectedOrder);
   const isYesterdayOrTomorrow = (day, forward) => {
     if (forward) {
       return dayjs(day).isSameOrAfter(today);
@@ -55,11 +56,11 @@ export function QuestionsUtils() {
       content: `You have not confirmed yet if you are prepared for the Metabolic test on ${dayjs(metabolicSampleDate).format(
         'MMMM DD, YYYY'
       )}`,
-      condition: !metabollicSampleStatus
+      condition: !metabolicStatus
     },
     {
       content: `You have not confirmed yet if you are prepared for the Hormone test on ${dayjs(hormoneSampleDate).format('MMMM DD, YYYY')}`,
-      condition: !hormoneSampleStatus
+      condition: !hormoneStatus
     },
     {
       content: `You confirmed on ${dayjs(metabolicSampleDate).format(

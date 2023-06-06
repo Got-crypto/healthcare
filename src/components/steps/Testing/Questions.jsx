@@ -15,8 +15,26 @@ import {
 import { useSelector } from 'react-redux';
 import { Info, Inventory } from '../../../../node_modules/@mui/icons-material/index';
 import { useState } from 'react';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 import { QuestionsUtils } from 'utils/TestingQuestions';
+
+
+export function ToggleReplies() {
+  const [reply, setReply] = useState('Yes');
+
+  const handleChange = (reply) => {
+    setReply(reply.target.value);
+  };
+  console.log('reply', reply);
+  return (
+    <ToggleButtonGroup color="info" value={reply} exclusive onChange={handleChange}>
+      <ToggleButton value="Yes">Yes</ToggleButton>
+      <ToggleButton value="No">No</ToggleButton>
+    </ToggleButtonGroup>
+  );
+}
 
 export default function Testing() {
   const { orderDetails } = useSelector((state) => state.main);
@@ -59,9 +77,10 @@ export default function Testing() {
                 sx={{ width: '100%', gap: 1, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
               >
                 <ListItemIcon>
-                  <Info />
+                  <Info sx={{color: 'info.main'}}/>
                 </ListItemIcon>
                 <ListItemText primary={content} />
+                <ToggleReplies />
               </ListItem>
             )
           );
@@ -71,6 +90,7 @@ export default function Testing() {
       {!hormoneSampleStatus && (
         <Box fullWidth>
           <Typography>Will you require any of the kits re-sent to you?</Typography>
+          <Typography sx={{ color: 'warning.main' }}>Please note there will be a fee for this.</Typography>
           <FormGroup sx={{ width: 'fit-content' }}>
             <FormControlLabel
               control={<Switch checked={checked} onChange={handleChange} defaultChecked={!1} />}
@@ -80,12 +100,13 @@ export default function Testing() {
         </Box>
       )}
       {checked && (
-        <List elevation={1} sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+        <List elevation={1} fullWidth sx={{ width: '100%', bgcolor: 'background.paper' }}>
           {['Hormone Test', 'Metabolic Test', 'Thyroid Test', 'Immune Test'].map((packadge, index) => {
             const packadgeId = `${packadge}-${index}`;
 
             return (
               <ListItem
+              sx={{mx:'auto'}}
                 key={packadgeId}
                 secondaryAction={
                   <IconButton edge="end">
@@ -94,7 +115,7 @@ export default function Testing() {
                 }
                 disablePadding
               >
-                <ListItemButton onClick={handleToggle(packadge)} dense>
+                <ListItemButton fullWidth onClick={handleToggle(packadge)} dense>
                   <ListItemIcon>
                     <Checkbox
                       edge="start"
@@ -104,7 +125,7 @@ export default function Testing() {
                       inputProps={{ 'aria-labelledby': packadgeId }}
                     />
                   </ListItemIcon>
-                  <ListItemText id={packadgeId} primary={packadge} />
+                  <ListItemText sx={{mx: 'auto'}} id={packadgeId} primary={packadge} />
                 </ListItemButton>
               </ListItem>
             );

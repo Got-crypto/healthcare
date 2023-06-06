@@ -17,7 +17,7 @@ import { addPrepDates } from 'store/reducers/tests';
 import { handleFinishPlanning } from 'services/BeOne';
 import { LoadingButton } from '../../../../node_modules/@mui/lab/index';
 
-export default function MetabollicTest() {
+export default function MetabollicTest({successMessage, setSuccessMessage}) {
   const [one, setOne] = useState(false);
   const [two, setTwo] = useState(false);
   const [three, setThree] = useState(false);
@@ -32,12 +32,14 @@ export default function MetabollicTest() {
   const planningData = orderDetails && orderDetails[2];
   const planningComplete = planningData?.status.toLowerCase() === 'done' ? !0 : !1;
 
-  const handleChangeMetabollicTestDate = (date) => {
-    const testDate = dayjs(`${date?.$y}-${date?.$M + 1}-${date?.$D}`).format('MMMM DD, YYYY');
+  const handleChangeMetabollicTestDate = () => {
+    const testDate = dayjs(`${date2?.$y}-${date2?.$M + 1}-${date2?.$D}`).format('MMMM DD, YYYY');
 
     dispatch(addPrepDates({ ...prepDates, metabolicTestDate: testDate }));
     setMetabollicPlanningComplete(true);
   };
+
+  console.log('prepDates', prepDates);
 
   const finishPlanning = async () => {
     try {
@@ -45,18 +47,19 @@ export default function MetabollicTest() {
       const response = await handleFinishPlanning(selectedOrder?.orderId, {
         hormoneSkipReminder1: true,
         hormoneSkipReminder2: true,
-        hormoneTestSamplingDate: prepDates?.hormoneTestSamplingDat,
-        hormoneTestWindowStartDate: prepDates?.StandardPackageHormone__PrepDate1,
+        hormoneTestSamplingDate: dayjs(prepDates?.hormoneTestSamplingDate).format('YYYY-MM-DD'),
+        hormoneTestWindowStartDate: dayjs(prepDates?.StandardPackageHormone__PrepDate1).format('YYYY-MM-DD'),
         metabolismSkipReminder1: true,
         metabolismSkipReminder2: true,
-        metabolismTestSamplingDate: prepDates?.metabolicTestDate,
+        metabolismTestSamplingDate: dayjs(prepDates?.metabolicTestDate).format('YYYY-MM-DD'),
         periodCycleLength: 10,
         testOption: 'OPTION_1'
       });
       setIsLoading(false);
+      setSuccessMessage(response?.data?.message);
       console.log('response', response);
     } catch (error) {
-      setError('Something went wrong');
+      setError(error?.data?.errors);
       setIsLoading(false);
       console.log('error finishing planning', error);
     }
@@ -245,7 +248,7 @@ export default function MetabollicTest() {
             <Typography variant="body1" sx={{ mt: 2 }}>{`Hormone Metebolic Test Date: ${dayjs(date2).format('MMMM DD, YYYY')}`}</Typography>
           )}
           {planningComplete && (
-            <Typography variant="body1" sx={{ mt: 2, color: 'success.main' }}>{`Hormone Metebolic Test Date was done at: ${dayjs(
+            <Typography variant="body1" sx={{ mt: 2, color: 'success.main' }}>{`Hormone Metabolic Test Date was done at: ${dayjs(
               prepDates?.metabolicTestDate
             ).format('MMMM DD, YYYY')}`}</Typography>
           )}
@@ -264,6 +267,11 @@ export default function MetabollicTest() {
             {planningComplete && (
               <Typography variant="body1" sx={{ color: 'success.main' }}>
                 Plannning tests complete
+              </Typography>
+            )}
+            {successMessage && (
+              <Typography variant="body1" sx={{ color: 'success.main' }}>
+                {successMessage}
               </Typography>
             )}
             {error && (

@@ -4,16 +4,21 @@ import { ThumbUp } from '../../../node_modules/@mui/icons-material/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleConfirmPackageReceived, handleGetCustomerOrderById } from 'services/BeOne';
 import { setOrderDetails } from 'store/reducers/main';
+import { LoadingButton } from '../../../node_modules/@mui/lab/index';
 
 function KitArrival({ step, nextStep }) {
   const { orderDetails, selectedOrder } = useSelector((state) => state.main);
+  const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(null);
   const dispatch = useDispatch();
-  
+
   const [checked, setChecked] = useState(false);
   const handleChange = (event) => {
     setChecked(event.target.checked);
   };
   const stepTwoData = orderDetails && orderDetails[1];
+  console.log('selectedOrder', selectedOrder);
+  console.log('orderDetails', orderDetails);
 
   const confirmPackageReceived = async () => {
     try {
@@ -26,9 +31,13 @@ function KitArrival({ step, nextStep }) {
   useEffect(() => {
     const getNewOrderDetails = async () => {
       try {
+        setIsLoading(true);
         const response = await handleGetCustomerOrderById(selectedOrder?.orderId);
         dispatch(setOrderDetails(response?.data));
+        setSuccessMessage(response?.data?.message);
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
         console.log('error', error);
       }
     };
@@ -56,7 +65,7 @@ function KitArrival({ step, nextStep }) {
               </Typography>
             )}
             <>
-              {stepTwoData?.status.toLowerCase() === 'pending' ? (
+              {stepTwoData?.status.toLowerCase() === 'active' ? (
                 <>
                   <Typography sx={{ color: !checked ? 'warning.main' : 'success.main' }}>
                     {checked ? 'Great! Confirm and proceed to planning tests.' : 'The package should be with you now?'}
@@ -72,14 +81,22 @@ function KitArrival({ step, nextStep }) {
                       The Package Should be with you soon. Please be Patient
                     </Typography>
                   )}
-                  <Button variant="contained" onClick={confirmPackageReceived} disabled={!checked} sx={{ mt: 2 }} startIcon={<ThumbUp />}>
+                  <LoadingButton
+                    loading={isLoading}
+                    variant="contained"
+                    onClick={confirmPackageReceived}
+                    disabled={!checked}
+                    sx={{ mt: 2 }}
+                    startIcon={<ThumbUp />}
+                  >
                     Confirm
-                  </Button>
+                  </LoadingButton>
+                  {successMessage && <Typography>{successMessage}</Typography>}
                 </>
-              ) : stepTwoData?.status.toLowerCase() === 'done' ? (
+              ) : stepTwoData?.status.toLowerCase() === 'done' || successMessage ? (
                 <>
                   <Typography sx={{ color: 'success.main' }}>Packages delivered!</Typography>
-                  <Button variant="contained" sx={{mt: 2}} onClick={nextStep} startIcon={<ThumbUp />}>
+                  <Button variant="contained" sx={{ mt: 2 }} onClick={nextStep} startIcon={<ThumbUp />}>
                     Proceed to Planning
                   </Button>
                 </>
