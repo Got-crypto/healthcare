@@ -91,7 +91,7 @@ export default function HormoneTest() {
 
   const [date1, setDate1] = useState();
 
-  const { orderDetails } = useSelector((state) => state.orders);
+  const { orderDetails } = useSelector((state) => state.main);
   const planningData = orderDetails && orderDetails[2];
   const planningComplete = planningData?.status.toLowerCase() === 'done' ? !0 : !1;
 

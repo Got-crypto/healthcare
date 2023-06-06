@@ -1,9 +1,12 @@
 import {
   Box,
+  Checkbox,
   FormControlLabel,
   FormGroup,
+  IconButton,
   List,
   ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
   Switch,
@@ -25,8 +28,22 @@ export default function Testing() {
   const hormoneSampleStatus = testingData?.StandardPackageHormoneSampleCollect__customerConfirmationStatus === 'Y' ? true : false;
 
   const questions = QuestionsUtils();
-
   console.log('questions', questions);
+
+  const [marked, setMarked] = useState([0]);
+
+  const handleToggle = (value) => () => {
+    const currentIndex = marked.indexOf(value);
+    const newMarked = [...marked];
+
+    if (currentIndex === -1) {
+      newMarked.push(value);
+    } else {
+      newMarked.splice(currentIndex, 1);
+    }
+
+    setMarked(newMarked);
+  };
 
   console.log('testingData', testingData);
   return (
@@ -63,31 +80,35 @@ export default function Testing() {
         </Box>
       )}
       {checked && (
-        <List>
-          <ListItem sx={{ width: '100%', gap: 1, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-            <ListItemIcon>
-              <Inventory />
-            </ListItemIcon>
-            <ListItemText primary="Hormone Test" />
-          </ListItem>
-          <ListItem>
-            <ListItemIcon>
-              <Inventory />
-            </ListItemIcon>
-            <ListItemText primary="Metabolic Test" secondary={'click to select'} />
-          </ListItem>
-          <ListItem>
-            <ListItemIcon>
-              <Inventory />
-            </ListItemIcon>
-            <ListItemText primary="Thyroid Test" secondary={'click to select'} />
-          </ListItem>
-          <ListItem>
-            <ListItemIcon>
-              <Inventory />
-            </ListItemIcon>
-            <ListItemText primary="Immune Test" secondary={'click to select'} />
-          </ListItem>
+        <List elevation={1} sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+          {['Hormone Test', 'Metabolic Test', 'Thyroid Test', 'Immune Test'].map((packadge, index) => {
+            const packadgeId = `${packadge}-${index}`;
+
+            return (
+              <ListItem
+                key={packadgeId}
+                secondaryAction={
+                  <IconButton edge="end">
+                    <Inventory />
+                  </IconButton>
+                }
+                disablePadding
+              >
+                <ListItemButton onClick={handleToggle(packadge)} dense>
+                  <ListItemIcon>
+                    <Checkbox
+                      edge="start"
+                      checked={marked.indexOf(packadge) !== -1}
+                      tabIndex={-1}
+                      disableRipple
+                      inputProps={{ 'aria-labelledby': packadgeId }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText id={packadgeId} primary={packadge} />
+                </ListItemButton>
+              </ListItem>
+            );
+          })}
         </List>
       )}
     </Box>
