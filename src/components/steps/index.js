@@ -5,5 +5,6 @@ import LifestyleProgram from './LifestyleProgram';
 import Planning from './Planning';
 import Results from './Results';
 import TestingInstructions from './TestingInstructions';
+import Welcome from './Welcome';
 
-export { HealthQuestionare, ImmuneTestPictrure, KitArrival, LifestyleProgram, Planning, Results, TestingInstructions };
+export { Welcome, HealthQuestionare, ImmuneTestPictrure, KitArrival, LifestyleProgram, Planning, Results, TestingInstructions };

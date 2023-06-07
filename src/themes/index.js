@@ -26,6 +26,15 @@ export default function ThemeCustomization({ children }) {
           xl: 1536
         }
       },
+      dashboardBreakpoints: {
+        values: {
+          xs: 0,
+          sm: 768,
+          md: 927,
+          lg: 1266,
+          xl: 1536
+        }
+      },
       direction: 'ltr',
       mixins: {
         toolbar: {

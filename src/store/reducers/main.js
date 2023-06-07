@@ -14,6 +14,21 @@ const initialState = {
   activeStep: -1,
   steps: [
     {
+      header: 'Welcome',
+      id: 'welcome',
+      collapse: false,
+      isActive: false,
+      reached: false,
+      children: [
+        {
+          header: '',
+          reached: false,
+          collapse: false,
+          isActive: false
+        }
+      ]
+    },
+    {
       header: 'Kit Arrival',
       id: 'kitarrival',
       collapse: false,

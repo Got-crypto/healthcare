@@ -16,7 +16,7 @@ const Header = ({ open, handleDrawerToggle }) => {
   // const iconBackColorOpen = 'grey.200';
 
   const mainHeader = (
-    <Toolbar className="app__header">
+    <Toolbar>
       <IconButton
         disableRipple
         aria-label="open drawer"
@@ -34,7 +34,7 @@ const Header = ({ open, handleDrawerToggle }) => {
   const appBar = {
     position: 'fixed',
     color: 'inherit',
-    elevation: 0,
+    elevation: 2,
     sx: {
       borderBottom: `1px solid ${theme.palette.divider}`,
       boxShadow: theme.customShadows.z1

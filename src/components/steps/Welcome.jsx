@@ -1,6 +1,7 @@
 import { Box, Typography } from '@mui/material';
+import SectionWrapper from 'layout/MainLayout/HOC/SectionWrapper';
 
-const ContentWrapper = ({ color, order, title }) => {
+const Welcome = () => {
   return (
     <Box
       sx={{
@@ -40,22 +41,18 @@ const ContentWrapper = ({ color, order, title }) => {
         }}
         color="textPrimary"
       >
-        {title}
+        Welcome! This is your Dashboard
       </Typography>
       Here you will find all the steps on your journey with us. Every time you log on here the{' '}
       <Typography component="span" variant="body1" sx={{ color: `primary.main` }}>
         tests
       </Typography>{' '}
       section on the sidebar will be pointing to the{' '}
-      <Typography component="span" variant="body1" sx={{ color: `${color || 'primary'}.main` }}>
+      <Typography component="span" variant="body1" sx={{ color: 'primary.main' }}>
         current step
       </Typography>{' '}
-      as well as see what the next step is. {order ? 'Click' : 'Please select an order from the page header then click'} the{' '}
-      <Typography component="span" variant="body1" sx={{ color: `${color || 'primary'}.main` }}>
-        Start
-      </Typography>{' '}
-      button to start the tests. You can always scroll up to see previous steps. To come back to the{' '}
-      <Typography component="span" variant="body1" sx={{ color: `${color || 'primary'}.main` }}>
+      as well as see what the next step is. You can always scroll up to see previous steps. To come back to the{' '}
+      <Typography component="span" variant="body1" sx={{ color: 'primary.main' }}>
         current step
       </Typography>{' '}
       simply press the current task button on the menu bar on the left.
@@ -63,4 +60,4 @@ const ContentWrapper = ({ color, order, title }) => {
   );
 };
 
-export default ContentWrapper;
+export default SectionWrapper(Welcome);

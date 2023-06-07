@@ -18,7 +18,7 @@ const SectionWrapper = (Component) =>
             display: 'flex',
             flexDirection: 'center',
             alignItems: 'center',
-            justifyContent: 'flex-end'
+            justifyContent: 'flex-start'
           }}
         >
           <Typography>BeOne</Typography>

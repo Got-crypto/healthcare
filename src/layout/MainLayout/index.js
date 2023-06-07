@@ -11,6 +11,7 @@ import navigation from 'menu-items';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
 
 import { openDrawer } from 'store/reducers/main';
+import MiniDrawer from './MiniDrawer/index';
 
 const MainLayout = () => {
   const theme = useTheme();
@@ -38,8 +39,9 @@ const MainLayout = () => {
   }, [drawerOpen]);
 
   return (
-    <Box className="" sx={{ display: 'flex', width: '100%' }}>
+    <Box sx={{ display: 'flex', width: '100%' }}>
       <Header open={open} handleDrawerToggle={handleDrawerToggle} />
+      <MiniDrawer />
       <Drawer className="" open={open} handleDrawerToggle={handleDrawerToggle} />
       <Box component="main" sx={{ width: '100%', flexGrow: 1, p: { xs: 2, sm: 3 } }}>
         <Toolbar />

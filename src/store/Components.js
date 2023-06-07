@@ -5,10 +5,15 @@ import {
   LifestyleProgram,
   Planning,
   Results,
-  TestingInstructions
+  TestingInstructions,
+  Welcome
 } from '../components/steps';
 
 export const Components = [
+  {
+    component: <Welcome />,
+    id: 'welcome'
+  },
   {
     component: <KitArrival />,
     id: 'kitarrival'

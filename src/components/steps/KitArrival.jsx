@@ -12,7 +12,6 @@ function KitArrival() {
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState(null);
   const dispatch = useDispatch();
-
   const [checked, setChecked] = useState(false);
   const handleChange = (event) => {
     setChecked(event.target.checked);
