@@ -99,4 +99,4 @@ function KitArrival() {
   );
 }
 
-export default SectionWrapper(KitArrival);
+export default SectionWrapper(KitArrival, 'kitarrival');

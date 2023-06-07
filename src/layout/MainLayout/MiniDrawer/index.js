@@ -9,6 +9,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { useSelector } from 'react-redux';
 import { Block, HourglassTop, RadioButtonChecked, RadioButtonUnchecked } from '../../../../node_modules/@mui/icons-material/index';
+import { useTheme } from '../../../../node_modules/@mui/styles/index';
+import { useMediaQuery } from '../../../../node_modules/@mui/material/index';
 
 const drawerWidth = 200;
 
@@ -27,9 +29,9 @@ const closedMixin = (theme) => ({
     duration: theme.transitions.duration.leavingScreen
   }),
   overflowX: 'hidden',
-  width: `calc(${theme.spacing(7)} + 1px)`,
-  [theme.breakpoints.up('sm')]: {
-    width: `calc(${theme.spacing(8)} + 1px)`
+  width: `150px`,
+  [theme.breakpoints.down('xsl')]: {
+    width: `100px`
   }
 });
 
@@ -49,19 +51,23 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 }));
 
 export default function MiniDrawer() {
+  const theme = useTheme();
+  const smx = useMediaQuery(theme.breakpoints.down('smx'));
   const open = true;
 
   const { steps, orderDetails } = useSelector((state) => state.main);
 
   return (
     <Box component="nav" sx={{ position: 'fixed', flexShrink: { md: 0 }, zIndex: 100 }} aria-label="mailbox folders">
-      <Drawer variant="permanent" open={!0} anchor="right">
+      <Drawer variant="permanent" open={!smx} anchor="right">
         <Box sx={{ height: '100px' }} />
         <List>
-          {steps.map(({ header, id }, i) => {
+          {steps.map(({ header, id, short }, i) => {
             return (
-              <ListItem key={`${id}-${i}`} disablePadding sx={{ display: 'block' }}>
+              <ListItem key={`${id}-${i}`} disablePadding sx={{ display: 'block', width: '150px' }}>
                 <ListItemButton
+                  component="a"
+                  href={`#${id}`}
                   sx={{
                     minHeight: 48,
                     justifyContent: open ? 'initial' : 'center',
@@ -86,7 +92,10 @@ export default function MiniDrawer() {
                     )}
                     {orderDetails && !orderDetails[i]?.status && <Block color="disabled" />}
                   </ListItemIcon>
-                  <ListItemText primary={header} />
+                  <ListItemText
+                    primary={smx ? short : header}
+                    secondary={orderDetails && orderDetails[i]?.status ? orderDetails[i]?.status : 'Not available'}
+                  />
                 </ListItemButton>
               </ListItem>
             );

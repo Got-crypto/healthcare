@@ -21,4 +21,4 @@ function HealthQuestionare() {
   );
 }
 
-export default SectionWrapper(HealthQuestionare);
+export default SectionWrapper(HealthQuestionare, 'healthQuestionnaire');

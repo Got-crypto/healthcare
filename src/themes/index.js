@@ -20,17 +20,13 @@ export default function ThemeCustomization({ children }) {
       breakpoints: {
         values: {
           xs: 0,
+          xsl: 493,
+          smxxx: 582,
+          smx: 675,
           sm: 768,
+          mdxx: 781,
+          mdx: 927,
           md: 1024,
-          lg: 1266,
-          xl: 1536
-        }
-      },
-      dashboardBreakpoints: {
-        values: {
-          xs: 0,
-          sm: 768,
-          md: 927,
           lg: 1266,
           xl: 1536
         }

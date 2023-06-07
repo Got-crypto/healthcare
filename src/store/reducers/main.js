@@ -16,6 +16,7 @@ const initialState = {
     {
       header: 'Welcome',
       id: 'welcome',
+      short: 'Welcome',
       collapse: false,
       isActive: false,
       reached: false,
@@ -31,6 +32,7 @@ const initialState = {
     {
       header: 'Kit Arrival',
       id: 'kitarrival',
+      short: 'Kit Arrival',
       collapse: false,
       isActive: false,
       reached: false,
@@ -48,6 +50,7 @@ const initialState = {
       reached: false,
       isActive: false,
       header: 'Planning',
+      short: 'Planning',
       collapse: true,
       children: [
         {
@@ -70,6 +73,7 @@ const initialState = {
       isActive: false,
       header: 'Testing instructions',
       collapse: false,
+      short: 'Testing',
       children: [
         {
           reached: false,
@@ -82,6 +86,7 @@ const initialState = {
     {
       id: 'immuneTestPictureUpload',
       reached: false,
+      short: 'Immune Test',
       isActive: false,
       header: 'Immune test picture',
       collapse: false,
@@ -98,7 +103,8 @@ const initialState = {
       id: 'healthQuestionnaire',
       reached: false,
       isActive: false,
-      header: 'Health Questionare',
+      header: 'Health Questionnaire',
+      short: 'Questionnaire',
       collapse: false,
       children: [
         {
@@ -114,6 +120,7 @@ const initialState = {
       reached: false,
       isActive: false,
       header: 'Begin your Lifestyle Program',
+      short: 'Lifestyle',
       collapse: false,
       children: [
         {
@@ -129,6 +136,7 @@ const initialState = {
       reached: false,
       isActive: false,
       header: 'Results and personalized protocol',
+      short: 'Results',
       collapse: false,
       children: [
         {

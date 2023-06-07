@@ -51,4 +51,4 @@ function TestingInstructions() {
   );
 }
 
-export default SectionWrapper(TestingInstructions);
+export default SectionWrapper(TestingInstructions, 'testingInstructions');

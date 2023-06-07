@@ -60,4 +60,4 @@ const Welcome = () => {
   );
 };
 
-export default SectionWrapper(Welcome);
+export default SectionWrapper(Welcome, 'welcome');

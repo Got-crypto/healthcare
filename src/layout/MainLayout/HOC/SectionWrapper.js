@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Box, Typography } from '../../../../node_modules/@mui/material/index';
 
-const SectionWrapper = (Component) =>
+const SectionWrapper = (Component, id) =>
   function HOC() {
     return (
       <motion.div
@@ -11,6 +11,7 @@ const SectionWrapper = (Component) =>
         transition={{ duration: 0.7 }}
         style={{ padding: '5vh 0' }}
       >
+        <span id={id} />
         <Component />
         <Box
           sx={{

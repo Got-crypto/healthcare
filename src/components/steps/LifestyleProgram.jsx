@@ -22,4 +22,4 @@ function LifestyleProgram() {
   );
 }
 
-export default SectionWrapper(LifestyleProgram);
+export default SectionWrapper(LifestyleProgram, 'beginLifestyleProgram');
