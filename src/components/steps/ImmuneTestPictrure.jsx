@@ -40,7 +40,7 @@ const FileInput = () => {
       setIsLoading(true);
       const resized = await resizeImage(selectedFile, 800, 800, 0.7);
       formData.append('file', resized);
-      await handleUploadPicture(selectedOrder && selectedOrder, false, formData);
+      await handleUploadPicture(selectedOrder?.orderId, false, formData);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);

@@ -38,7 +38,7 @@ const Orders = () => {
     const recent = customerOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     const selectRecentOrder = async () => {
       try {
-        dispatch(selectOrder(recent[0]?.orderId));
+        dispatch(selectOrder(recent[0]));
         const response = await handleGetCustomerOrderById(recent[0]?.orderId);
         dispatch(setOrderDetails(response?.data));
         dispatch(getUnlockedSteps());

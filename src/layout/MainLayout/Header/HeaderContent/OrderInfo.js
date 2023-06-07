@@ -7,7 +7,7 @@ export default function OrderInfo() {
     <Box sx={{ width: '100%', ml: { xs: 0, md: 1 } }}>
       {selectedOrder ? (
         <Paper sx={{ p: 1, backgroundColor: 'transparent', color: 'text.primary' }} elevation={1}>
-          Selected Order: {selectedOrder && selectedOrder}
+          Selected Order: {selectedOrder?.orderId}
         </Paper>
       ) : (
         <Paper sx={{ p: 1, backgroundColor: 'transparent', color: 'text.primary' }} elevation={1}>

@@ -22,6 +22,7 @@ const SectionWrapper = (Component) =>
           }}
         >
           <Typography>BeOne</Typography>
+          <Typography></Typography>
         </Box>
       </motion.div>
     );

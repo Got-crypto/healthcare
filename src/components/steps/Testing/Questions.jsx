@@ -17,6 +17,7 @@ import { Info, Inventory } from '../../../../node_modules/@mui/icons-material/in
 import { useState } from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import { motion } from 'framer-motion';
 
 import { QuestionsUtils } from 'utils/TestingQuestions';
 
@@ -60,7 +61,7 @@ export default function Testing() {
   };
 
   return (
-    <Box>
+    <motion.div layout>
       <List dense>
         {questions.map(({ content, condition }, index) => {
           return (
@@ -125,6 +126,6 @@ export default function Testing() {
           })}
         </List>
       )}
-    </Box>
+    </motion.div>
   );
 }

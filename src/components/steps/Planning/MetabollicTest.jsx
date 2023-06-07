@@ -43,7 +43,7 @@ export default function MetabollicTest({successMessage, setSuccessMessage}) {
   const finishPlanning = async () => {
     try {
       setIsLoading(true);
-      const response = await handleFinishPlanning(selectedOrder && selectedOrder, {
+      const response = await handleFinishPlanning(selectedOrder?.orderId, {
         hormoneSkipReminder1: true,
         hormoneSkipReminder2: true,
         hormoneTestSamplingDate: dayjs(prepDates?.hormoneTestSamplingDate).format('YYYY-MM-DD'),

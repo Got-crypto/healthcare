@@ -21,7 +21,7 @@ function KitArrival() {
 
   const confirmPackageReceived = async () => {
     try {
-      await handleConfirmPackageReceived(selectedOrder && selectedOrder);
+      await handleConfirmPackageReceived(selectedOrder?.orderId);
     } catch (error) {
       console.log('error confirming delivery', error);
     }
@@ -31,7 +31,7 @@ function KitArrival() {
     const getNewOrderDetails = async () => {
       try {
         setIsLoading(true);
-        const response = await handleGetCustomerOrderById(selectedOrder && selectedOrder);
+        const response = await handleGetCustomerOrderById(selectedOrder?.orderId);
         dispatch(setOrderDetails(response?.data));
         setSuccessMessage(response?.data?.message);
         setIsLoading(false);
