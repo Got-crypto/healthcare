@@ -12,7 +12,7 @@ import componentsOverride from './overrides';
 export default function ThemeCustomization({ children }) {
   const theme = Palette('light', 'default');
 
-  const themeTypography = Typography(`'Public Sans', sans-serif`);
+  const themeTypography = Typography("'Comfortaa', cursive");
   const themeCustomShadows = useMemo(() => CustomShadows(theme), [theme]);
 
   const themeOptions = useMemo(

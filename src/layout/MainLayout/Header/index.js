@@ -12,18 +12,18 @@ const Header = ({ open, handleDrawerToggle }) => {
   const theme = useTheme();
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
 
-  const iconBackColor = 'grey.100';
-  const iconBackColorOpen = 'grey.200';
+  // const iconBackColor = 'grey.100';
+  // const iconBackColorOpen = 'grey.200';
 
   const mainHeader = (
-    <Toolbar>
+    <Toolbar className="app__header">
       <IconButton
         disableRipple
         aria-label="open drawer"
         onClick={handleDrawerToggle}
         edge="start"
         color="secondary"
-        sx={{ color: 'text.primary', bgcolor: open ? iconBackColorOpen : iconBackColor, ml: { xs: 0, lg: -2 } }}
+        sx={{ color: 'text.primary', bgcolor: '#45d9c9', ml: { xs: 0, lg: -2 } }}
       >
         {!open ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
       </IconButton>

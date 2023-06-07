@@ -6,7 +6,6 @@ import {
   Badge,
   Box,
   ClickAwayListener,
-  Divider,
   IconButton,
   List,
   ListItemButton,
@@ -57,8 +56,6 @@ const Notification = () => {
     setOpen(false);
   };
 
-  const iconBackColorOpen = 'grey.300';
-  const iconBackColor = 'grey.100';
 
   const notifications = [
     {
@@ -80,14 +77,14 @@ const Notification = () => {
       <IconButton
         disableRipple
         color="secondary"
-        sx={{ color: 'text.primary', bgcolor: open ? iconBackColorOpen : iconBackColor }}
+        sx={{ color: 'text.primary', bgcolor: '#45d9c9' }}
         aria-label="open profile"
         ref={anchorRef}
         aria-controls={open ? 'profile-grow' : undefined}
         aria-haspopup="true"
         onClick={handleToggle}
       >
-        <Badge badgeContent={notifications.length} color="primary">
+        <Badge badgeContent={notifications.length} color="secondary">
           <BellOutlined />
         </Badge>
       </IconButton>
@@ -128,6 +125,7 @@ const Notification = () => {
                   elevation={0}
                   border={false}
                   content={false}
+                  sx={{ background: 'linear-gradient(232deg, rgba(247,194,228,1) 12%, rgba(53,192,233,1) 56%)' }}
                   secondary={
                     <IconButton size="small" onClick={handleToggle}>
                       <CloseOutlined />
@@ -168,7 +166,6 @@ const Notification = () => {
                             </Typography>
                           </ListItemSecondaryAction>
                         </ListItemButton>
-                        <Divider />
                       </>
                     ))}
                   </List>

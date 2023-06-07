@@ -1,13 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {
-  HealthQuestionare,
-  ImmuneTestPictrure,
-  KitArrival,
-  LifestyleProgram,
-  Planning,
-  Results,
-  TestingInstructions
-} from '../../components/steps';
 
 const initialState = {
   authUser: localStorage.getItem('authUser') && JSON.parse(localStorage.getItem('authUser')),
@@ -23,7 +14,6 @@ const initialState = {
   activeStep: -1,
   steps: [
     {
-      component: KitArrival,
       header: 'Kit Arrival',
       id: 'kitarrival',
       collapse: false,
@@ -40,7 +30,6 @@ const initialState = {
     },
     {
       id: 'planning',
-      component: Planning,
       reached: false,
       isActive: false,
       header: 'Planning',
@@ -62,7 +51,6 @@ const initialState = {
     },
     {
       id: 'testingInstructions',
-      component: TestingInstructions,
       reached: false,
       isActive: false,
       header: 'Testing instructions',
@@ -78,7 +66,6 @@ const initialState = {
     },
     {
       id: 'immuneTestPictureUpload',
-      component: ImmuneTestPictrure,
       reached: false,
       isActive: false,
       header: 'Immune test picture',
@@ -94,7 +81,6 @@ const initialState = {
     },
     {
       id: 'healthQuestionnaire',
-      component: HealthQuestionare,
       reached: false,
       isActive: false,
       header: 'Health Questionare',
@@ -110,7 +96,6 @@ const initialState = {
     },
     {
       id: 'beginLifestyleProgram',
-      component: LifestyleProgram,
       reached: false,
       isActive: false,
       header: 'Begin your Lifestyle Program',
@@ -126,7 +111,6 @@ const initialState = {
     },
     {
       id: 'resultsAndPersonalizedProtocol',
-      component: Results,
       reached: false,
       isActive: false,
       header: 'Results and personalized protocol',
@@ -170,7 +154,6 @@ const menu = createSlice({
     getUnlockedSteps(state) {
       state.unlockedSteps = state.steps?.filter((step, index) => {
         if (state.orderDetails) {
-          console.log('called');
           if (state.orderDetails[index]?.status === 'Done' || state.orderDetails[index]?.status === 'Active') return step;
         }
       });

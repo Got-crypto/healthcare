@@ -13,11 +13,10 @@ export async function handleGetCustomerOrderById(orderId) {
 }
 
 export async function handleConfirmPackageReceived(id) {
-  const response = await API.post(`api/dashboard/${id}/complete-confirm-shipment`, {
+  await API.post(`api/dashboard/${id}/complete-confirm-shipment`, {
     packageReceiptStatus: 'Y'
   });
 
-  console.log('response', response);
 }
 
 export async function handleUpdateUserProfile(id, credentials) {

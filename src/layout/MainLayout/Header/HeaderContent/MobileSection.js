@@ -43,7 +43,7 @@ const MobileSection = () => {
           component="span"
           disableRipple
           sx={{
-            bgcolor: open ? 'grey.300' : 'grey.100'
+            bgcolor: "#45d9c9"
           }}
           ref={anchorRef}
           aria-controls={open ? 'menu-list-grow' : undefined}
@@ -79,7 +79,7 @@ const MobileSection = () => {
           <Transitions type="fade" in={open} {...TransitionProps}>
             <Paper sx={{ boxShadow: theme.customShadows.z1 }}>
               <ClickAwayListener onClickAway={handleClose}>
-                <AppBar color="inherit">
+                <AppBar className="app__header" color="inherit">
                   <Toolbar>
                     <OrderInfo />
                     <Profile />

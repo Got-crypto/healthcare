@@ -2,36 +2,41 @@ import PropTypes from 'prop-types';
 import { useMemo } from 'react';
 
 import { useTheme } from '@mui/material/styles';
-import { Box, Drawer, useMediaQuery } from '@mui/material';
+// import { makeStyles } from '@mui/styles';
+import { Box, SwipeableDrawer, useMediaQuery } from '@mui/material';
 
 import DrawerHeader from './DrawerHeader';
 import DrawerContent from './DrawerContent';
 import MiniDrawerStyled from './MiniDrawerStyled';
 import { drawerWidth } from 'config';
 
+// const useStyles = makeStyles(() => ({
+//   customDrawer: {
+//     background: 'linear-gradient(to right, #f2f2f2, #e6e6e6)'
+//   }
+// }));
 const MainDrawer = ({ open, handleDrawerToggle, window }) => {
   const theme = useTheme();
   const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
 
-  // responsive drawer container
   const container = window !== undefined ? () => window().document.body : undefined;
 
-  // header content
   const drawerContent = useMemo(() => <DrawerContent />, []);
   const drawerHeader = useMemo(() => <DrawerHeader open={open} />, [open]);
 
   return (
-    <Box component="nav" sx={{ flexShrink: { md: 0 }, zIndex: 1300 }} aria-label="mailbox folders">
+    <Box backgroundColor="#232323" component="nav" sx={{ flexShrink: { md: 0 }, zIndex: 1300 }} aria-label="mailbox folders">
       {!matchDownMD ? (
         <MiniDrawerStyled variant="permanent" open={open}>
           {drawerHeader}
           {drawerContent}
         </MiniDrawerStyled>
       ) : (
-        <Drawer
+        <SwipeableDrawer
           container={container}
           variant="temporary"
           open={open}
+          onOpen={() => {}}
           onClose={handleDrawerToggle}
           ModalProps={{ keepMounted: true }}
           sx={{
@@ -41,13 +46,13 @@ const MainDrawer = ({ open, handleDrawerToggle, window }) => {
               width: drawerWidth,
               borderRight: `1px solid ${theme.palette.divider}`,
               backgroundImage: 'none',
-              boxShadow: 'inherit'
-            }
+            },
+            background: 'linear-gradient(90deg, rgba(247,194,228,1) 12%, rgba(53,192,233,.3) 56%)'
           }}
         >
           {open && drawerHeader}
           {open && drawerContent}
-        </Drawer>
+        </SwipeableDrawer>
       )}
     </Box>
   );

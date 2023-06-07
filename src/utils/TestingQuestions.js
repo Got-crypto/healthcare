@@ -6,10 +6,8 @@ dayjs.extend(isSameOrAfter);
 
 export function QuestionsUtils() {
   const today = new Date();
-  const { orderDetails, selectedOrder } = useSelector((state) => state.main);
+  const { orderDetails } = useSelector((state) => state.main);
   const testingData = orderDetails && orderDetails[3]?.data;
-  console.log('orderDetails', orderDetails);
-  console.log('selctedOrder', selectedOrder);
   const isYesterdayOrTomorrow = (day, forward) => {
     if (forward) {
       return dayjs(day).isSameOrAfter(today);

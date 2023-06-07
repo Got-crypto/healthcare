@@ -76,7 +76,7 @@ const Profile = () => {
     setValue(newValue);
   };
 
-  const iconBackColorOpen = 'grey.300';
+  const iconBackColorOpen = '#45d9c9';
 
   return (
     <Box sx={{ flexShrink: 0, ml: 0.75 }}>
@@ -84,8 +84,7 @@ const Profile = () => {
         sx={{
           p: 0.25,
           bgcolor: open ? iconBackColorOpen : 'transparent',
-          borderRadius: 1,
-          '&:hover': { bgcolor: 'secondary.lighter' }
+          borderRadius: 1
         }}
         aria-label="open profile"
         ref={anchorRef}

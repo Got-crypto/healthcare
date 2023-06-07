@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Button, FormControlLabel, FormGroup, Grid, Switch, Typography } from '../../../node_modules/@mui/material/index';
+import { Box, FormControlLabel, FormGroup, Grid, Switch, Typography } from '../../../node_modules/@mui/material/index';
 import { ThumbUp } from '../../../node_modules/@mui/icons-material/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleConfirmPackageReceived, handleGetCustomerOrderById } from 'services/BeOne';
@@ -18,12 +18,10 @@ function KitArrival() {
     setChecked(event.target.checked);
   };
   const stepTwoData = orderDetails && orderDetails[1];
-  console.log('selectedOrder', selectedOrder);
-  console.log('orderDetails', orderDetails);
 
   const confirmPackageReceived = async () => {
     try {
-      await handleConfirmPackageReceived(selectedOrder?.orderId);
+      await handleConfirmPackageReceived(selectedOrder && selectedOrder);
     } catch (error) {
       console.log('error confirming delivery', error);
     }
@@ -33,7 +31,7 @@ function KitArrival() {
     const getNewOrderDetails = async () => {
       try {
         setIsLoading(true);
-        const response = await handleGetCustomerOrderById(selectedOrder?.orderId);
+        const response = await handleGetCustomerOrderById(selectedOrder && selectedOrder);
         dispatch(setOrderDetails(response?.data));
         setSuccessMessage(response?.data?.message);
         setIsLoading(false);
@@ -71,10 +69,7 @@ function KitArrival() {
                   {checked ? 'Great! Confirm and proceed to planning tests.' : 'The package should be with you now?'}
                 </Typography>
                 <FormGroup sx={{ width: 'fit-content' }}>
-                  <FormControlLabel
-                    control={<Switch checked={checked} onChange={handleChange} defaultChecked={!1} />}
-                    label={checked ? 'Yes' : 'No'}
-                  />
+                  <FormControlLabel control={<Switch checked={checked} onChange={handleChange} />} label={checked ? 'Yes' : 'No'} />
                 </FormGroup>
                 {!checked && (
                   <Typography variant="subtitle2" sx={{ color: 'error.main' }}>
@@ -86,7 +81,7 @@ function KitArrival() {
                   variant="contained"
                   onClick={confirmPackageReceived}
                   disabled={!checked}
-                  sx={{ mt: 2 }}
+                  sx={{ mt: 2, backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' } }}
                   startIcon={<ThumbUp />}
                 >
                   Confirm
@@ -96,9 +91,6 @@ function KitArrival() {
             ) : stepTwoData?.status.toLowerCase() === 'done' || successMessage ? (
               <>
                 <Typography sx={{ color: 'success.main' }}>Packages delivered!</Typography>
-                <Button variant="contained" sx={{ mt: 2 }} startIcon={<ThumbUp />}>
-                  Proceed to Planning
-                </Button>
               </>
             ) : null}
           </>

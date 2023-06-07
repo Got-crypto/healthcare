@@ -26,10 +26,7 @@ import { strengthColor, strengthIndicator } from 'utils/password-strength';
 
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { MenuItem, Select } from '../../../../node_modules/@mui/material/index';
-// import axios from '../../../../node_modules/axios/index';
-// import { baseUrl } from 'store/beOneApi';
 import { API } from 'utils/api';
-// import { baseUrl } from 'store/beOneApi';
 
 const AuthRegister = () => {
   const [level, setLevel] = useState();
@@ -48,8 +45,7 @@ const AuthRegister = () => {
   };
 
   const registerUser = async () => {
-    const response = await API.get('api/dashboard');
-    console.log('response', response);
+    await API.get('api/dashboard');
   };
 
   useEffect(() => {

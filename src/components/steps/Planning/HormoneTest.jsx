@@ -192,7 +192,12 @@ export default function HormoneTest() {
                     {!planningComplete && isMobile && (
                       <Box sx={{ diplay: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                         <DatePicker onChange={(date) => setDate1(date)} />
-                        <Button variant="contained" disabled={date1 === undefined ? !0 : !1} onClick={handleSamplingDate}>
+                        <Button
+                          sx={{ backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' } }}
+                          variant="contained"
+                          disabled={date1 === undefined ? !0 : !1}
+                          onClick={handleSamplingDate}
+                        >
                           Set Date
                         </Button>
                       </Box>
@@ -307,6 +312,7 @@ export default function HormoneTest() {
                         label={checked ? 'Yes' : 'No'}
                       />
                       <Button
+                        sx={{ backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' } }}
                         variant="contained"
                         onClick={() => {
                           setResponse(checked);
@@ -413,7 +419,13 @@ export default function HormoneTest() {
                   <DateCalendar onChange={(date) => setDate1(date)} />
                   {!planningComplete && (
                     <Box sx={{ diplay: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                      <Button fullWidth variant="contained" disabled={date1 === undefined ? !0 : !1} onClick={handleSamplingDate}>
+                      <Button
+                        sx={{ backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' } }}
+                        fullWidth
+                        variant="contained"
+                        disabled={date1 === undefined ? !0 : !1}
+                        onClick={handleSamplingDate}
+                      >
                         Set Date
                       </Button>
                     </Box>
@@ -468,7 +480,7 @@ export default function HormoneTest() {
             disabled={!hormoneTestComplete}
             onClick={checkHormoneComplete}
             startIcon={<ThumbUp />}
-            sx={{ mx: 'auto', mt: 5 }}
+            sx={{ mx: 'auto', mt: 5, backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' } }}
             variant="contained"
           >
             Proceed

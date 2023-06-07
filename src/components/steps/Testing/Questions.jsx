@@ -26,7 +26,6 @@ export function ToggleReplies() {
   const handleChange = (reply) => {
     setReply(reply.target.value);
   };
-  console.log('reply', reply);
   return (
     <ToggleButtonGroup color="info" value={reply} exclusive onChange={handleChange}>
       <ToggleButton value="Yes">Yes</ToggleButton>
@@ -45,8 +44,6 @@ export default function Testing() {
   const hormoneSampleStatus = testingData?.StandardPackageHormoneSampleCollect__customerConfirmationStatus === 'Y' ? true : false;
 
   const questions = QuestionsUtils();
-  console.log('questions', questions);
-
   const [marked, setMarked] = useState([0]);
 
   const handleToggle = (value) => () => {
@@ -62,13 +59,10 @@ export default function Testing() {
     setMarked(newMarked);
   };
 
-  console.log('testingData', testingData);
   return (
     <Box>
-      <List fullWidth dense>
+      <List dense>
         {questions.map(({ content, condition }, index) => {
-          console.log('condition', condition);
-
           return (
             condition && (
               <ListItem
@@ -87,19 +81,19 @@ export default function Testing() {
       </List>
 
       {!hormoneSampleStatus && (
-        <Box fullWidth>
+        <Box>
           <Typography>Will you require any of the kits re-sent to you?</Typography>
           <Typography sx={{ color: 'warning.main' }}>Please note there will be a fee for this.</Typography>
           <FormGroup sx={{ width: 'fit-content' }}>
             <FormControlLabel
-              control={<Switch checked={checked} onChange={handleChange} defaultChecked={!1} />}
+              control={<Switch checked={checked} onChange={handleChange} />}
               label={checked ? 'Enable kits' : "I'd rather not"}
             />
           </FormGroup>
         </Box>
       )}
       {checked && (
-        <List elevation={1} fullWidth sx={{ width: '100%', bgcolor: 'background.paper' }}>
+        <List elevation={1} sx={{ width: '100%', bgcolor: 'background.paper' }}>
           {['Hormone Test', 'Metabolic Test', 'Thyroid Test', 'Immune Test'].map((kitPackage, index) => {
             const kitPackageId = `${kitPackage}-${index}`;
 
@@ -114,7 +108,7 @@ export default function Testing() {
                 }
                 disablePadding
               >
-                <ListItemButton fullWidth onClick={handleToggle(kitPackage)} dense>
+                <ListItemButton onClick={handleToggle(kitPackage)} dense>
                   <ListItemIcon>
                     <Checkbox
                       edge="start"

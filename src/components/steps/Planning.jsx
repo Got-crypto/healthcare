@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Button, Grid, Typography } from '../../../node_modules/@mui/material/index';
+import { Box, Grid, Typography } from '../../../node_modules/@mui/material/index';
 import { HormoneTest, MetabollicTest } from './Planning/index';
 import { useSelector } from 'react-redux';
 import SectionWrapper from 'layout/MainLayout/HOC/SectionWrapper';
@@ -37,9 +37,6 @@ function Planning() {
               </>
             </Box>
           </Box>
-          <Button sx={{ mt: 2 }} variant="contained">
-            Proceed to Next step
-          </Button>
         </Box>
       </Grid>
     </>

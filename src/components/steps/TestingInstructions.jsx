@@ -1,6 +1,5 @@
 import SectionWrapper from 'layout/MainLayout/HOC/SectionWrapper';
-import { ThumbUp } from '../../../node_modules/@mui/icons-material/index';
-import { Box, Button, Grid, List, ListItem, ListItemButton, ListItemText, Typography } from '../../../node_modules/@mui/material/index';
+import { Box, Grid, List, ListItem, ListItemButton, ListItemText, Typography } from '../../../node_modules/@mui/material/index';
 import Questions from './Testing/Questions';
 
 function TestingInstructions() {
@@ -22,13 +21,9 @@ function TestingInstructions() {
             Read the instructions and watch the videos at least a few days before starting the preparation to ensure that everything is
             clear
           </Typography>
-          <List fullWidth>
-            <ListItem
-              fullWidth
-              disablePadding
-              sx={{ gap: 1, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
-            >
-              <ListItemButton component="a" href="#" fullWidth>
+          <List>
+            <ListItem disablePadding sx={{ gap: 1, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <ListItemButton component="a" href="#">
                 <ListItemText sx={{ mx: 'auto' }} primary="Hormone Test video instructions" />
               </ListItemButton>
             </ListItem>
@@ -49,9 +44,6 @@ function TestingInstructions() {
             </ListItem>
           </List>
           <Questions />
-          <Button variant="contained" sx={{ mt: 2 }} startIcon={<ThumbUp />}>
-            Next
-          </Button>
         </Box>
       </Grid>
     </>

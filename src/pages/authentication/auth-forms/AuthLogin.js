@@ -20,7 +20,6 @@ import {
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 
-import FirebaseSocial from './FirebaseSocial';
 import AnimateButton from 'components/@extended/AnimateButton';
 
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
@@ -75,7 +74,6 @@ const AuthLogin = () => {
             setStatus({ success: false });
             setErrors({ submit: err.message });
             setSubmitting(false);
-            console.log('err', err);
           }
         }}
       >
@@ -150,7 +148,7 @@ const AuthLogin = () => {
                         size="small"
                       />
                     }
-                    label={<Typography variant="h6">Keep me sign in</Typography>}
+                    label={<Typography variant="h6">Keep me signed in</Typography>}
                   />
                   <Link variant="h6" component={RouterLink} to="" color="text.primary">
                     Forgot Password?
@@ -172,6 +170,7 @@ const AuthLogin = () => {
                     type="submit"
                     variant="contained"
                     color="primary"
+                    sx={{ backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' } }}
                   >
                     Login
                   </Button>
@@ -179,11 +178,8 @@ const AuthLogin = () => {
               </Grid>
               <Grid item xs={12}>
                 <Divider>
-                  <Typography variant="caption"> Login with</Typography>
+                  <Typography variant="caption">Be One</Typography>
                 </Divider>
-              </Grid>
-              <Grid item xs={12}>
-                <FirebaseSocial />
               </Grid>
             </Grid>
           </form>

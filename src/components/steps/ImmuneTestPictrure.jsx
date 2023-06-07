@@ -40,8 +40,7 @@ const FileInput = () => {
       setIsLoading(true);
       const resized = await resizeImage(selectedFile, 800, 800, 0.7);
       formData.append('file', resized);
-      const response = await handleUploadPicture(selectedOrder?.orderId, false, formData);
-      console.log('reponse', response);
+      await handleUploadPicture(selectedOrder && selectedOrder, false, formData);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -66,7 +65,7 @@ const FileInput = () => {
             display: 'flex',
             justifyContent: 'center',
             flexDirection: 'column',
-            alignItems: 'center'
+            alignItems: 'center',
           }}
         >
           {selectedFile ? (
@@ -90,7 +89,13 @@ const FileInput = () => {
       <Button variant="outline" sx={{ backgroundColor: 'error.main', mt: 1, color: 'white' }} onClick={() => setSelectedFile(null)}>
         <Delete />
       </Button>
-      <LoadingButton loading={isLoading} sx={{ mt: 2 }} fullWidth onClick={uploadImmuneTestPicture} variant="contained">
+      <LoadingButton
+        loading={isLoading}
+        sx={{ mt: 2, backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' } }}
+        fullWidth
+        onClick={uploadImmuneTestPicture}
+        variant="contained"
+      >
         Upload Test picture
       </LoadingButton>
     </Box>

@@ -39,12 +39,11 @@ export default function MetabollicTest({successMessage, setSuccessMessage}) {
     setMetabollicPlanningComplete(true);
   };
 
-  console.log('prepDates', prepDates);
 
   const finishPlanning = async () => {
     try {
       setIsLoading(true);
-      const response = await handleFinishPlanning(selectedOrder?.orderId, {
+      const response = await handleFinishPlanning(selectedOrder && selectedOrder, {
         hormoneSkipReminder1: true,
         hormoneSkipReminder2: true,
         hormoneTestSamplingDate: dayjs(prepDates?.hormoneTestSamplingDate).format('YYYY-MM-DD'),
@@ -57,7 +56,6 @@ export default function MetabollicTest({successMessage, setSuccessMessage}) {
       });
       setIsLoading(false);
       setSuccessMessage(response?.data?.message);
-      console.log('response', response);
     } catch (error) {
       setError(error?.data?.errors);
       setIsLoading(false);
@@ -236,7 +234,12 @@ export default function MetabollicTest({successMessage, setSuccessMessage}) {
                       consecutive sampling dates.
                     </Typography>
                     <DatePicker onChange={(date) => setDate2(date)} />
-                    <Button onClick={handleChangeMetabollicTestDate} startIcon={<ThumbUp />} variant="contained">
+                    <Button
+                      sx={{ backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' } }}
+                      onClick={handleChangeMetabollicTestDate}
+                      startIcon={<ThumbUp />}
+                      variant="contained"
+                    >
                       Confirm Date
                     </Button>
                   </Box>
@@ -257,7 +260,7 @@ export default function MetabollicTest({successMessage, setSuccessMessage}) {
             loading={isLoading}
             disabled={planningComplete ? false : metabollicPlanningComplete && hormorneTestComplete ? false : true}
             startIcon={<ThumbUp />}
-            sx={{ mx: 'auto', mt: 5 }}
+            sx={{ mx: 'auto', backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' }, mt: 5 }}
             variant="contained"
             onClick={finishPlanning}
           >

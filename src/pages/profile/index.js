@@ -119,9 +119,8 @@ const Profile = () => {
         if (file.size > 10000) {
           resizeImage(file, 800, 800, 0.7)
             .then((resizedImage) => setFileToUpload(resizedImage))
-            .catch((error) => {
+            .catch(() => {
               setErrorMessage('Failed to get image');
-              console.log('error', error);
             });
         } else setFileToUpload(file);
         setErrorMessage(null);
@@ -133,17 +132,13 @@ const Profile = () => {
       }
     });
   };
-  console.log('selectedFile', selectedFile);
 
   const updateProfilePic = async () => {
     const formData = new FormData();
     formData.append('file', fileToUpload);
     try {
       setIsUpdating(true);
-      console.log('test');
       const response = await API.post('api/files?purpose=PROFILE_PIC', formData);
-      console.log('response', response)
-      console.log('passed');
       setErrorMessage(null);
       if (response?.status === 200) {
         const updatedImageId = response?.data?.id;
@@ -152,23 +147,11 @@ const Profile = () => {
 
         if (responseUrl?.status === 200) {
           const base64Url = await handleArrayBuffer(responseUrl?.data);
-          console.log('base64URL', base64Url);
           setSelectedFile(null);
           setIsSuccess(true);
           setUpdatedProfilePicture(base64Url);
           setUserCredentials({ ...userCredentials, formProfilePic: base64Url });
           setSuccessMessage('Profile picture updated');
-          const userData = user;
-          const update = { ...userData, profilePic: base64Url };
-          const accessToken = JSON.parse(localStorage.getItem('authUser')).accessToken;
-          localStorage.setItem(
-            'authUser',
-            JSON.stringify({
-              accessToken,
-              user: update
-            })
-          );
-
           setIsUpdating(false);
         }
       }
@@ -219,7 +202,7 @@ const Profile = () => {
               alignItems: 'center'
             }}
           >
-            <Grid sx={{ width: '100%' }} xs={3}>
+            <Grid item sx={{ width: '100%' }} xs={3}>
               <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
                 <Avatar
                   src={isSuccess ? updatedProfilePic : selectedFile ? selectedFile : profilePic ? profilePic : null}
@@ -227,7 +210,11 @@ const Profile = () => {
                   sx={{ height: '200px', width: '200px' }}
                 />
                 <BorderColorOutlined onClick={handleFileInputChange} sx={{ cursor: 'pointer', mt: 1 }} />
-                {errorMessage && <Typography sx={{ color: 'error.main' }}>{errorMessage}</Typography>}
+                {errorMessage && (
+                  <Typography fullWidth sx={{ color: 'error.main' }}>
+                    {errorMessage}
+                  </Typography>
+                )}
                 {successMessage && <Typography sx={{ color: 'success.main' }}>{successMessage}</Typography>}
                 <Box sx={{ width: isMobile ? '100%' : '90%' }}>
                   <LoadingButton
@@ -235,7 +222,7 @@ const Profile = () => {
                     loading={isUpdating}
                     variant="contained"
                     fullWidth
-                    sx={{ mt: 1, backgroundColor: isUpdating && 'primary.main' }}
+                    sx={{ mt: 1, backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' } }}
                     startIcon={<UploadFileOutlined />}
                     onClick={updateProfilePic}
                   >
@@ -244,7 +231,7 @@ const Profile = () => {
                 </Box>
               </Box>
             </Grid>
-            <Grid xs={9} sx={{ mt: isMobile ? 4 : 0 }}>
+            <Grid xs={9} item sx={{ mt: isMobile ? 4 : 0 }}>
               <Box>
                 <Grid container rowSpacing={2} columnSpacing={2}>
                   <Grid item xs={columns ? 12 : 4}>
@@ -421,7 +408,13 @@ const Profile = () => {
                     </FormControl>
                   </Grid>
                   <Grid item xs={12}>
-                    <Button fullWidth variant="contained" onClick={updateUserProfile} startIcon={<UpdateOutlined />}>
+                    <Button
+                      sx={{ backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' } }}
+                      fullWidth
+                      variant="contained"
+                      onClick={updateUserProfile}
+                      startIcon={<UpdateOutlined />}
+                    >
                       Update
                     </Button>{' '}
                   </Grid>
