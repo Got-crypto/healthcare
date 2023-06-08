@@ -8,12 +8,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { useSelector } from 'react-redux';
-import {
-  Block,
-  HourglassTop,
-  RadioButtonChecked,
-  RadioButtonUnchecked
-} from '../../../../node_modules/@mui/icons-material/index';
+import { Block, HourglassTop, RadioButtonChecked, RadioButtonUnchecked } from '../../../../node_modules/@mui/icons-material/index';
 import { useTheme } from '../../../../node_modules/@mui/styles/index';
 import { useMediaQuery } from '../../../../node_modules/@mui/material/index';
 import { useState } from 'react';
@@ -37,7 +32,7 @@ const closedMixin = (theme) => ({
     duration: theme.transitions.duration.leavingScreen
   }),
   overflowX: 'hidden',
-  width: 0,
+  width: `45px`,
   [theme.breakpoints.down('xsl')]: {
     width: `100px`
   }
@@ -64,6 +59,7 @@ export default function MiniDrawer() {
   const [open, setOpen] = useState(true);
   const { steps, orderDetails } = useSelector((state) => state.main);
   const location = useLocation();
+
   useEffect(() => {
     const handleRouteChange = () => {
       if (location.pathname === '/profile') setOpen(false);
