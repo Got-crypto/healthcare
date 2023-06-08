@@ -17,7 +17,7 @@ import { drawerWidth } from 'config';
 // }));
 const MainDrawer = ({ open, handleDrawerToggle, window }) => {
   const theme = useTheme();
-  const matchDownMD = useMediaQuery(theme.breakpoints.down('lg'));
+  const matchDownMD = useMediaQuery(theme.breakpoints.down('xl'));
 
   const container = window !== undefined ? () => window().document.body : undefined;
 

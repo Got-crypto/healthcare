@@ -8,9 +8,17 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { useSelector } from 'react-redux';
-import { Block, HourglassTop, RadioButtonChecked, RadioButtonUnchecked } from '../../../../node_modules/@mui/icons-material/index';
+import {
+  Block,
+  HourglassTop,
+  RadioButtonChecked,
+  RadioButtonUnchecked
+} from '../../../../node_modules/@mui/icons-material/index';
 import { useTheme } from '../../../../node_modules/@mui/styles/index';
 import { useMediaQuery } from '../../../../node_modules/@mui/material/index';
+import { useState } from 'react';
+import { useLocation } from '../../../../node_modules/react-router-dom/dist/index';
+import { useEffect } from 'react';
 
 const drawerWidth = 200;
 
@@ -29,7 +37,7 @@ const closedMixin = (theme) => ({
     duration: theme.transitions.duration.leavingScreen
   }),
   overflowX: 'hidden',
-  width: `150px`,
+  width: 0,
   [theme.breakpoints.down('xsl')]: {
     width: `100px`
   }
@@ -53,14 +61,24 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function MiniDrawer() {
   const theme = useTheme();
   const smx = useMediaQuery(theme.breakpoints.down('smx'));
-  const open = true;
-
+  const [open, setOpen] = useState(true);
   const { steps, orderDetails } = useSelector((state) => state.main);
+  const location = useLocation();
+  useEffect(() => {
+    const handleRouteChange = () => {
+      if (location.pathname === '/profile') setOpen(false);
+      if (location.pathname === '/') setOpen(true);
+    };
+
+    handleRouteChange();
+  }, [location]);
 
   return (
     <Box component="nav" sx={{ position: 'fixed', flexShrink: { md: 0 }, zIndex: 100 }} aria-label="mailbox folders">
-      <Drawer variant="permanent" open={!smx} anchor="right">
+      <Drawer variant="permanent" open={open} anchor="right">
         <Box sx={{ height: '100px' }} />
+        {/* {open && <ChevronRight onClick={() => setOpen((open) => !open)} />}
+        {!open && <ChevronLeft onClick={() => setOpen((open) => !open)} />} */}
         <List>
           {steps.map(({ header, id, short }, i) => {
             return (
@@ -70,15 +88,15 @@ export default function MiniDrawer() {
                   href={`#${id}`}
                   sx={{
                     minHeight: 48,
-                    justifyContent: open ? 'initial' : 'center',
+                    justifyContent: 'initial',
                     px: 1
                   }}
                 >
                   <ListItemIcon
                     sx={{
                       minWidth: 0,
-                      mr: open ? 1.5 : 'auto',
-                      justifyContent: 'center'
+                      mr: 1.5,
+                      justifyContent: 'cover'
                     }}
                   >
                     {orderDetails && orderDetails[i]?.status && orderDetails[i]?.status.toLowerCase() === 'done' && (
