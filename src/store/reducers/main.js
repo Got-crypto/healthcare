@@ -175,9 +175,9 @@ const menu = createSlice({
     },
 
     getUnlockedSteps(state) {
-      state.unlockedSteps = state.steps?.filter((step, index) => {
+      state.unlockedSteps = state.steps?.filter((step) => {
         if (state.orderDetails) {
-          if (state.orderDetails[index]?.status === 'Done' || state.orderDetails[index]?.status === 'Active') return step;
+          return step;
         }
       });
     },
@@ -216,3 +216,4 @@ export const {
   setOrderDetails,
   getUnlockedSteps
 } = menu.actions;
+// if (state.orderDetails[index]?.status?.toLowerCase() === 'done' || state.orderDetails[index]?.status?.toLowerCase() === 'active') 

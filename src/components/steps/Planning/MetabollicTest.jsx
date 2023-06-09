@@ -17,7 +17,7 @@ import { addPrepDates } from 'store/reducers/tests';
 import { handleFinishPlanning } from 'services/BeOne';
 import { LoadingButton } from '../../../../node_modules/@mui/lab/index';
 
-export default function MetabollicTest({successMessage, setSuccessMessage}) {
+export default function MetabollicTest({ successMessage, setSuccessMessage }) {
   const [one, setOne] = useState(false);
   const [two, setTwo] = useState(false);
   const [three, setThree] = useState(false);
@@ -35,10 +35,9 @@ export default function MetabollicTest({successMessage, setSuccessMessage}) {
   const handleChangeMetabollicTestDate = () => {
     const testDate = dayjs(`${date2?.$y}-${date2?.$M + 1}-${date2?.$D}`).format('MMMM DD, YYYY');
 
-    dispatch(addPrepDates({ ...prepDates, metabolicTestDate: testDate }));
+    dispatch(addPrepDates({ ...prepDates, metabolicSamplingSelectedDay: testDate }));
     setMetabollicPlanningComplete(true);
   };
-
 
   const finishPlanning = async () => {
     try {
@@ -47,10 +46,10 @@ export default function MetabollicTest({successMessage, setSuccessMessage}) {
         hormoneSkipReminder1: true,
         hormoneSkipReminder2: true,
         hormoneTestSamplingDate: dayjs(prepDates?.hormoneTestSamplingDate).format('YYYY-MM-DD'),
-        hormoneTestWindowStartDate: dayjs(prepDates?.StandardPackageHormone__PrepDate1).format('YYYY-MM-DD'),
+        hormoneTestWindowStartDate: dayjs(prepDates?.hormoneSelectedDay).format('YYYY-MM-DD'),
         metabolismSkipReminder1: true,
         metabolismSkipReminder2: true,
-        metabolismTestSamplingDate: dayjs(prepDates?.metabolicTestDate).format('YYYY-MM-DD'),
+        metabolismTestSamplingDate: dayjs(prepDates?.metabolicSamplingSelectedDay).format('YYYY-MM-DD'),
         periodCycleLength: 10,
         testOption: 'OPTION_1'
       });
@@ -252,7 +251,7 @@ export default function MetabollicTest({successMessage, setSuccessMessage}) {
           )}
           {planningComplete && (
             <Typography variant="body1" sx={{ mt: 2, color: 'success.main' }}>{`Hormone Metabolic Test Date was done at: ${dayjs(
-              prepDates?.metabolicTestDate
+              prepDates?.metabolicSamplingSelectedDay
             ).format('MMMM DD, YYYY')}`}</Typography>
           )}
           <LoadingButton

@@ -33,7 +33,7 @@ function Planning() {
             </Box>
             <Box sx={{ mt: 2, width: 'full' }}>
               <>
-                <MetabollicTest successMessage={successMessage} setSuccessMessag={setSuccessMessage} />
+                <MetabollicTest successMessage={successMessage} setSuccessMessage={setSuccessMessage} />
               </>
             </Box>
           </Box>

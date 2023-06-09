@@ -32,10 +32,7 @@ const closedMixin = (theme) => ({
     duration: theme.transitions.duration.leavingScreen
   }),
   overflowX: 'hidden',
-  width: `45px`,
-  [theme.breakpoints.down('xsl')]: {
-    width: `100px`
-  }
+  width: 0
 });
 
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({

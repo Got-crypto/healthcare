@@ -24,6 +24,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import dayjs from 'dayjs';
+import { Day } from 'utils/CustomPickersDay';
 
 import { addPrepDates, setCompleteHormoneTest } from 'store/reducers/tests';
 
@@ -52,26 +53,32 @@ export default function HormoneTest() {
       dispatch(
         addPrepDates({
           ...prepDates,
-          StandardPackageHormone__PrepDate1: null,
-          StandardPackageHormone__PrepDate2: null,
-          StandardPackageHormone__PrepDate3: null,
-          StandardPackageHormone__PrepDate4: null
+          hormoneSelectedDay: null,
+          hormonePrepDay1: null,
+          hormonePrepDay2: null,
+          hormonePrepDay3: null,
+          hormonePrepDay4: null,
+          hormoneTestDay: null
         })
       );
       setisDelayed(false);
     } else {
       const day = dayjs(`${date1?.$y}-${date1?.$M + 2}-${date1?.$D}`).format('MMMM DD, YYYY');
-      const day1 = dayjs(`${date1?.$y}-${date1?.$M + 2}-${date1?.$D + 1}`).format('MMMM DD, YYYY');
-      const day2 = dayjs(`${date1?.$y}-${date1?.$M + 2}-${date1?.$D + 2}`).format('MMMM DD, YYYY');
-      const day3 = dayjs(`${date1?.$y}-${date1?.$M + 2}-${date1?.$D + 3}`).format('MMMM DD, YYYY');
+      const day1 = dayjs(`${date1?.$y}-${date1?.$M + 2}-${date1?.$D - 1}`).format('MMMM DD, YYYY');
+      const day2 = dayjs(`${date1?.$y}-${date1?.$M + 2}-${date1?.$D - 2}`).format('MMMM DD, YYYY');
+      const day3 = dayjs(`${date1?.$y}-${date1?.$M + 2}-${date1?.$D - 3}`).format('MMMM DD, YYYY');
+      const day4 = dayjs(`${date1?.$y}-${date1?.$M + 2}-${date1?.$D - 4}`).format('MMMM DD, YYYY');
+      const day5 = dayjs(`${date1?.$y}-${date1?.$M + 2}-${date1?.$D + 1}`).format('MMMM DD, YYYY');
 
       dispatch(
         addPrepDates({
           ...prepDates,
-          StandardPackageHormone__PrepDate1: day,
-          StandardPackageHormone__PrepDate2: day1,
-          StandardPackageHormone__PrepDate3: day2,
-          StandardPackageHormone__PrepDate4: day3
+          hormoneSelectedDay: day,
+          hormonePrepDay1: day1,
+          hormonePrepDay2: day2,
+          hormonePrepDay3: day3,
+          hormonePrepDay4: day4,
+          hormoneTestDay: day5
         })
       );
 
@@ -97,24 +104,44 @@ export default function HormoneTest() {
 
   const [checked, setChecked] = useState(false);
 
-  const handleSamplingDate = () => {
-    const day = dayjs(`${date1?.$y}-${date1?.$M + 1}-${date1?.$D}`).format('MMMM DD, YYYY');
-    const day1 = dayjs(`${date1?.$y}-${date1?.$M + 1}-${date1?.$D + 1}`).format('MMMM DD, YYYY');
-    const day2 = dayjs(`${date1?.$y}-${date1?.$M + 1}-${date1?.$D + 2}`).format('MMMM DD, YYYY');
-    const day3 = dayjs(`${date1?.$y}-${date1?.$M + 1}-${date1?.$D + 3}`).format('MMMM DD, YYYY');
+  const addDates = (date) => {
+    setDate1(date);
+
+    handleSamplingDate(date);
+  };
+
+  const handleSamplingDate = (date) => {
+
+    const day = dayjs(`${date?.$y}-${date?.$M + 1}-${date?.$D}`).format('MMMM DD, YYYY');
+    const day1 = dayjs(`${date?.$y}-${date?.$M + 1}-${date?.$D - 1}`).format('MMMM DD, YYYY');
+    const day2 = dayjs(`${date?.$y}-${date?.$M + 1}-${date?.$D - 2}`).format('MMMM DD, YYYY');
+    const day3 = dayjs(`${date?.$y}-${date?.$M + 1}-${date?.$D - 3}`).format('MMMM DD, YYYY');
+    const day4 = dayjs(`${date?.$y}-${date?.$M + 1}-${date?.$D - 4}`).format('MMMM DD, YYYY');
+    const day5 = dayjs(`${date?.$y}-${date?.$M + 1}-${date?.$D + 1}`).format('MMMM DD, YYYY');
 
     dispatch(
       addPrepDates({
         ...prepDates,
-        StandardPackageHormone__PrepDate1: day,
-        StandardPackageHormone__PrepDate2: day1,
-        StandardPackageHormone__PrepDate3: day2,
-        StandardPackageHormone__PrepDate4: day3
+        hormoneSelectedDay: day,
+        hormonePrepDay1: day1,
+        hormonePrepDay2: day2,
+        hormonePrepDay3: day3,
+        hormonePrepDay4: day4,
+        hormoneTestDay: day5
       })
     );
 
     setOneComplete(true);
   };
+
+  const hormoneDates = [
+    { name: 'Preparation day 1', date: prepDates?.hormonePrepDay1 },
+    { name: 'Preparation day 2', date: prepDates?.hormonePrepDay2 },
+    { name: 'Preparation day 3', date: prepDates?.hormonePrepDay3 },
+    { name: 'Preparation day 4', date: prepDates?.hormonePrepDay4 },
+    { name: 'Selected day', date: prepDates?.hormoneSelectedDay },
+    { name: 'Testing day', date: prepDates?.hormoneTestDay }
+  ];
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
@@ -207,14 +234,9 @@ export default function HormoneTest() {
                         <>
                           <Typography variant="body2">This was your plan</Typography>
                           <List>
-                            {[
-                              prepDates?.StandardPackageHormone__PrepDate1,
-                              prepDates?.StandardPackageHormone__PrepDate2,
-                              prepDates?.StandardPackageHormone__PrepDate3,
-                              prepDates?.StandardPackageHormone__PrepDate4
-                            ].map((date, index) => (
+                            {hormoneDates.map(({ name, date }, index) => (
                               <ListItem key={index}>
-                                <Typography>{`Day ${index + 1}: ${dayjs(date).format('MMMM DD, YYYY')}`}</Typography>
+                                <Typography>{`${name}: ${dayjs(date).format('MMMM DD, YYYY')}`}</Typography>
                               </ListItem>
                             ))}
                           </List>
@@ -223,16 +245,11 @@ export default function HormoneTest() {
                         <>
                           <Typography variant="body2">Here is your plan</Typography>
                           <List>
-                            {[
-                              prepDates?.StandardPackageHormone__PrepDate1,
-                              prepDates?.StandardPackageHormone__PrepDate2,
-                              prepDates?.StandardPackageHormone__PrepDate3,
-                              prepDates?.StandardPackageHormone__PrepDate4
-                            ].map((date, index) => {
+                            {hormoneDates.map(({ name, date }, index) => {
                               return (
                                 <ListItem key={index}>
                                   <Typography>
-                                    {date ? `Day ${index + 1}: ${dayjs(date).format('MMMM DD, YYYY')}` : 'Choose proper dates'}
+                                    {date ? `${name}: ${dayjs(date).format('MMMM DD, YYYY')}` : 'Choose proper dates'}
                                   </Typography>
                                 </ListItem>
                               );
@@ -416,32 +433,26 @@ export default function HormoneTest() {
               <Grid item xs={isMobile ? 12 : 6}>
                 <Typography variant="body1">Select a Date</Typography>
                 <Box sx={{ width: 'full', height: 'full', position: 'relative' }}>
-                  <DateCalendar onChange={(date) => setDate1(date)} />
-                  {!planningComplete && (
-                    <Box sx={{ diplay: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                      <Button
-                        sx={{ backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' } }}
-                        fullWidth
-                        variant="contained"
-                        disabled={date1 === undefined ? !0 : !1}
-                        onClick={handleSamplingDate}
-                      >
-                        Set Date
-                      </Button>
-                    </Box>
-                  )}
+                  <DateCalendar onChange={addDates} slots={{ day: Day }} slotProps={{ day: { selectedDay: date1 } }} />
+                  <List>
+                    {[
+                      { color: '#f7c2e4', text: 'Preparation day' },
+                      { color: 'primary.main', text: 'Selected day' },
+                      { color: '#45d9c9', text: 'Test day' }
+                    ].map(({ color, text }, index) => (
+                      <ListItem key={index} sx={{ display: 'flex', flexDirection: 'row' }}>
+                        <Box sx={{ height: '20px', width: '20px', backgroundColor: color }} />
+                        <Typography sx={{ ml: 2 }}> : {text}</Typography>
+                      </ListItem>
+                    ))}
+                  </List>
                   {planningComplete ? (
                     <>
                       <Typography variant="body2">This was your plan</Typography>
                       <List>
-                        {[
-                          prepDates?.StandardPackageHormone__PrepDate1,
-                          prepDates?.StandardPackageHormone__PrepDate2,
-                          prepDates?.StandardPackageHormone__PrepDate3,
-                          prepDates?.StandardPackageHormone__PrepDate4
-                        ].map((date, index) => (
+                        {hormoneDates.map(({ name, date }, index) => (
                           <ListItem key={index}>
-                            <Typography>{`Day ${index + 1}: ${dayjs(date).format('MMMM DD, YYYY')}`}</Typography>
+                            <Typography>{`${name}: ${dayjs(date).format('MMMM DD, YYYY')}`}</Typography>
                           </ListItem>
                         ))}
                         {planningComplete && (
@@ -451,19 +462,14 @@ export default function HormoneTest() {
                     </>
                   ) : oneComplete && !isDelayed ? (
                     <>
-                      <Typography variant="body2">Here is your plan</Typography>
+                      <Typography variant="body2">This is your plan</Typography>
                       <List>
-                        {[
-                          prepDates?.StandardPackageHormone__PrepDate1,
-                          prepDates?.StandardPackageHormone__PrepDate2,
-                          prepDates?.StandardPackageHormone__PrepDate3,
-                          prepDates?.StandardPackageHormone__PrepDate4
-                        ].map((date, index) => (
+                        {hormoneDates.map(({ name, date }, index) => (
                           <ListItem key={index}>
-                            {date ? `Day ${index + 1}: ${dayjs(date).format('MMMM DD, YYYY')}` : 'Choose proper dates'}
+                            {date ? `${name}: ${dayjs(date).format('MMMM DD, YYYY')}` : 'Choose proper dates'}
                           </ListItem>
                         ))}
-                        {prepDates.hormoneTestSamplingDate && (
+                        {prepDates?.hormoneTestSamplingDate && (
                           <ListItem>
                             <Typography>{`Sampling Date: ${dayjs(prepDates?.hormoneTestSamplingDate).format('MMMM DD, YYYY')}`}</Typography>
                           </ListItem>

@@ -16,7 +16,6 @@ export async function handleConfirmPackageReceived(id) {
   await API.post(`api/dashboard/${id}/complete-confirm-shipment`, {
     packageReceiptStatus: 'Y'
   });
-
 }
 
 export async function handleUpdateUserProfile(id, credentials) {
@@ -38,6 +37,14 @@ export async function handleUploadPicture(id, isProfilePic, data) {
 
 export async function handleFinishPlanning(id, data) {
   const response = await API.post(`api/dashboard/${id}/complete-planning-task`, data);
+
+  return response;
+}
+
+export async function handleOverallSampling(overAllSamplingStatus) {
+  const response = await API.post(`api/dashboard/${id}/complete-confirm-sampling-ok`, {
+    overAllSamplingStatus: overAllSamplingStatus ? 'Y' : 'N'
+  });
 
   return response;
 }

@@ -51,13 +51,15 @@ export function QuestionsUtils() {
       condition: !hormoneStatus
     },
     {
-      content: `You have not confirmed yet if you are prepared for the Metabolic test on ${dayjs(metabolicSampleDate).format(
-        'MMMM DD, YYYY'
-      )}`,
+      content: `You have not confirmed yet if you are prepared for the Metabolic test ${
+        metabolicSampleDate ? `on ${dayjs(metabolicSampleDate).format('MMMM DD, YYYY')}` : ''
+      }`,
       condition: !metabolicStatus
     },
     {
-      content: `You have not confirmed yet if you are prepared for the Hormone test on ${dayjs(hormoneSampleDate).format('MMMM DD, YYYY')}`,
+      content: `You have not confirmed yet if you are prepared for the Hormone test ${
+        hormoneSampleDate ? `on ${dayjs(hormoneSampleDate).format('MMMM DD, YYYY')}` : ''
+      }`,
       condition: !hormoneStatus
     },
     {
