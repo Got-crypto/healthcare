@@ -7,7 +7,7 @@ import { handleGetCustomerOrderById, handleGetCustomerOrders } from 'services/Be
 import { getUnlockedSteps, selectOrder, setOrderDetails } from '../../../../store/reducers/main';
 
 const Orders = () => {
-  const [order, setOrder] = useState('');
+  const [order, setOrder] = useState('Setting order');
   const [customerOrders, setCustomerOrders] = useState([]);
   const dispatch = useDispatch();
 

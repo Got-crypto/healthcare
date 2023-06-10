@@ -21,7 +21,7 @@ export default function ThemeCustomization({ children }) {
         values: {
           xs: 0,
           xsl: 493,
-          smxxx: 582,
+          smxx: 582,
           smx: 675,
           sm: 768,
           mdxx: 781,

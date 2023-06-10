@@ -7,7 +7,7 @@ function TestingInstructions() {
   return (
     <>
       <Grid marginTop={10} item xs={12}>
-        <Box sx={{ flex: 'wrap' }}>
+        <Box sx={{ flex: 'wrap', width: '100%' }}>
           <Typography variant="h2" color="textPrimary">
             Testing Instructions
           </Typography>

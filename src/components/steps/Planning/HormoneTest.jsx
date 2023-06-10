@@ -111,7 +111,6 @@ export default function HormoneTest() {
   };
 
   const handleSamplingDate = (date) => {
-
     const day = dayjs(`${date?.$y}-${date?.$M + 1}-${date?.$D}`).format('MMMM DD, YYYY');
     const day1 = dayjs(`${date?.$y}-${date?.$M + 1}-${date?.$D - 1}`).format('MMMM DD, YYYY');
     const day2 = dayjs(`${date?.$y}-${date?.$M + 1}-${date?.$D - 2}`).format('MMMM DD, YYYY');
@@ -217,17 +216,23 @@ export default function HormoneTest() {
                   </Typography>
                   <Box sx={{ pb: 2 }}>
                     {!planningComplete && isMobile && (
-                      <Box sx={{ diplay: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                        <DatePicker onChange={(date) => setDate1(date)} />
-                        <Button
-                          sx={{ backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' } }}
-                          variant="contained"
-                          disabled={date1 === undefined ? !0 : !1}
-                          onClick={handleSamplingDate}
-                        >
-                          Set Date
-                        </Button>
-                      </Box>
+                      <>
+                        <Box sx={{ diplay: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                          <DatePicker onChange={addDates} slots={{ day: Day }} slotProps={{ day: { selectedDay: date1 } }} />
+                        </Box>
+                        <List>
+                          {[
+                            { color: '#f7c2e4', text: 'Preparation day' },
+                            { color: 'primary.main', text: 'Selected day' },
+                            { color: '#45d9c9', text: 'Test day' }
+                          ].map(({ color, text }, index) => (
+                            <ListItem key={index} sx={{ display: 'flex', flexDirection: 'row' }}>
+                              <Box sx={{ height: '20px', width: '20px', backgroundColor: color }} />
+                              <Typography sx={{ ml: 2 }}> : {text}</Typography>
+                            </ListItem>
+                          ))}
+                        </List>
+                      </>
                     )}
                     <Box>
                       {planningComplete && isMobile ? (
@@ -271,7 +276,7 @@ export default function HormoneTest() {
                   setThree(false);
                   setTwo((current) => !current);
                 }}
-                sx={{ ':hover': { cursor: 'pointer', color: 'primary.main', textDecoration: 'underline' } }}
+                sx={{ mt: 2, ':hover': { cursor: 'pointer', color: 'primary.main', textDecoration: 'underline' } }}
                 variant="body2"
               >
                 2. Preparation time prior to taking the samples (two days prior to the test there are foods and supplements) to avoid{' '}
@@ -382,7 +387,7 @@ export default function HormoneTest() {
                   setTwo(false);
                   setThree((current) => !current);
                 }}
-                sx={{ ':hover': { cursor: 'pointer', color: 'primary.main', textDecoration: 'underline' } }}
+                sx={{ mt: 2, ':hover': { cursor: 'pointer', color: 'primary.main', textDecoration: 'underline' } }}
                 variant="body2"
               >
                 3. Your availability to take the samples at the specific times required throughout the day {icon3}

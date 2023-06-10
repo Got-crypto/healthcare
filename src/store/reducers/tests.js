@@ -9,7 +9,12 @@ const initialState = {
     hormonePrepDay4: null,
     hormoneTestDay: null,
     hormoneTestSamplingDate: null,
-    metabolicSamplingSelectedDay: null
+    metabolicPrepDay1: null,
+    metabolicPrepDay2: null,
+    metabolicPrepDay3: null,
+    metabolicPrepDay4: null,
+    metabolicTestDay: null,
+    metabolicTestSamplingDate: null
   },
   hormorneTestComplete: false
 };

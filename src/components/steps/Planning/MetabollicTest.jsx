@@ -6,9 +6,11 @@ import {
   Button,
   Collapse,
   Grid,
+  List,
+  ListItem,
   Typography
 } from '../../../../node_modules/@mui/material/index';
-import { ExpandMore, ThumbUp } from '../../../../node_modules/@mui/icons-material/index';
+import { ExpandLess, ExpandMore, ThumbUp } from '../../../../node_modules/@mui/icons-material/index';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -16,6 +18,8 @@ import dayjs from 'dayjs';
 import { addPrepDates } from 'store/reducers/tests';
 import { handleFinishPlanning } from 'services/BeOne';
 import { LoadingButton } from '../../../../node_modules/@mui/lab/index';
+
+import { Day } from 'utils/CustomPickersDay';
 
 export default function MetabollicTest({ successMessage, setSuccessMessage }) {
   const [one, setOne] = useState(false);
@@ -33,9 +37,24 @@ export default function MetabollicTest({ successMessage, setSuccessMessage }) {
   const planningComplete = planningData?.status.toLowerCase() === 'done' ? !0 : !1;
 
   const handleChangeMetabollicTestDate = () => {
-    const testDate = dayjs(`${date2?.$y}-${date2?.$M + 1}-${date2?.$D}`).format('MMMM DD, YYYY');
+    const day = dayjs(`${date2?.$y}-${date2?.$M + 1}-${date2?.$D}`).format('MMMM DD, YYYY');
+    const day1 = dayjs(`${date2?.$y}-${date2?.$M + 1}-${date2?.$D - 1}`).format('MMMM DD, YYYY');
+    const day2 = dayjs(`${date2?.$y}-${date2?.$M + 1}-${date2?.$D - 2}`).format('MMMM DD, YYYY');
+    const day3 = dayjs(`${date2?.$y}-${date2?.$M + 1}-${date2?.$D - 3}`).format('MMMM DD, YYYY');
+    const day4 = dayjs(`${date2?.$y}-${date2?.$M + 1}-${date2?.$D - 4}`).format('MMMM DD, YYYY');
+    const day5 = dayjs(`${date2?.$y}-${date2?.$M + 1}-${date2?.$D + 1}`).format('MMMM DD, YYYY');
 
-    dispatch(addPrepDates({ ...prepDates, metabolicSamplingSelectedDay: testDate }));
+    dispatch(
+      addPrepDates({
+        ...prepDates,
+        metabolicTestSamplingDate: day,
+        metabolicPrepDay1: day1,
+        metabolicPrepDay2: day2,
+        metabolicPrepDay3: day3,
+        metabolicPrepDay4: day4,
+        metabolicTestDay: day5
+      })
+    );
     setMetabollicPlanningComplete(true);
   };
 
@@ -49,7 +68,7 @@ export default function MetabollicTest({ successMessage, setSuccessMessage }) {
         hormoneTestWindowStartDate: dayjs(prepDates?.hormoneSelectedDay).format('YYYY-MM-DD'),
         metabolismSkipReminder1: true,
         metabolismSkipReminder2: true,
-        metabolismTestSamplingDate: dayjs(prepDates?.metabolicSamplingSelectedDay).format('YYYY-MM-DD'),
+        metabolismTestSamplingDate: dayjs(prepDates?.metabolicTestSamplingDate).format('YYYY-MM-DD'),
         periodCycleLength: 10,
         testOption: 'OPTION_1'
       });
@@ -61,6 +80,19 @@ export default function MetabollicTest({ successMessage, setSuccessMessage }) {
       console.log('error finishing planning', error);
     }
   };
+
+  const icon1 = one ? <ExpandLess /> : <ExpandMore />;
+  const icon2 = two ? <ExpandLess /> : <ExpandMore />;
+  const icon3 = three ? <ExpandLess /> : <ExpandMore />;
+
+  const metabolicDates = [
+    { name: 'Preparation day 1', date: prepDates?.metabolicPrepDay1 },
+    { name: 'Preparation day 2', date: prepDates?.metabolicPrepDay2 },
+    { name: 'Preparation day 3', date: prepDates?.metabolicPrepDay3 },
+    { name: 'Preparation day 4', date: prepDates?.metabolicPrepDay4 },
+    { name: 'Selected day', date: prepDates?.metabolicTestSamplingDate },
+    { name: 'Testing day', date: prepDates?.metabolicTestDay }
+  ];
 
   return (
     <>
@@ -92,7 +124,7 @@ export default function MetabollicTest({ successMessage, setSuccessMessage }) {
                 sx={{ ':hover': { cursor: 'pointer', color: 'primary.main', textDecoration: 'underline' } }}
                 variant="body2"
               >
-                1. Testing cannot happen while menstruating
+                1. Testing cannot happen while menstruating {icon1}
               </Typography>
               <Collapse in={one} timeout="auto" unmountOnExit>
                 <Typography variant="body2" sx={{ ml: 1 }}>
@@ -116,10 +148,10 @@ export default function MetabollicTest({ successMessage, setSuccessMessage }) {
                   setThree(false);
                   setTwo((current) => !current);
                 }}
-                sx={{ ':hover': { cursor: 'pointer', color: 'primary.main', textDecoration: 'underline' } }}
+                sx={{ mt: 2, ':hover': { cursor: 'pointer', color: 'primary.main', textDecoration: 'underline' } }}
                 variant="body2"
               >
-                2. Preparation time prior to taking the samples (two days prior to the test there are foods and supplements)
+                2. Preparation time prior to taking the samples (two days prior to the test there are foods and supplements) {icon2}
               </Typography>
               <Collapse in={two} timeout="auto" unmountOnExit>
                 <Typography variant="body2" sx={{ ml: 1 }}>
@@ -166,10 +198,10 @@ export default function MetabollicTest({ successMessage, setSuccessMessage }) {
                   setTwo(false);
                   setThree((current) => !current);
                 }}
-                sx={{ ':hover': { cursor: 'pointer', color: 'primary.main', textDecoration: 'underline' } }}
+                sx={{ mt: 2, ':hover': { cursor: 'pointer', color: 'primary.main', textDecoration: 'underline' } }}
                 variant="body2"
               >
-                3. Timings and requirements for day one and day two of testing
+                3. Timings and requirements for day one and day two of testing {icon3}
               </Typography>
               <Collapse in={three} timeout="auto" unmountOnExit>
                 <Typography variant="body2" sx={{ ml: 1, fontWeight: 'bold' }}>
@@ -232,7 +264,29 @@ export default function MetabollicTest({ successMessage, setSuccessMessage }) {
                       Taking into account your menstruation, preparation and sampling requirements, Confirm the first day of the two
                       consecutive sampling dates.
                     </Typography>
-                    <DatePicker onChange={(date) => setDate2(date)} />
+                    <DatePicker onChange={(date) => setDate2(date)} slots={{ day: Day }} slotProps={{ day: { selectedDay: date2 } }} />
+                    <List>
+                      {[
+                        { color: '#f7c2e4', text: 'Preparation day' },
+                        { color: 'primary.main', text: 'Selected day' },
+                        { color: '#45d9c9', text: 'Test day' }
+                      ].map(({ color, text }, index) => (
+                        <ListItem key={index} sx={{ display: 'flex', flexDirection: 'row' }}>
+                          <Box sx={{ height: '20px', width: '20px', backgroundColor: color }} />
+                          <Typography sx={{ ml: 2 }}> : {text}</Typography>
+                        </ListItem>
+                      ))}
+                    </List>
+                    <Typography variant="body2">Here is your plan</Typography>
+                    <List>
+                      {metabolicDates.map(({ name, date }, index) => {
+                        return (
+                          <ListItem key={index}>
+                            <Typography>{date ? `${name}: ${dayjs(date).format('MMMM DD, YYYY')}` : 'Choose proper dates'}</Typography>
+                          </ListItem>
+                        );
+                      })}
+                    </List>
                     <Button
                       sx={{ backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' } }}
                       onClick={handleChangeMetabollicTestDate}

@@ -1,49 +1,81 @@
 import {
-  Box,
+  Button,
   Checkbox,
-  FormControlLabel,
-  FormGroup,
+  FormControl,
   IconButton,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Switch,
-  Typography
+  TextField
 } from '../../../../node_modules/@mui/material/index';
-import { useSelector } from 'react-redux';
-import { Info, Inventory } from '../../../../node_modules/@mui/icons-material/index';
+// import { useSelector } from 'react-redux';
+import { Info, Inventory, Send, ThumbUp } from '../../../../node_modules/@mui/icons-material/index';
 import { useState } from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { motion } from 'framer-motion';
 
-import { QuestionsUtils } from 'utils/TestingQuestions';
+import { QuestionsUtils, additionalQuestions } from 'utils/TestingQuestions';
 
-export function ToggleReplies() {
-  const [reply, setReply] = useState('Yes');
+export function ToggleReplies({ response, setAdditionalQuestionsActivated, setKitsPackages, setContactForm }) {
+  const [reply, setReply] = useState('');
 
   const handleChange = (reply) => {
     setReply(reply.target.value);
   };
+
   return (
-    <ToggleButtonGroup color="info" value={reply} exclusive onChange={handleChange}>
-      <ToggleButton value="Yes">Yes</ToggleButton>
-      <ToggleButton value="No">No</ToggleButton>
-    </ToggleButtonGroup>
+    <>
+      {response === 'planning' && (
+        <ToggleButtonGroup value={reply} exclusive onChange={handleChange}>
+          <ToggleButton color="success" component="a" href="#planning" value="Y">
+            Yes
+          </ToggleButton>
+          <ToggleButton color="error" value="N">
+            No
+          </ToggleButton>
+        </ToggleButtonGroup>
+      )}
+      {response === 'report' && (
+        <ToggleButtonGroup value={reply} exclusive onChange={handleChange}>
+          <ToggleButton color="success" onClick={() => setAdditionalQuestionsActivated(true)} value="Y">
+            Yes
+          </ToggleButton>
+          <ToggleButton color="error" value="N">
+            No
+          </ToggleButton>
+        </ToggleButtonGroup>
+      )}
+      {response === 'contact' && (
+        <ToggleButtonGroup value={reply} exclusive onChange={handleChange}>
+          <ToggleButton color="success" onClick={() => setContactForm(true)} value="Y">
+            Yes
+          </ToggleButton>
+          <ToggleButton color="error" value="N">
+            No
+          </ToggleButton>
+        </ToggleButtonGroup>
+      )}
+      {response === 'kits' && (
+        <ToggleButtonGroup value={reply} exclusive onChange={handleChange}>
+          <ToggleButton onClick={() => setKitsPackages(true)} color="success" value="Y">
+            Yes
+          </ToggleButton>
+          <ToggleButton color="error" value="N">
+            No
+          </ToggleButton>
+        </ToggleButtonGroup>
+      )}
+    </>
   );
 }
 
 export default function Testing() {
-  const { orderDetails } = useSelector((state) => state.main);
-  const testingData = orderDetails ? orderDetails[3]?.data : null;
-  const [checked, setChecked] = useState(false);
-  const handleChange = (event) => {
-    setChecked(event.target.checked);
-  };
-  const hormoneSampleStatus = testingData?.StandardPackageHormoneSampleCollect__customerConfirmationStatus === 'Y' ? true : false;
-
+  const [additionalQuestionsActivated, setAdditionalQuestionsActivated] = useState(false);
+  const [kitsPackages, setKitsPackages] = useState(false);
+  const [contactForm, setContactForm] = useState(false);
   const questions = QuestionsUtils();
   const [marked, setMarked] = useState([0]);
 
@@ -61,9 +93,9 @@ export default function Testing() {
   };
 
   return (
-    <motion.div layout>
+    <motion.div layout style={{ width: '100%' }}>
       <List dense>
-        {questions.map(({ content, condition }, index) => {
+        {questions.map(({ content, condition, response }, index) => {
           return (
             condition && (
               <ListItem
@@ -74,57 +106,93 @@ export default function Testing() {
                   <Info sx={{ color: 'info.main' }} />
                 </ListItemIcon>
                 <ListItemText primary={content} />
-                <ToggleReplies />
+                <ToggleReplies
+                  response={response}
+                  setAdditionalQuestionsActivated={setAdditionalQuestionsActivated}
+                  setKitsPackages={setKitsPackages}
+                  setContactForm={setContactForm}
+                />
               </ListItem>
             )
           );
         })}
+        {additionalQuestionsActivated &&
+          additionalQuestions().map(({ content, response }, key) => (
+            <ListItem
+              key={key}
+              sx={{ width: '100%', gap: 1, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
+            >
+              <ListItemIcon>
+                <Info sx={{ color: 'info.main' }} />
+              </ListItemIcon>
+              <ListItemText sx={{ color: 'warning.main' }} primary={content} />
+              <ToggleReplies
+                response={response}
+                setAdditionalQuestionsActivated={setAdditionalQuestionsActivated}
+                setKitsPackages={setKitsPackages}
+                setContactForm={setContactForm}
+              />
+            </ListItem>
+          ))}
+        {contactForm && (
+          <>
+            <FormControl sx={{ m: 1, width: 600 }}>
+              <TextField id="outlined-adornment-amount" label="What's the issue?" multiline maxRows={8} />
+              <Button
+                sx={{ backgroundColor: '#45d9c9', mt: 2, width: '20%', ':hover': { backgroundColor: '#45c0d9' } }}
+                variant="contained"
+                endIcon={<Send />}
+                size="small"
+              >
+                Send
+              </Button>
+            </FormControl>
+          </>
+        )}
       </List>
 
-      {!hormoneSampleStatus && (
-        <Box>
-          <Typography>Will you require any of the kits re-sent to you?</Typography>
-          <Typography sx={{ color: 'warning.main' }}>Please note there will be a fee for this.</Typography>
-          <FormGroup sx={{ width: 'fit-content' }}>
-            <FormControlLabel
-              control={<Switch checked={checked} onChange={handleChange} />}
-              label={checked ? 'Enable kits' : "I'd rather not"}
-            />
-          </FormGroup>
-        </Box>
-      )}
-      {checked && (
-        <List elevation={1} sx={{ width: '100%', bgcolor: 'background.paper' }}>
-          {['Hormone Test', 'Metabolic Test', 'Thyroid Test', 'Immune Test'].map((kitPackage, index) => {
-            const kitPackageId = `${kitPackage}-${index}`;
+      {kitsPackages && (
+        <>
+          <List elevation={1} sx={{ mt: 4, width: '100%', bgcolor: 'background.paper' }}>
+            {['Hormone Test', 'Metabolic Test', 'Thyroid Test', 'Immune Test'].map((kitPackage, index) => {
+              const kitPackageId = `${kitPackage}-${index}`;
 
-            return (
-              <ListItem
-                sx={{ mx: 'auto' }}
-                key={kitPackageId}
-                secondaryAction={
-                  <IconButton edge="end">
-                    <Inventory />
-                  </IconButton>
-                }
-                disablePadding
-              >
-                <ListItemButton onClick={handleToggle(kitPackage)} dense>
-                  <ListItemIcon>
-                    <Checkbox
-                      edge="start"
-                      checked={marked.indexOf(kitPackage) !== -1}
-                      tabIndex={-1}
-                      disableRipple
-                      inputProps={{ 'aria-labelledby': kitPackageId }}
-                    />
-                  </ListItemIcon>
-                  <ListItemText sx={{ mx: 'auto' }} id={kitPackageId} primary={kitPackage} />
-                </ListItemButton>
-              </ListItem>
-            );
-          })}
-        </List>
+              return (
+                <ListItem
+                  sx={{ mx: 'auto' }}
+                  key={kitPackageId}
+                  secondaryAction={
+                    <IconButton edge="end">
+                      <Inventory />
+                    </IconButton>
+                  }
+                  disablePadding
+                >
+                  <ListItemButton onClick={handleToggle(kitPackage)} dense>
+                    <ListItemIcon>
+                      <Checkbox
+                        edge="start"
+                        checked={marked.indexOf(kitPackage) !== -1}
+                        tabIndex={-1}
+                        disableRipple
+                        inputProps={{ 'aria-labelledby': kitPackageId }}
+                      />
+                    </ListItemIcon>
+                    <ListItemText sx={{ mx: 'auto' }} id={kitPackageId} primary={kitPackage} />
+                  </ListItemButton>
+                </ListItem>
+              );
+            })}
+          </List>
+          <Button
+            sx={{ backgroundColor: '#45d9c9', mt: 2, width: '20%', ':hover': { backgroundColor: '#45c0d9' } }}
+            variant="contained"
+            endIcon={<ThumbUp />}
+            size="small"
+          >
+            Confirm
+          </Button>
+        </>
       )}
     </motion.div>
   );

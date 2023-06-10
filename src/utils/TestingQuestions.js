@@ -44,11 +44,13 @@ export function QuestionsUtils() {
     },
     {
       content: 'It seems that you need to reschedule your sampling for Metabolic Test?',
-      condition: !metabolicStatus
+      condition: !metabolicStatus,
+      reponse: 'planning'
     },
     {
       content: 'It seems that you need to reschedule your sampling for Hormone Test?',
-      condition: !hormoneStatus
+      condition: !hormoneStatus,
+      response: 'planning'
     },
     {
       content: `You have not confirmed yet if you are prepared for the Metabolic test ${
@@ -74,11 +76,13 @@ export function QuestionsUtils() {
     },
     {
       content: 'It seems that you ran into some problems with sampling of Metabolic test correct?',
-      condition: !metabollicSampleStatus
+      condition: !metabollicSampleStatus,
+      response: 'report'
     },
     {
       content: 'It seems that you ran into some problems with sampling of Hormone test correct?',
-      condition: !hormoneSampleStatus
+      condition: !hormoneSampleStatus,
+      response: 'report'
     },
     {
       content: `Your Metabolic sampling date is on ${metabolicSampleDate}. You can confirm only after that date.`,
@@ -99,4 +103,19 @@ export function QuestionsUtils() {
   ];
 
   return questions;
+}
+
+export function additionalQuestions() {
+  const questions = [
+    {
+      content: 'We are sorry to hear that you had some problems. Do you need to contact us regarding the issue that you had?',
+      response: 'contact'
+    },
+    {
+      content: 'Will you require any of the kits re-sent to you? Please note that there will be a fee for this.',
+      response: 'kits'
+    }
+  ];
+
+  return questions; 
 }
