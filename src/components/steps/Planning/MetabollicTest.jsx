@@ -75,7 +75,7 @@ export default function MetabollicTest({ successMessage, setSuccessMessage }) {
       setIsLoading(false);
       setSuccessMessage(response?.data?.message);
     } catch (error) {
-      setError(error?.data?.errors);
+      setError(error?.data?.status === 500 ? 'Sorry, This step is not active' : error?.data?.errors);
       setIsLoading(false);
       console.log('error finishing planning', error);
     }
@@ -320,11 +320,6 @@ export default function MetabollicTest({ successMessage, setSuccessMessage }) {
             Finish Planning
           </LoadingButton>
           <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-            {planningComplete && (
-              <Typography variant="body1" sx={{ color: 'success.main' }}>
-                Plannning tests complete
-              </Typography>
-            )}
             {successMessage && (
               <Typography variant="body1" sx={{ color: 'success.main' }}>
                 {successMessage}

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import {
-  Button,
   Checkbox,
   Divider,
   FormControlLabel,
@@ -27,11 +26,13 @@ import { baseUrl } from 'store/beOneApi';
 import axios from '../../../../node_modules/axios/index';
 
 import logo from '../../../assets/images/Logo-header.png';
+import { LoadingButton } from '../../../../node_modules/@mui/lab/index';
 
 const AuthLogin = () => {
   const [checked, setChecked] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [disableButton, setDisableButton] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -42,13 +43,15 @@ const AuthLogin = () => {
 
   async function loginUser(email, password) {
     try {
-      setDisableButton(true);
+      setIsLoading(true);
       const response = await axios.post(`${baseUrl}/auth`, { email, password });
       localStorage.setItem('authUser', JSON.stringify(response?.data));
       if (response?.status === 200) {
         location.reload();
       }
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       setDisableButton(false);
       console.log('error', error);
     }
@@ -165,9 +168,9 @@ const AuthLogin = () => {
               )}
               <Grid item xs={12}>
                 <AnimateButton>
-                  <Button
-                    disableElevation
-                    disabled={disableButton}
+                  <LoadingButton
+                    elevation={2}
+                    loading={isLoading}
                     fullWidth
                     size="large"
                     type="submit"
@@ -176,7 +179,7 @@ const AuthLogin = () => {
                     sx={{ backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' } }}
                   >
                     Login
-                  </Button>
+                  </LoadingButton>
                 </AnimateButton>
               </Grid>
               <Grid item xs={12}>

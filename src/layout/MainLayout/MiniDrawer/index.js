@@ -23,7 +23,13 @@ const openedMixin = (theme) => ({
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen
   }),
-  overflowX: 'hidden'
+  overflowX: 'hidden',
+  [theme.breakpoints.down('smx')]: {
+    width: 150
+  },
+  [theme.breakpoints.down('xsl')]: {
+    width: 100
+  }
 });
 
 const closedMixin = (theme) => ({

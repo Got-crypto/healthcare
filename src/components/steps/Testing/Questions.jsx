@@ -112,7 +112,7 @@ export default function Testing() {
     } catch (error) {
       setIsLoading(false);
       console.log('error', error);
-      setErrorMessage( error?.data?.status === 500 ? 'Sorry, This step is not active' : error?.data?.errors);
+      setErrorMessage(error?.data?.status === 500 ? 'Sorry, This step is not active' : error?.data?.errors);
     }
   };
 

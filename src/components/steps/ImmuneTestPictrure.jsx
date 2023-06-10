@@ -10,6 +10,8 @@ import SectionWrapper from 'layout/MainLayout/HOC/SectionWrapper';
 const FileInput = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState();
+  const [successMessage, setSuccessMessage] = useState();
 
   const { selectedOrder } = useSelector((state) => state.main);
 
@@ -40,10 +42,14 @@ const FileInput = () => {
       setIsLoading(true);
       const resized = await resizeImage(selectedFile, 800, 800, 0.7);
       formData.append('file', resized);
-      await handleUploadPicture(selectedOrder?.orderId, false, formData);
+      const response = await handleUploadPicture(selectedOrder?.orderId, false, formData);
       setIsLoading(false);
+      setErrorMessage();
+      setSuccessMessage(response?.data?.message);
     } catch (error) {
       setIsLoading(false);
+      setSuccessMessage();
+      setErrorMessage(error?.data?.status === 500 ? 'Sorry, This step is not active' : error?.data?.errors);
       console.log('error', error);
     }
   };
@@ -65,7 +71,7 @@ const FileInput = () => {
             display: 'flex',
             justifyContent: 'center',
             flexDirection: 'column',
-            alignItems: 'center',
+            alignItems: 'center'
           }}
         >
           {selectedFile ? (
@@ -98,6 +104,27 @@ const FileInput = () => {
       >
         Upload Test picture
       </LoadingButton>
+      <Box
+        sx={{
+          mt: 2,
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'flex-end'
+        }}
+      >
+        {errorMessage && (
+          <Typography variant="body1" sx={{ color: 'error.main' }}>
+            {errorMessage}
+          </Typography>
+        )}
+        {successMessage && (
+          <Typography variant="body1" sx={{ color: 'success.main' }}>
+            {successMessage}
+          </Typography>
+        )}
+      </Box>
     </Box>
   );
 };

@@ -14,6 +14,7 @@ const DashboardDefault = () => {
   const theme = useTheme();
   const mdx = useMediaQuery(theme.breakpoints.down('mdx'));
   const mdxx = useMediaQuery(theme.breakpoints.down('mdxx'));
+  // const mdxxx = useMediaQuery(theme.breakpoints.down('mdxxx'));
   const smx = useMediaQuery(theme.breakpoints.down('smx'));
   const smxx = useMediaQuery(theme.breakpoints.down('smxx'));
   const xsl = useMediaQuery(theme.breakpoints.down('xsl'));
@@ -25,7 +26,7 @@ const DashboardDefault = () => {
         {!selectedOrder && <Box>Loading orders...</Box>}
       </Grid>
 
-      <Grid item xs={xsl ? 9 : smxx ? 8.5 : smx ? 9 : mdxx ? 8.5 : mdx ? 9 : 9.5} sx={{ flex: 'wrap' }}>
+      <Grid item xs={xsl ? 9.5 : smxx ? 8.5 : smx ? 9 : mdxx ? 8.5 : mdx ? 9 : 9.5} sx={{ flex: 'wrap' }}>
         {unlockedSteps.map((step, index) => {
           const { id } = step;
 
