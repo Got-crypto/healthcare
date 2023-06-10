@@ -16,4 +16,4 @@ function Results() {
   );
 }
 
-export default SectionWrapper(Results, 'resultsAndPersonalizedProtocol');
+export default SectionWrapper(Results, 'resultsAndPersonalizedProtocol', !1);

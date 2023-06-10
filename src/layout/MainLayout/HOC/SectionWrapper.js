@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion';
-import { Box, Typography } from '../../../../node_modules/@mui/material/index';
+import { Box } from '../../../../node_modules/@mui/material/index';
 
-const SectionWrapper = (Component, id) =>
+import Logo from '../../../assets/images/icon.png';
+
+const SectionWrapper = (Component, id, reverse) =>
   function HOC() {
     return (
       <motion.div
@@ -15,15 +17,14 @@ const SectionWrapper = (Component, id) =>
         <Component />
         <Box
           sx={{
-            mt: 5,
+            mt: 10,
             display: 'flex',
-            flexDirection: 'center',
+            flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'flex-start'
+            justifyContent: `flex-${reverse ? 'end' : 'start'}`
           }}
         >
-          <Typography>BeOne</Typography>
-          <Typography></Typography>
+          <img src={Logo} alt="beone logo" style={{ width: '30px', height: 'auto' }} />
         </Box>
       </motion.div>
     );

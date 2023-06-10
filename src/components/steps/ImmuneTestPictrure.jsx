@@ -117,4 +117,4 @@ function ImmuneTestPicture() {
   );
 }
 
-export default SectionWrapper(ImmuneTestPicture, 'immuneTestPictureUpload');
+export default SectionWrapper(ImmuneTestPicture, 'immuneTestPictureUpload', !0);

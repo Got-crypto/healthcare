@@ -41,9 +41,11 @@ export async function handleFinishPlanning(id, data) {
   return response;
 }
 
-export async function handleOverallSampling(overAllSamplingStatus) {
+export async function handleOverallSampling(id, overAllSamplingStatus, overAllPrepStatus, reorderData) {
   const response = await API.post(`api/dashboard/${id}/complete-confirm-sampling-ok`, {
-    overAllSamplingStatus: overAllSamplingStatus ? 'Y' : 'N'
+    overallSamplingStatus: overAllSamplingStatus ? 'Y' : 'N',
+    overAllPrepStatus: overAllPrepStatus ? 'Y' : 'N',
+    reorderData: reorderData
   });
 
   return response;

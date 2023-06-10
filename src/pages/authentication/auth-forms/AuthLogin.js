@@ -26,6 +26,8 @@ import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { baseUrl } from 'store/beOneApi';
 import axios from '../../../../node_modules/axios/index';
 
+import logo from '../../../assets/images/Logo-header.png';
+
 const AuthLogin = () => {
   const [checked, setChecked] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -113,6 +115,7 @@ const AuthLogin = () => {
                     name="password"
                     onBlur={handleBlur}
                     onChange={handleChange}
+                    autoComplete="current-password"
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton
@@ -178,7 +181,7 @@ const AuthLogin = () => {
               </Grid>
               <Grid item xs={12}>
                 <Divider>
-                  <Typography variant="caption">Be One</Typography>
+                  <img src={logo} alt="beone logo" style={{ width: '50px' }} />
                 </Divider>
               </Grid>
             </Grid>

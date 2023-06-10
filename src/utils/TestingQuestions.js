@@ -29,6 +29,8 @@ export function QuestionsUtils() {
   const hormoneDateBeforeToday = isYesterdayOrTomorrow(hormoneSampleDate, false);
   const hormoneDateAfterToday = isYesterdayOrTomorrow(hormoneSampleDate, true);
 
+  const completeStatus = metabolicStatus && metabollicSampleStatus && hormoneStatus && hormoneSampleStatus;
+
   const questions = [
     {
       content: `You confirmed that you are ready to go ahead with the sampling of Metabolic test on ${dayjs(metabolicDate).format(
@@ -45,7 +47,7 @@ export function QuestionsUtils() {
     {
       content: 'It seems that you need to reschedule your sampling for Metabolic Test?',
       condition: !metabolicStatus,
-      reponse: 'planning'
+      response: 'planning'
     },
     {
       content: 'It seems that you need to reschedule your sampling for Hormone Test?',
@@ -102,7 +104,7 @@ export function QuestionsUtils() {
     }
   ];
 
-  return questions;
+  return { questions, completeStatus };
 }
 
 export function additionalQuestions() {
@@ -117,5 +119,5 @@ export function additionalQuestions() {
     }
   ];
 
-  return questions; 
+  return questions;
 }

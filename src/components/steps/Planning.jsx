@@ -43,4 +43,4 @@ function Planning() {
   );
 }
 
-export default SectionWrapper(Planning, 'planning');
+export default SectionWrapper(Planning, 'planning', !0);

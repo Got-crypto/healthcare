@@ -8,7 +8,8 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  TextField
+  TextField,
+  Typography
 } from '../../../../node_modules/@mui/material/index';
 // import { useSelector } from 'react-redux';
 import { Info, Inventory, Send, ThumbUp } from '../../../../node_modules/@mui/icons-material/index';
@@ -18,6 +19,10 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { motion } from 'framer-motion';
 
 import { QuestionsUtils, additionalQuestions } from 'utils/TestingQuestions';
+import { useSelector } from '../../../../node_modules/react-redux/es/exports';
+import { useEffect } from 'react';
+import { handleOverallSampling } from 'services/BeOne';
+import { LoadingButton } from '../../../../node_modules/@mui/lab/index';
 
 export function ToggleReplies({ response, setAdditionalQuestionsActivated, setKitsPackages, setContactForm }) {
   const [reply, setReply] = useState('');
@@ -76,8 +81,12 @@ export default function Testing() {
   const [additionalQuestionsActivated, setAdditionalQuestionsActivated] = useState(false);
   const [kitsPackages, setKitsPackages] = useState(false);
   const [contactForm, setContactForm] = useState(false);
-  const questions = QuestionsUtils();
+  const { questions, completeStatus } = QuestionsUtils();
   const [marked, setMarked] = useState([0]);
+  const { selectedOrder } = useSelector(({ main }) => main);
+  const [successMessage, setSuccessMessage] = useState();
+  const [errorMessage, setErrorMessage] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleToggle = (value) => () => {
     const currentIndex = marked.indexOf(value);
@@ -91,6 +100,27 @@ export default function Testing() {
 
     setMarked(newMarked);
   };
+
+  const overallCompleteSampling = async () => {
+    try {
+      setIsLoading(true);
+      const response = await handleOverallSampling(selectedOrder?.orderId, true, true, ['']);
+      setIsLoading(false);
+      console.log('response', response);
+      setSuccessMessage(response?.data?.message);
+      setErrorMessage();
+    } catch (error) {
+      setIsLoading(false);
+      console.log('error', error);
+      setErrorMessage( error?.data?.status === 500 ? 'Sorry, This step is not active' : error?.data?.errors);
+    }
+  };
+
+  useEffect(() => {
+    setAdditionalQuestionsActivated(false);
+    setKitsPackages(false);
+    setContactForm(false);
+  }, [selectedOrder]);
 
   return (
     <motion.div layout style={{ width: '100%' }}>
@@ -193,6 +223,28 @@ export default function Testing() {
             Confirm
           </Button>
         </>
+      )}
+
+      {completeStatus && (
+        <LoadingButton
+          loading={isLoading}
+          variant="contained"
+          sx={{ backgroundColor: '#45d9c9', mt: 2, ':hover': { backgroundColor: '#45c0d9' } }}
+          startIcon={<ThumbUp />}
+          onClick={overallCompleteSampling}
+        >
+          Completed
+        </LoadingButton>
+      )}
+      {successMessage && (
+        <Typography variant="body1" sx={{ color: 'success.main', mt: 1 }}>
+          {successMessage}
+        </Typography>
+      )}
+      {errorMessage && (
+        <Typography variant="body1" sx={{ color: 'error.main', mt: 1 }}>
+          {errorMessage}
+        </Typography>
       )}
     </motion.div>
   );
