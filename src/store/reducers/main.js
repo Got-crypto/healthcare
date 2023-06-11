@@ -1,7 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const session = sessionStorage.getItem('userDetails');
+
 const initialState = {
-  authUser: localStorage.getItem('authUser') && JSON.parse(localStorage.getItem('authUser')),
+  authUser: session
+    ? JSON.parse(session)
+    : {
+        ageInYears: null,
+        title: null,
+        firstName: null,
+        lastName: null,
+        username: null,
+        middleName: null,
+        gender: null,
+        email: null,
+        mobileNumber: null,
+        base64Url: null,
+        dob: null,
+        height: null,
+        heightUnit: null,
+        weight: null,
+        weightUnit: null,
+        shopifyCustomerId: null
+      },
   openItem: ['dashboard'],
   defaultId: 'dashboard',
   openComponent: 'buttons',
@@ -170,14 +191,19 @@ const menu = createSlice({
       state.componentDrawerOpen = action.payload.componentDrawerOpen;
     },
 
+    setAuthUserDetails(state, action) {
+      state.authUser = action.payload;
+    },
+
     collapseItem(state, action) {
       state.itemCollapsed = action.payload;
     },
 
     getUnlockedSteps(state) {
-      state.unlockedSteps = state.steps?.filter((step) => {
+      state.unlockedSteps = state.steps?.filter((step, index) => {
         if (state.orderDetails) {
-          return step;
+          if (state.orderDetails[index]?.status?.toLowerCase() === 'done' || state.orderDetails[index]?.status?.toLowerCase() === 'active')
+            return step;
         }
       });
     },
@@ -214,6 +240,6 @@ export const {
   setActiveStep,
   selectOrder,
   setOrderDetails,
-  getUnlockedSteps
+  getUnlockedSteps,
+  setAuthUserDetails
 } = menu.actions;
-// if (state.orderDetails[index]?.status?.toLowerCase() === 'done' || state.orderDetails[index]?.status?.toLowerCase() === 'active') 

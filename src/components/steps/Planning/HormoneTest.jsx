@@ -284,7 +284,7 @@ export default function HormoneTest() {
               </Typography>
               <Collapse in={two} timeout="auto" unmountOnExit>
                 <Typography variant="body2" sx={{ ml: 1 }}>
-                  <Typography variant="body2" sx={{ color: 'primary.main' }}>
+                  <Typography variant="body2" component="span" sx={{ color: 'primary.main' }}>
                     Note that:
                   </Typography>
                   It is best to postpone testing if you have had an unusually bad night of sleep. Therefore, avoid planning to test on the
@@ -324,12 +324,7 @@ export default function HormoneTest() {
                     <FormGroup sx={{ display: 'flex', flexDirection: 'row', py: 2, width: 'fit-content' }}>
                       <FormControlLabel
                         control={
-                          <Switch
-                            checked={checked}
-                            sx={{ color: checked ? 'success.main' : 'error.main' }}
-                            onChange={handleChange}
-                            defaultChecked={!0}
-                          />
+                          <Switch checked={checked} sx={{ color: checked ? 'success.main' : 'error.main' }} onChange={handleChange} />
                         }
                         label={checked ? 'Yes' : 'No'}
                       />

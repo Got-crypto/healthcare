@@ -1,4 +1,41 @@
+import { baseUrl } from 'store/beOneApi';
 import { API } from 'utils/api';
+import handleArrayBuffer from 'utils/handleArrayBuffer';
+import axios from 'axios';
+
+export async function handleGetUser() {
+  const response = await API.get('api/user');
+
+  if (response?.status === 200) {
+    const { profilePic } = response.data;
+    const responseUrl = await axios.get(`${baseUrl}/files/${profilePic}/serve`, { responseType: 'arraybuffer' });
+
+    if (responseUrl?.status === 200) {
+      const base64Url = await handleArrayBuffer(responseUrl?.data);
+
+      return { ...response.data, base64Url };
+    }
+  }
+
+  return {
+    ageInYears: '',
+    title: '',
+    firstName: '',
+    lastName: '',
+    username: '',
+    middleName: '',
+    gender: '',
+    email: '',
+    mobileNumber: '',
+    profilePic: '',
+    dob: '',
+    height: '',
+    heightUnit: '',
+    weight: '',
+    weightUnit: '',
+    shopifyCustomerId: ''
+  };
+}
 
 export async function handleGetCustomerOrders() {
   const response = await API.get('api/dashboard');

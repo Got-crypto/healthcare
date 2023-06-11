@@ -24,7 +24,11 @@ import ProfileTab from './ProfileTab';
 import SettingTab from './SettingTab';
 
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { createUserSession } from 'utils/handleUserStorage';
+
+import { setAuthUserDetails } from 'store/reducers/main';
 
 function TabPanel({ children, value, index, ...other }) {
   return (
@@ -50,10 +54,13 @@ function a11yProps(index) {
 const Profile = () => {
   const theme = useTheme();
 
+  const dispatch = useDispatch();
+
   const { authUser } = useSelector((state) => state.main);
 
   const handleLogout = () => {
     localStorage.removeItem('authUser');
+    sessionStorage.clear();
     location.reload();
   };
 
@@ -78,6 +85,16 @@ const Profile = () => {
 
   const iconBackColorOpen = '#45d9c9';
 
+  useEffect(() => {
+    const updateUserProfile = async () => {
+      const response = await createUserSession();
+      dispatch(setAuthUserDetails(response));
+    };
+
+    updateUserProfile();
+    // eslint-disable-next-line
+  }, [sessionStorage.getItem('userDetails')]);
+
   return (
     <Box sx={{ flexShrink: 0, ml: 0.75 }}>
       <ButtonBase
@@ -93,10 +110,10 @@ const Profile = () => {
         onClick={handleToggle}
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
-          <Avatar alt="profile user" src={authUser?.user?.profilePic} sx={{ width: 32, height: 32 }} />
+          <Avatar alt="profile user" src={authUser?.base64Url} sx={{ width: 32, height: 32 }} />
 
           <Typography variant="subtitle1">
-            {authUser?.user?.firstName} {authUser?.user?.lastName}
+            {authUser?.firstName} {authUser?.lastName}
           </Typography>
         </Stack>
       </ButtonBase>
@@ -138,13 +155,13 @@ const Profile = () => {
                       <Grid container justifyContent="space-between" alignItems="center">
                         <Grid item>
                           <Stack direction="row" spacing={1.25} alignItems="center">
-                            <Avatar alt="profile user" src={authUser?.user?.profilePic} sx={{ width: 32, height: 32 }} />
+                            <Avatar alt="profile user" src={authUser?.base64Url} sx={{ width: 32, height: 32 }} />
                             <Stack>
                               <Typography variant="h6">
-                                {authUser?.user?.firstName} {authUser?.user?.lastName}
+                                {authUser?.firstName} {authUser?.lastName}
                               </Typography>
                               <Typography variant="body2" color="textSecondary">
-                                {authUser?.user?.email}
+                                {authUser?.email}
                               </Typography>
                             </Stack>
                           </Stack>

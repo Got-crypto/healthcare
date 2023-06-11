@@ -166,7 +166,7 @@ export default function Testing() {
           ))}
         {contactForm && (
           <>
-            <FormControl sx={{ m: 1, width: 600 }}>
+            <FormControl fullWidth sx={{ m: 1 }}>
               <TextField id="outlined-adornment-amount" label="What's the issue?" multiline maxRows={8} />
               <Button
                 sx={{ backgroundColor: '#45d9c9', mt: 2, width: '20%', ':hover': { backgroundColor: '#45c0d9' } }}

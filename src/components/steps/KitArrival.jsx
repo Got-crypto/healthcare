@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Box, FormControlLabel, FormGroup, Grid, Switch, Typography } from '../../../node_modules/@mui/material/index';
 import { ThumbUp } from '../../../node_modules/@mui/icons-material/index';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,31 +18,27 @@ function KitArrival() {
   };
   const stepTwoData = orderDetails && orderDetails[1];
 
-  const confirmPackageReceived = async () => {
+  const getNewOrderDetails = async () => {
     try {
-      await handleConfirmPackageReceived(selectedOrder?.orderId);
+      const response = await handleGetCustomerOrderById(selectedOrder?.orderId);
+      dispatch(setOrderDetails(response?.data));
     } catch (error) {
-      console.log('error confirming delivery', error);
+      console.log('error', error);
     }
   };
 
-  useEffect(() => {
-    const getNewOrderDetails = async () => {
-      try {
-        setIsLoading(true);
-        const response = await handleGetCustomerOrderById(selectedOrder?.orderId);
-        dispatch(setOrderDetails(response?.data));
-        setSuccessMessage(response?.data?.message);
-        setIsLoading(false);
-      } catch (error) {
-        setIsLoading(false);
-        console.log('error', error);
-      }
-    };
-    if (selectedOrder) {
-      getNewOrderDetails();
+  const confirmPackageReceived = async () => {
+    try {
+      setIsLoading(true);
+      const response = await handleConfirmPackageReceived(selectedOrder?.orderId);
+      await getNewOrderDetails();
+      setSuccessMessage(response?.data?.message);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.log('error confirming delivery', error);
     }
-  }, [selectedOrder, dispatch]);
+  };
 
   return (
     <>
@@ -85,7 +81,11 @@ function KitArrival() {
                 >
                   Confirm
                 </LoadingButton>
-                {successMessage && <Typography>{successMessage}</Typography>}
+                {successMessage && (
+                  <Typography variant="body1" sx={{ color: 'success.main' }}>
+                    {successMessage}
+                  </Typography>
+                )}
               </>
             ) : stepTwoData?.status.toLowerCase() === 'done' || successMessage ? (
               <>

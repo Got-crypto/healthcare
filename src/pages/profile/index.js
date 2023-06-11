@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import {
   Avatar,
   Box,
-  Button,
   Divider,
   FormControl,
   FormHelperText,
@@ -24,7 +23,7 @@ import { LoadingButton } from '../../../node_modules/@mui/lab/index';
 import { resizeImage } from 'utils/File-Controller';
 
 const Profile = () => {
-  const { authUser } = useSelector((state) => state.main);
+  const { authUser: user } = useSelector((state) => state.main);
   const [isMobile, setIsMobile] = useState(false);
   const [columns, setColumns] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -34,7 +33,6 @@ const Profile = () => {
   const [updatedProfilePic, setUpdatedProfilePicture] = useState();
   const [isUpdating, setIsUpdating] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const { user } = authUser;
 
   const [userCredentials, setUserCredentials] = useState({
     formTitle: '',
@@ -64,13 +62,14 @@ const Profile = () => {
     gender,
     email,
     mobileNumber,
-    profilePic,
+    base64Url,
     dob,
     height,
     heightUnit,
     weight,
     weightUnit,
-    shopifyCustomerId
+    shopifyCustomerId,
+    profilePic
   } = user;
 
   const updateUserProfile = async () => {
@@ -93,11 +92,18 @@ const Profile = () => {
       shopifyCustomerId: userCredentials.formShopifyCustomerId !== '' ? userCredentials.formShopifyCustomerId : shopifyCustomerId
     };
     try {
-      await API.post(`api/user/update/${user?.id}`, updatedCredentials);
+      setIsUpdating(false);
+      await API.put(`api/user`, updatedCredentials);
       const response = await API.get('api/user');
-      localStorage.setItem('authUser', response?.data);
+
+      const { accessToken } = JSON.parse(localStorage.getItem('authUser'));
+
+      localStorage.setItem('authUser', JSON.stringify({ accessToken, user: response?.data }));
+      sessionStorage.setItem('userDetails', JSON.stringify({ ...response?.data, base64Url }));
       setSuccessMessage('Updated Successfully');
+      location.reload();
     } catch (error) {
+      setIsUpdating(true);
       console.log('error updating user profile', error);
       setErrorMessage('Error updating profile');
     }
@@ -111,7 +117,6 @@ const Profile = () => {
 
     fileInput.addEventListener('change', (event) => {
       const file = event.target.files[0];
-      console.log('file', file);
       const allowedTypes = ['image/jpeg', 'image/png'];
 
       if (file && allowedTypes.includes(file.type)) {
@@ -147,6 +152,8 @@ const Profile = () => {
 
         if (responseUrl?.status === 200) {
           const base64Url = await handleArrayBuffer(responseUrl?.data);
+          const user = JSON.parse(sessionStorage.getItem('userDetails'));
+          sessionStorage.setItem('userDetails', JSON.stringify({ ...user, base64Url }));
           setSelectedFile(null);
           setIsSuccess(true);
           setUpdatedProfilePicture(base64Url);
@@ -205,16 +212,15 @@ const Profile = () => {
             <Grid item sx={{ width: '100%' }} xs={3}>
               <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
                 <Avatar
-                  src={isSuccess ? updatedProfilePic : selectedFile ? selectedFile : profilePic ? profilePic : null}
+                  src={isSuccess ? updatedProfilePic : selectedFile ? selectedFile : base64Url ? base64Url : null}
                   alt="profile"
                   sx={{ height: '200px', width: '200px' }}
                 />
-                <BorderColorOutlined onClick={handleFileInputChange} sx={{ cursor: 'pointer', mt: 1 }} />
-                {errorMessage && (
-                  <Typography fullWidth sx={{ color: 'error.main' }}>
-                    {errorMessage}
-                  </Typography>
-                )}
+                <BorderColorOutlined
+                  onClick={handleFileInputChange}
+                  sx={{ border: '#000 solid 2px', borderRadius: '5px', cursor: 'pointer', mt: 1 }}
+                />
+                {errorMessage && <Typography sx={{ color: 'error.main' }}>{errorMessage}</Typography>}
                 {successMessage && <Typography sx={{ color: 'success.main' }}>{successMessage}</Typography>}
                 <Box sx={{ width: isMobile ? '100%' : '90%' }}>
                   <LoadingButton
@@ -257,7 +263,6 @@ const Profile = () => {
                       <TextField
                         value={userCredentials.formFirstName}
                         onChange={({ target }) => setUserCredentials({ ...userCredentials, formUsername: target.value })}
-                        fullWidth
                         label="First Name"
                       />
                       <FormHelperText>{firstName}</FormHelperText>
@@ -266,7 +271,6 @@ const Profile = () => {
                   <Grid item xs={columns ? 12 : 4}>
                     <FormControl sx={{ minWidth: 120, width: '100%' }}>
                       <TextField
-                        fullWidth
                         value={userCredentials.formLastName}
                         onChange={({ target }) => setUserCredentials({ ...userCredentials, formLastName: target.value })}
                         label="Last Name"
@@ -277,7 +281,6 @@ const Profile = () => {
                   <Grid item xs={columns ? 12 : 4}>
                     <FormControl sx={{ minWidth: 120, width: '100%' }}>
                       <TextField
-                        fullWidth
                         label="Username"
                         value={userCredentials.formUsername}
                         onChange={({ target }) => setUserCredentials({ ...userCredentials, formUsername: target.value })}
@@ -287,7 +290,7 @@ const Profile = () => {
                   </Grid>
                   <Grid item xs={columns ? 12 : 4}>
                     <FormControl sx={{ minWidth: 120, width: '100%' }}>
-                      <TextField fullWidth label="Middle name" />
+                      <TextField label="Middle name" />
                       <FormHelperText>{middleName ? middleName : 'Provide middleName'}</FormHelperText>
                     </FormControl>
                   </Grid>
@@ -313,7 +316,6 @@ const Profile = () => {
                       <TextField
                         value={userCredentials.formAge}
                         onChange={({ target }) => setUserCredentials({ ...userCredentials, formAge: target.value })}
-                        fullWidth
                         label="Age"
                       />
                       <FormHelperText>{ageInYears ? ageInYears : 'Provide age'}</FormHelperText>
@@ -322,7 +324,6 @@ const Profile = () => {
                   <Grid item xs={columns ? 12 : 4}>
                     <FormControl sx={{ minWidth: 120, width: '100%' }}>
                       <TextField
-                        fullWidth
                         label="Email"
                         value={userCredentials.formEmail}
                         onChange={({ target }) => setUserCredentials({ ...userCredentials, formEmail: target.value })}
@@ -333,7 +334,6 @@ const Profile = () => {
                   <Grid item xs={columns ? 12 : 4}>
                     <FormControl sx={{ minWidth: 120, width: '100%' }}>
                       <TextField
-                        fullWidth
                         label="Phone Number"
                         value={userCredentials.formMobileNumber}
                         onChange={({ target }) => setUserCredentials({ ...userCredentials, formMobileNumber: target.value })}
@@ -344,7 +344,6 @@ const Profile = () => {
                   <Grid item xs={columns ? 12 : 4}>
                     <FormControl sx={{ minWidth: 120, width: '100%' }}>
                       <TextField
-                        fullWidth
                         label="Shopify ID"
                         value={userCredentials.formShopifyCustomerId}
                         onChange={({ target }) => setUserCredentials({ ...userCredentials, formShopifyCustomerId: target.value })}
@@ -366,7 +365,6 @@ const Profile = () => {
                   <Grid item xs={columns ? 12 : 4}>
                     <FormControl sx={{ minWidth: 120, width: '100%' }}>
                       <TextField
-                        fullWidth
                         label="Height"
                         value={userCredentials.formHeight}
                         onChange={({ target }) => setUserCredentials({ ...userCredentials, formHeight: target.value })}
@@ -377,7 +375,6 @@ const Profile = () => {
                   <Grid item xs={columns ? 12 : 4}>
                     <FormControl sx={{ minWidth: 120, width: '100%' }}>
                       <TextField
-                        fullWidth
                         label="Height Unit"
                         value={userCredentials.formHeightUnit}
                         onChange={({ target }) => setUserCredentials({ ...userCredentials, formHeightUnit: target.value })}
@@ -388,7 +385,6 @@ const Profile = () => {
                   <Grid item xs={columns ? 12 : 4}>
                     <FormControl sx={{ minWidth: 120, width: '100%' }}>
                       <TextField
-                        fullWidth
                         label="Weight"
                         value={userCredentials.formWeight}
                         onChange={({ target }) => setUserCredentials({ ...userCredentials, formWeight: target.value })}
@@ -399,7 +395,6 @@ const Profile = () => {
                   <Grid item xs={columns ? 12 : 4}>
                     <FormControl sx={{ minWidth: 120, width: '100%' }}>
                       <TextField
-                        fullWidth
                         label="Weight Unit"
                         value={userCredentials.formWeightUnit}
                         onChange={({ target }) => setUserCredentials({ ...userCredentials, formWeightUnit: target.value })}
@@ -408,7 +403,8 @@ const Profile = () => {
                     </FormControl>
                   </Grid>
                   <Grid item xs={12}>
-                    <Button
+                    <LoadingButton
+                      loading={isUpdating}
                       sx={{ backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' } }}
                       fullWidth
                       variant="contained"
@@ -416,7 +412,7 @@ const Profile = () => {
                       startIcon={<UpdateOutlined />}
                     >
                       Update
-                    </Button>{' '}
+                    </LoadingButton>{' '}
                   </Grid>
                 </Grid>
               </Box>

@@ -29,6 +29,9 @@ const openedMixin = (theme) => ({
   },
   [theme.breakpoints.down('xsl')]: {
     width: 100
+  },
+  [theme.breakpoints.down('xsll')]: {
+    width: 40
   }
 });
 

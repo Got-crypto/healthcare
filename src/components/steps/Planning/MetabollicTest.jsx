@@ -3,7 +3,6 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
-  Button,
   Collapse,
   Grid,
   List,
@@ -36,7 +35,9 @@ export default function MetabollicTest({ successMessage, setSuccessMessage }) {
   const planningData = orderDetails && orderDetails[2];
   const planningComplete = planningData?.status.toLowerCase() === 'done' ? !0 : !1;
 
-  const handleChangeMetabollicTestDate = () => {
+  const handleChangeMetabollicTestDate = (date2) => {
+    setDate2(date2);
+
     const day = dayjs(`${date2?.$y}-${date2?.$M + 1}-${date2?.$D}`).format('MMMM DD, YYYY');
     const day1 = dayjs(`${date2?.$y}-${date2?.$M + 1}-${date2?.$D - 1}`).format('MMMM DD, YYYY');
     const day2 = dayjs(`${date2?.$y}-${date2?.$M + 1}-${date2?.$D - 2}`).format('MMMM DD, YYYY');
@@ -264,7 +265,11 @@ export default function MetabollicTest({ successMessage, setSuccessMessage }) {
                       Taking into account your menstruation, preparation and sampling requirements, Confirm the first day of the two
                       consecutive sampling dates.
                     </Typography>
-                    <DatePicker onChange={(date) => setDate2(date)} slots={{ day: Day }} slotProps={{ day: { selectedDay: date2 } }} />
+                    <DatePicker
+                      onChange={handleChangeMetabollicTestDate}
+                      slots={{ day: Day }}
+                      slotProps={{ day: { selectedDay: date2 } }}
+                    />
                     <List>
                       {[
                         { color: '#f7c2e4', text: 'Preparation day' },
@@ -287,14 +292,14 @@ export default function MetabollicTest({ successMessage, setSuccessMessage }) {
                         );
                       })}
                     </List>
-                    <Button
+                    {/* <Button
                       sx={{ backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' } }}
                       onClick={handleChangeMetabollicTestDate}
                       startIcon={<ThumbUp />}
                       variant="contained"
                     >
                       Confirm Date
-                    </Button>
+                    </Button> */}
                   </Box>
                 )}
               </Collapse>

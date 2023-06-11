@@ -2,7 +2,6 @@ import SectionWrapper from 'layout/MainLayout/HOC/SectionWrapper';
 import { Box, Grid, List, ListItem, ListItemButton, ListItemText, Typography } from '../../../node_modules/@mui/material/index';
 import Questions from './Testing/Questions';
 
-
 function TestingInstructions() {
   return (
     <>

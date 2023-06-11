@@ -20,6 +20,7 @@ export default function ThemeCustomization({ children }) {
       breakpoints: {
         values: {
           xs: 0,
+          xsll: 480,
           xsl: 493,
           smxx: 582,
           smx: 675,

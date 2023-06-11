@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { Box, List, Typography } from '@mui/material';
 
@@ -9,6 +9,8 @@ import { collapseItem } from '../../../../../store/reducers/main';
 const NavGroup = ({ item }) => {
   const menu = useSelector((state) => state.main);
   const { drawerOpen } = menu;
+
+  const dispatch = useDispatch();
 
   const navCollapse = item.children?.map((menuItem) => {
     return <NavItem key={menuItem.id} item={menuItem} level={1} />;
