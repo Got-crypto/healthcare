@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const session = sessionStorage.getItem('userDetails');
+import { userDetailsStorage, userOrderStorage } from 'store/sessionstorage';
 
 const initialState = {
-  authUser: session
-    ? JSON.parse(session)
+  authUser: userDetailsStorage
+    ? JSON.parse(userDetailsStorage)
     : {
         ageInYears: null,
         title: null,
@@ -27,7 +27,7 @@ const initialState = {
   defaultId: 'dashboard',
   openComponent: 'buttons',
   drawerOpen: false,
-  selectedOrder: null,
+  selectedOrder: JSON.parse(userOrderStorage) || null,
   orderDetails: null,
   componentDrawerOpen: true,
   itemCollapsed: false,

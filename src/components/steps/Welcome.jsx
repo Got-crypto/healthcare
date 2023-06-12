@@ -6,6 +6,7 @@ const Welcome = () => {
     <Box
       sx={{
         flex: 'wrap',
+        mt: 10,
         '@media (max-width: 686px)': {
           textAlign: 'justify'
         },

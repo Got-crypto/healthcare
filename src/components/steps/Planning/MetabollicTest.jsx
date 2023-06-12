@@ -76,7 +76,11 @@ export default function MetabollicTest({ successMessage, setSuccessMessage }) {
       setIsLoading(false);
       setSuccessMessage(response?.data?.message);
     } catch (error) {
-      setError(error?.data?.status === 500 ? 'Sorry, This step is not active' : error?.data?.errors);
+      setError(
+        error?.data?.status === 500 && metabollicPlanningComplete && hormorneTestComplete
+          ? error?.data?.errors
+          : 'Sorry, This step is not active'
+      );
       setIsLoading(false);
       console.log('error finishing planning', error);
     }

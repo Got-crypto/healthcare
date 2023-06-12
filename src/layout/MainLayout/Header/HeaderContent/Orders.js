@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Box, FormControl } from '@mui/material';
 import { InputLabel, MenuItem, Select } from '../../../../../node_modules/@mui/material/index';
 import { useEffect, useState } from 'react';
@@ -7,12 +8,13 @@ import { handleGetCustomerOrderById, handleGetCustomerOrders } from 'services/Be
 import { getUnlockedSteps, selectOrder, setOrderDetails } from '../../../../store/reducers/main';
 
 const Orders = () => {
-  const [order, setOrder] = useState('Setting order');
+  const [order, setOrder] = useState('');
   const [customerOrders, setCustomerOrders] = useState([]);
   const dispatch = useDispatch();
 
   const handleChange = async (e) => {
     setOrder(e.target.value);
+    sessionStorage.setItem('userOrder', e.target.value);
     dispatch(selectOrder(JSON.parse(e.target.value)));
     try {
       const response = await handleGetCustomerOrderById(JSON.parse(e.target.value).orderId);
@@ -36,10 +38,14 @@ const Orders = () => {
   }, []);
   useEffect(() => {
     const recent = customerOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const userOrderExist = sessionStorage.getItem('userOrder') || null;
+    if (!userOrderExist){
+      sessionStorage.setItem('userOrder', JSON.stringify(recent[0]));
+      dispatch(selectOrder(recent[0]));
+    }
     const selectRecentOrder = async () => {
       try {
-        dispatch(selectOrder(recent[0]));
-        const response = await handleGetCustomerOrderById(recent[0]?.orderId);
+        const response = await handleGetCustomerOrderById(userOrderExist ? JSON.parse(userOrderExist).orderId : recent[0]?.orderId);
         dispatch(setOrderDetails(response?.data));
         dispatch(getUnlockedSteps());
       } catch (error) {
