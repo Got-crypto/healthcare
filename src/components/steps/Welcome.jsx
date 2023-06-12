@@ -14,7 +14,7 @@ const Welcome = () => {
           fontWeight: 400,
           fontSize: '0.875rem',
           lineHeight: 1.57
-        },
+        }
       }}
     >
       <Typography

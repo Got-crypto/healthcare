@@ -27,7 +27,7 @@ const initialState = {
   defaultId: 'dashboard',
   openComponent: 'buttons',
   drawerOpen: false,
-  selectedOrder: JSON.parse(userOrderStorage) || null,
+  selectedOrder: userOrderStorage ? JSON.parse(userOrderStorage) : null,
   orderDetails: null,
   componentDrawerOpen: true,
   itemCollapsed: false,

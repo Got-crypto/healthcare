@@ -30,29 +30,47 @@ const Orders = () => {
       try {
         const response = await handleGetCustomerOrders();
         setCustomerOrders(response?.data);
+        const recent = response?.data?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        const userOrderExist = sessionStorage.getItem('userOrder') || null;
+        if (!userOrderExist){
+          sessionStorage.setItem('userOrder', JSON.stringify({orderId: recent[0].orderId, createdAt: recent[0].createdAt}));
+          dispatch(selectOrder(recent[0]));
+        }
       } catch (error) {
         console.log('error', error);
       }
     };
     getOders();
-  }, []);
+  }, [dispatch]);
   useEffect(() => {
-    const recent = customerOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    const userOrderExist = sessionStorage.getItem('userOrder') || null;
-    if (!userOrderExist){
-      sessionStorage.setItem('userOrder', JSON.stringify(recent[0]));
-      dispatch(selectOrder(recent[0]));
-    }
     const selectRecentOrder = async () => {
-      try {
-        const response = await handleGetCustomerOrderById(userOrderExist ? JSON.parse(userOrderExist).orderId : recent[0]?.orderId);
-        dispatch(setOrderDetails(response?.data));
-        dispatch(getUnlockedSteps());
-      } catch (error) {
-        console.log('error', error);
+      const recent = customerOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      const userOrderExist = sessionStorage.getItem('userOrder') !== undefined ? true : false;
+      if (!userOrderExist){
+        sessionStorage.setItem('userOrder', JSON.stringify({orderId: recent[0].orderId, createdAt: recent[0].createdAt}));
+        dispatch(selectOrder(recent[0]));
+        try {
+          const response = await handleGetCustomerOrderById(recent[0]?.orderId);
+          dispatch(setOrderDetails(response?.data));
+          dispatch(getUnlockedSteps());
+        } catch (error) {
+          console.log('error', error);
+          console.clear()
+        } 
+      } else {
+        try {
+          console.log('sessionStorage.getItem(userOrder)', sessionStorage.getItem('userOrder'));
+          const response = await handleGetCustomerOrderById(JSON.parse(sessionStorage.getItem('userOrder')).orderId);
+          dispatch(setOrderDetails(response?.data));
+          dispatch(getUnlockedSteps());
+        } catch (error) {
+          console.log('error', error);
+          console.clear()
+        }
+
       }
     };
-    if (recent.length > 0) selectRecentOrder();
+    selectRecentOrder();
   }, [customerOrders, dispatch]);
   return (
     <Box sx={{ width: '100%', ml: { xs: 2, md: 1 } }}>
