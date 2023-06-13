@@ -38,7 +38,7 @@ export default function HormoneTest() {
   const [isMobile, setIsMobile] = useState(false);
   const [response, setResponse] = useState();
   const [delay, setDelay] = useState('');
-  const [isDelayed, setisDelayed] = useState();
+  const [isDelayed, setIsDelayed] = useState();
 
   const hormoneTestComplete = oneComplete && twoComplete && threeComplete;
 
@@ -61,28 +61,29 @@ export default function HormoneTest() {
           hormoneTestDay: null
         })
       );
-      setisDelayed(false);
+      setIsDelayed(false);
     } else {
-      const day = dayjs(`${date1?.$y}-${date1?.$M + 2}-${date1?.$D}`).format('MMMM DD, YYYY');
-      const day1 = dayjs(`${date1?.$y}-${date1?.$M + 2}-${date1?.$D - 1}`).format('MMMM DD, YYYY');
-      const day2 = dayjs(`${date1?.$y}-${date1?.$M + 2}-${date1?.$D - 2}`).format('MMMM DD, YYYY');
-      const day3 = dayjs(`${date1?.$y}-${date1?.$M + 2}-${date1?.$D - 3}`).format('MMMM DD, YYYY');
-      const day4 = dayjs(`${date1?.$y}-${date1?.$M + 2}-${date1?.$D - 4}`).format('MMMM DD, YYYY');
-      const day5 = dayjs(`${date1?.$y}-${date1?.$M + 2}-${date1?.$D + 1}`).format('MMMM DD, YYYY');
+      const nextMonth = dayjs(date1).add(1, 'month');
+      const day = dayjs(nextMonth).format('MMMM DD, YYYY');
+      const day1 = dayjs(nextMonth).subtract(1, 'day').format('MMMM DD, YYYY');
+      const day2 = dayjs(nextMonth).subtract(2, 'day').format('MMMM DD, YYYY');
+      const day3 = dayjs(nextMonth).subtract(3, 'day').format('MMMM DD, YYYY');
+      const day4 = dayjs(nextMonth).subtract(4, 'day').format('MMMM DD, YYYY');
+      const day5 = dayjs(nextMonth).add(1, 'day').format('MMMM DD, YYYY');
 
       dispatch(
         addPrepDates({
           ...prepDates,
           hormoneSelectedDay: day,
-          hormonePrepDay1: day1,
-          hormonePrepDay2: day2,
-          hormonePrepDay3: day3,
-          hormonePrepDay4: day4,
+          hormonePrepDay1: day4,
+          hormonePrepDay2: day3,
+          hormonePrepDay3: day2,
+          hormonePrepDay4: day1,
           hormoneTestDay: day5
         })
       );
 
-      setisDelayed(true);
+      setIsDelayed(true);
     }
   };
 
@@ -111,21 +112,21 @@ export default function HormoneTest() {
   };
 
   const handleSamplingDate = (date) => {
-    const day = dayjs(`${date?.$y}-${date?.$M + 1}-${date?.$D}`).format('MMMM DD, YYYY');
-    const day1 = dayjs(`${date?.$y}-${date?.$M + 1}-${date?.$D - 1}`).format('MMMM DD, YYYY');
-    const day2 = dayjs(`${date?.$y}-${date?.$M + 1}-${date?.$D - 2}`).format('MMMM DD, YYYY');
-    const day3 = dayjs(`${date?.$y}-${date?.$M + 1}-${date?.$D - 3}`).format('MMMM DD, YYYY');
-    const day4 = dayjs(`${date?.$y}-${date?.$M + 1}-${date?.$D - 4}`).format('MMMM DD, YYYY');
-    const day5 = dayjs(`${date?.$y}-${date?.$M + 1}-${date?.$D + 1}`).format('MMMM DD, YYYY');
+    const day = dayjs(date).format('MMMM DD, YYYY');
+    const day1 = dayjs(date).subtract(1, 'day').format('MMMM DD, YYYY');
+    const day2 = dayjs(date).subtract(2, 'day').format('MMMM DD, YYYY');
+    const day3 = dayjs(date).subtract(3, 'day').format('MMMM DD, YYYY');
+    const day4 = dayjs(date).subtract(4, 'day').format('MMMM DD, YYYY');
+    const day5 = dayjs(date).add(1, 'day').format('MMMM DD, YYYY');
 
     dispatch(
       addPrepDates({
         ...prepDates,
         hormoneSelectedDay: day,
-        hormonePrepDay1: day1,
-        hormonePrepDay2: day2,
-        hormonePrepDay3: day3,
-        hormonePrepDay4: day4,
+        hormonePrepDay1: day4,
+        hormonePrepDay2: day3,
+        hormonePrepDay3: day2,
+        hormonePrepDay4: day1,
         hormoneTestDay: day5
       })
     );
@@ -220,7 +221,7 @@ export default function HormoneTest() {
                         <Box sx={{ diplay: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                           <DatePicker onChange={addDates} slots={{ day: Day }} slotProps={{ day: { selectedDay: date1 } }} />
                         </Box>
-                        <List>
+                        <List sx={{ diplay: 'flex', flexDirection: 'column', gap: 1 }}>
                           {[
                             { color: '#f7c2e4', text: 'Preparation day' },
                             { color: 'primary.main', text: 'Selected day' },
@@ -351,7 +352,7 @@ export default function HormoneTest() {
                             not possible, we suggest to reschedule for next month instead of using the last day of your testing window
                           </Typography>
                           <Typography variant="body2" sx={{ color: 'warning.main' }}>
-                            Will you go ahead with testing this month or will you need to recalculate for next month?
+                            Will you go ahead with testing this month or will you need to re-calculate for next month?
                           </Typography>
                           <FormControl sx={{ minWidth: 120, width: '100%' }}>
                             <InputLabel>Choose Month</InputLabel>
@@ -362,9 +363,11 @@ export default function HormoneTest() {
                             <FormHelperText>This month or Next month</FormHelperText>
                           </FormControl>
                           {isDelayed === true ? (
-                            <Typography variant="body2">Please choose another testing window</Typography>
+                            <Typography variant="body2">
+                              Check new testing window set for next month, and confirm it by selecting on the calendar
+                            </Typography>
                           ) : isDelayed === false ? (
-                            <Typography variant="body2">Check new testing window set for next month</Typography>
+                            <Typography variant="body2">Please choose another testing window</Typography>
                           ) : null}
                         </Box>
                       ) : null}
@@ -460,15 +463,17 @@ export default function HormoneTest() {
                         )}
                       </List>
                     </>
-                  ) : oneComplete && !isDelayed ? (
+                  ) : oneComplete && isDelayed ? (
                     <>
                       <Typography variant="body2">This is your plan</Typography>
                       <List>
-                        {hormoneDates.map(({ name, date }, index) => (
-                          <ListItem key={index}>
-                            {date ? `${name}: ${dayjs(date).format('MMMM DD, YYYY')}` : 'Choose proper dates'}
-                          </ListItem>
-                        ))}
+                        {hormoneDates.map(({ name, date }, index) => {
+                          return (
+                            <ListItem key={index}>
+                              <Typography>{date ? `${name}: ${dayjs(date).format('MMMM DD, YYYY')}` : 'Choose proper dates'}</Typography>
+                            </ListItem>
+                          );
+                        })}
                         {prepDates?.hormoneTestSamplingDate && (
                           <ListItem>
                             <Typography>{`Sampling Date: ${dayjs(prepDates?.hormoneTestSamplingDate).format('MMMM DD, YYYY')}`}</Typography>

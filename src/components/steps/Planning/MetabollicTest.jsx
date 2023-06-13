@@ -38,21 +38,21 @@ export default function MetabollicTest({ successMessage, setSuccessMessage }) {
   const handleChangeMetabollicTestDate = (date2) => {
     setDate2(date2);
 
-    const day = dayjs(`${date2?.$y}-${date2?.$M + 1}-${date2?.$D}`).format('MMMM DD, YYYY');
-    const day1 = dayjs(`${date2?.$y}-${date2?.$M + 1}-${date2?.$D - 1}`).format('MMMM DD, YYYY');
-    const day2 = dayjs(`${date2?.$y}-${date2?.$M + 1}-${date2?.$D - 2}`).format('MMMM DD, YYYY');
-    const day3 = dayjs(`${date2?.$y}-${date2?.$M + 1}-${date2?.$D - 3}`).format('MMMM DD, YYYY');
-    const day4 = dayjs(`${date2?.$y}-${date2?.$M + 1}-${date2?.$D - 4}`).format('MMMM DD, YYYY');
-    const day5 = dayjs(`${date2?.$y}-${date2?.$M + 1}-${date2?.$D + 1}`).format('MMMM DD, YYYY');
+    const day = dayjs(date2).format('MMMM DD, YYYY');
+    const day1 = dayjs(date2).subtract(1, 'day').format('MMMM DD, YYYY');
+    const day2 = dayjs(date2).subtract(2, 'day').format('MMMM DD, YYYY');
+    const day3 = dayjs(date2).subtract(3, 'day').format('MMMM DD, YYYY');
+    const day4 = dayjs(date2).subtract(4, 'day').format('MMMM DD, YYYY');
+    const day5 = dayjs(date2).add(1, 'day').format('MMMM DD, YYYY');
 
     dispatch(
       addPrepDates({
         ...prepDates,
         metabolicTestSamplingDate: day,
-        metabolicPrepDay1: day1,
-        metabolicPrepDay2: day2,
-        metabolicPrepDay3: day3,
-        metabolicPrepDay4: day4,
+        metabolicPrepDay1: day4,
+        metabolicPrepDay2: day3,
+        metabolicPrepDay3: day2,
+        metabolicPrepDay4: day1,
         metabolicTestDay: day5
       })
     );
@@ -296,14 +296,6 @@ export default function MetabollicTest({ successMessage, setSuccessMessage }) {
                         );
                       })}
                     </List>
-                    {/* <Button
-                      sx={{ backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' } }}
-                      onClick={handleChangeMetabollicTestDate}
-                      startIcon={<ThumbUp />}
-                      variant="contained"
-                    >
-                      Confirm Date
-                    </Button> */}
                   </Box>
                 )}
               </Collapse>

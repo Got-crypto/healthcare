@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { Box, useMediaQuery } from '../../../node_modules/@mui/material/index';
+import { Box, Divider, Typography, useMediaQuery } from '../../../node_modules/@mui/material/index';
 import { Components } from 'store/Components';
 import { useTheme } from '../../../node_modules/@mui/styles/index';
 import { useEffect } from 'react';
@@ -47,6 +47,13 @@ const DashboardDefault = () => {
 
           return <StepComponent key={`${id}-${index}`} Component={Components[index].component} />;
         })}
+        <Box sx={{ mt: 30 }}>
+          <Divider>
+            <Typography variant="caption" sx={{ color: 'secondary.main' }}>
+              Please finish previous step to proceed to next step
+            </Typography>
+          </Divider>
+        </Box>
       </Grid>
     </Grid>
   );
