@@ -4,8 +4,11 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { LoadingButton } from '../../../node_modules/@mui/lab/index';
 import { resizeImage } from 'utils/File-Controller';
-import { Delete } from '../../../node_modules/@mui/icons-material/index';
+import { Delete, Download } from '../../../node_modules/@mui/icons-material/index';
 import SectionWrapper from 'layout/MainLayout/HOC/SectionWrapper';
+import { baseUrl } from 'store/beOneApi';
+import handleArrayBuffer from 'utils/handleArrayBuffer';
+import axios from '../../../node_modules/axios/index';
 
 const FileInput = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -46,6 +49,7 @@ const FileInput = () => {
       setIsLoading(false);
       setErrorMessage();
       setSuccessMessage(response?.data?.message);
+      console.log('first', response);
     } catch (error) {
       setIsLoading(false);
       setSuccessMessage();
@@ -130,6 +134,39 @@ const FileInput = () => {
 };
 
 function ImmuneTestPicture() {
+  const [isLoading, setIsLoading] = useState(false);
+  const { orderDetails } = useSelector(({ main }) => main);
+
+  const immuneTestPictureStep = orderDetails && orderDetails[4];
+  const immuneBalanceTestFile = immuneTestPictureStep?.data?.immuneBalanceTestFile;
+
+  const downloadImmuneTestPicture = async () => {
+    setIsLoading(!0);
+    const responseUrl = await axios.get(`${baseUrl}/files/${immuneTestPictureStep?.data?.immuneBalanceTestFileId}/serve`, {
+      responseType: 'arraybuffer'
+    });
+    const base64Url = await handleArrayBuffer(responseUrl?.data);
+    setIsLoading(!1);
+
+    const fileExtension = base64Url.includes('data:image/jpeg') ? 'jpg' : 'png';
+    const base64Image = base64Url.split(';base64,').pop();
+
+    const byteArray = new Uint8Array(
+      atob(base64Image)
+        .split('')
+        .map((char) => char.charCodeAt(0))
+    );
+
+    const blob = new Blob([byteArray], { type: `image/${fileExtension}` });
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `immunetest.${fileExtension}`;
+
+    link.click();
+
+    URL.revokeObjectURL(link.href);
+  };
   return (
     <>
       <Grid marginTop={10} item xs={12}>
@@ -137,7 +174,24 @@ function ImmuneTestPicture() {
           <Typography variant="h2" color="textPrimary">
             Immune Test Picture
           </Typography>
-          <FileInput />
+          {immuneTestPictureStep?.status.toLowerCase() !== 'done' ? (
+            <FileInput />
+          ) : (
+            <Box sx={{ mt: 2 }}>
+              <Box>
+                <Typography>{immuneBalanceTestFile ? `Your uploaded File: ${immuneBalanceTestFile}` : 'Loading...'}</Typography>
+              </Box>
+              <LoadingButton
+                loading={isLoading}
+                variant="contained"
+                sx={{ mt: 2, backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' } }}
+                startIcon={<Download />}
+                onClick={downloadImmuneTestPicture}
+              >
+                Download Your Immune Test File
+              </LoadingButton>
+            </Box>
+          )}
         </Box>
       </Grid>
     </>

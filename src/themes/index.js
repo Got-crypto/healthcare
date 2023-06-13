@@ -29,6 +29,8 @@ export default function ThemeCustomization({ children }) {
           mdxx: 781,
           mdx: 927,
           md: 1024,
+          lgxx: 1042,
+          lgx: 1158,
           lg: 1266,
           xl: 1536
         }

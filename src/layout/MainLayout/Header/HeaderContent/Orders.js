@@ -59,7 +59,6 @@ const Orders = () => {
         } 
       } else {
         try {
-          console.log('sessionStorage.getItem(userOrder)', sessionStorage.getItem('userOrder'));
           const response = await handleGetCustomerOrderById(JSON.parse(sessionStorage.getItem('userOrder')).orderId);
           dispatch(setOrderDetails(response?.data));
           dispatch(getUnlockedSteps());

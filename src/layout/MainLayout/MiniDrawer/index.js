@@ -15,7 +15,7 @@ import { useState } from 'react';
 import { useLocation } from '../../../../node_modules/react-router-dom/dist/index';
 import { useEffect } from 'react';
 
-const drawerWidth = 200;
+const drawerWidth = 230;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -24,6 +24,15 @@ const openedMixin = (theme) => ({
     duration: theme.transitions.duration.enteringScreen
   }),
   overflowX: 'hidden',
+  [theme.breakpoints.down('lg')]: {
+    width: 250
+  },
+  [theme.breakpoints.down('lgx')]: {
+    width: 230
+  },
+  [theme.breakpoints.down('lgxx')]: {
+    width: 210
+  },
   [theme.breakpoints.down('smx')]: {
     width: 150
   },
