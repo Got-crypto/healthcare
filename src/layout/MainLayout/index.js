@@ -15,7 +15,7 @@ import MiniDrawer from './MiniDrawer/index';
 
 const MainLayout = () => {
   const theme = useTheme();
-  const matchDownLG = useMediaQuery(theme.breakpoints.down('sm'));
+  const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
   const dispatch = useDispatch();
 
   const { drawerOpen } = useSelector((state) => state.main);
@@ -34,7 +34,7 @@ const MainLayout = () => {
   }, [matchDownLG]);
 
   useEffect(() => {
-    if (open !== drawerOpen) setOpen(!drawerOpen);
+    if (open !== drawerOpen) setOpen(drawerOpen);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [drawerOpen]);
 
