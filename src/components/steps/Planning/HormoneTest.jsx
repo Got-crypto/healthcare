@@ -39,6 +39,7 @@ export default function HormoneTest() {
   const [response, setResponse] = useState();
   const [delay, setDelay] = useState('');
   const [isDelayed, setIsDelayed] = useState();
+  const [error, setError] = useState();
 
   const hormoneTestComplete = oneComplete && twoComplete && threeComplete;
 
@@ -71,6 +72,17 @@ export default function HormoneTest() {
       const day4 = dayjs(nextMonth).subtract(4, 'day').format('MMMM DD, YYYY');
       const day5 = dayjs(nextMonth).add(1, 'day').format('MMMM DD, YYYY');
 
+      if (![0, 1, 2].includes(dayjs(day5).day())) {
+        dispatch(setCompleteHormoneTest(false));
+        return setError('Test dates can only be Sunday, Monday and Tuesday');
+      }
+      if (dayjs(day1).isBefore(new Date())) {
+        dispatch(setCompleteHormoneTest(false));
+        return setError('Preparation dates cannot be in the past');
+      }
+
+      setError();
+
       dispatch(
         addPrepDates({
           ...prepDates,
@@ -90,6 +102,8 @@ export default function HormoneTest() {
   const handleChangeSamplingDate = (date) => {
     const samplingDate = dayjs(`${date?.$y}-${date?.$M + 1}-${date?.$D}`).format('MMMM DD, YYYY');
 
+    if (dayjs(samplingDate).isBefore(new Date())) return setError('Sampling date cannot be in the past');
+    setError();
     dispatch(addPrepDates({ ...prepDates, hormoneTestSamplingDate: samplingDate }));
     setThreeComplete(true);
   };
@@ -119,6 +133,11 @@ export default function HormoneTest() {
     const day4 = dayjs(date).subtract(4, 'day').format('MMMM DD, YYYY');
     const day5 = dayjs(date).add(1, 'day').format('MMMM DD, YYYY');
 
+    if (![0, 1, 2].includes(dayjs(day5).day())) return setError('Test dates can only be Sunday, Monday and Tuesday');
+    if (dayjs(day1).isBefore(new Date())) return setError('Preparation dates cannot be in the past');
+
+    setError();
+
     dispatch(
       addPrepDates({
         ...prepDates,
@@ -142,6 +161,7 @@ export default function HormoneTest() {
     { name: 'Selected day', date: prepDates?.hormoneSelectedDay },
     { name: 'Testing day', date: prepDates?.hormoneTestDay }
   ];
+  // const hormoneSamplingDate = { name: 'Sampling Date', date: prepDates?.hormoneTestSamplingDate };
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
@@ -267,6 +287,11 @@ export default function HormoneTest() {
                           You need to select a date to complete this test
                         </Typography>
                       ) : null}
+                      {error && (
+                        <Typography variant="body2" color="error.main">
+                          {error}
+                        </Typography>
+                      )}
                     </Box>
                   </Box>
                 </Box>
@@ -396,22 +421,22 @@ export default function HormoneTest() {
                   you have the time to take the samples
                 </Typography>
                 <Typography variant="body2" sx={{ ml: 1 }}>
-                  Upon waking -1st sample: saliva and urine
+                  Upon waking (1st sample): saliva and urine
                 </Typography>
                 <Typography variant="body2" sx={{ ml: 1 }}>
-                  30 mins after waking- 2nd sample: saliva only
+                  30 mins after waking (2nd sample): saliva only
                 </Typography>
                 <Typography variant="body2" sx={{ ml: 1 }}>
-                  60 mins after waking- 3rd sample: saliva
+                  60 mins after waking (3rd sample): saliva
                 </Typography>
                 <Typography variant="body2" sx={{ ml: 1 }}>
-                  2-3hrs after waking -4th sample: urine only
+                  2-3hrs after waking (4th sample): urine only
                 </Typography>
                 <Typography variant="body2" sx={{ ml: 1 }}>
-                  16:00-17:00 -5th sample: urine only
+                  16:00-17:00 (5th sample): urine only
                 </Typography>
                 <Typography variant="body2" sx={{ ml: 1 }}>
-                  22:00-24:00- 6th sample: saliva and urine
+                  22:00-24:00 (6th sample): saliva and urine
                 </Typography>
                 {!planningComplete ? (
                   <Box sx={{ mt: 1 }}>
@@ -463,7 +488,7 @@ export default function HormoneTest() {
                         )}
                       </List>
                     </>
-                  ) : oneComplete && isDelayed ? (
+                  ) : oneComplete && !error ? (
                     <>
                       <Typography variant="body2">This is your plan</Typography>
                       <List>
@@ -482,6 +507,11 @@ export default function HormoneTest() {
                       </List>
                     </>
                   ) : null}
+                  {error && (
+                    <Typography variant="body2" color="error.main">
+                      {error}
+                    </Typography>
+                  )}
                 </Box>
               </Grid>
             )}

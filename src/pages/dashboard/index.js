@@ -37,7 +37,7 @@ const DashboardDefault = () => {
   return (
     <Grid sx={{ width: { xl: 'auto' }, pb: 25 }} container rowSpacing={4.5} columnSpacing={2.75}>
       <Grid item xs={12} sx={{ mb: -2.25, flex: 'wrap' }}>
-        {selectedOrder && <Box>Main Dashboard:: Order {selectedOrder?.orderId} </Box>}
+        {selectedOrder && <Box>Main Dashboard:: Order {selectedOrder} </Box>}
         {!selectedOrder && <Box>Loading orders...</Box>}
       </Grid>
 

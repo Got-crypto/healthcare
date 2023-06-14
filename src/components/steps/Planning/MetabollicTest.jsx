@@ -15,10 +15,11 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import dayjs from 'dayjs';
 import { addPrepDates } from 'store/reducers/tests';
-import { handleFinishPlanning } from 'services/BeOne';
+import { handleFinishPlanning, handleGetCustomerOrderById } from 'services/BeOne';
 import { LoadingButton } from '../../../../node_modules/@mui/lab/index';
 
 import { Day } from 'utils/CustomPickersDay';
+import { getUnlockedSteps, setOrderDetails } from 'store/reducers/main';
 
 export default function MetabollicTest({ successMessage, setSuccessMessage }) {
   const [one, setOne] = useState(false);
@@ -28,6 +29,7 @@ export default function MetabollicTest({ successMessage, setSuccessMessage }) {
   const [metabollicPlanningComplete, setMetabollicPlanningComplete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
+  const [dateError, setDateError] = useState();
 
   const { orderDetails, selectedOrder } = useSelector((state) => state.main);
   const { prepDates, hormorneTestComplete } = useSelector((state) => state.tests);
@@ -45,6 +47,11 @@ export default function MetabollicTest({ successMessage, setSuccessMessage }) {
     const day4 = dayjs(date2).subtract(4, 'day').format('MMMM DD, YYYY');
     const day5 = dayjs(date2).add(1, 'day').format('MMMM DD, YYYY');
 
+    if (![0, 1, 2].includes(dayjs(day5).day())) return setDateError('Test dates can only be Sunday, Monday and Tuesday');
+    if (dayjs(day1).isBefore(new Date())) return setDateError('Preparation dates cannot be in the past');
+
+    setDateError();
+
     dispatch(
       addPrepDates({
         ...prepDates,
@@ -59,10 +66,20 @@ export default function MetabollicTest({ successMessage, setSuccessMessage }) {
     setMetabollicPlanningComplete(true);
   };
 
+  const getNewOrderDetails = async () => {
+    try {
+      const response = await handleGetCustomerOrderById(selectedOrder);
+      dispatch(setOrderDetails(response?.data));
+      dispatch(getUnlockedSteps());
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
   const finishPlanning = async () => {
     try {
       setIsLoading(true);
-      const response = await handleFinishPlanning(selectedOrder?.orderId, {
+      const response = await handleFinishPlanning(selectedOrder, {
         hormoneSkipReminder1: true,
         hormoneSkipReminder2: true,
         hormoneTestSamplingDate: dayjs(prepDates?.hormoneTestSamplingDate).format('YYYY-MM-DD'),
@@ -75,6 +92,7 @@ export default function MetabollicTest({ successMessage, setSuccessMessage }) {
       });
       setIsLoading(false);
       setSuccessMessage(response?.data?.message);
+      await getNewOrderDetails();
     } catch (error) {
       setError(
         error?.data?.status === 500 && metabollicPlanningComplete && hormorneTestComplete
@@ -286,16 +304,24 @@ export default function MetabollicTest({ successMessage, setSuccessMessage }) {
                         </ListItem>
                       ))}
                     </List>
-                    <Typography variant="body2">Here is your plan</Typography>
-                    <List>
-                      {metabolicDates.map(({ name, date }, index) => {
-                        return (
-                          <ListItem key={index}>
-                            <Typography>{date ? `${name}: ${dayjs(date).format('MMMM DD, YYYY')}` : 'Choose proper dates'}</Typography>
-                          </ListItem>
-                        );
-                      })}
-                    </List>
+                    {dateError ? (
+                      <Typography variant="body2" color="error.main">
+                        {dateError}
+                      </Typography>
+                    ) : (
+                      <>
+                        <Typography variant="body2">Here is your plan</Typography>
+                        <List>
+                          {metabolicDates.map(({ name, date }, index) => {
+                            return (
+                              <ListItem key={index}>
+                                <Typography>{date ? `${name}: ${dayjs(date).format('MMMM DD, YYYY')}` : 'Choose proper dates'}</Typography>
+                              </ListItem>
+                            );
+                          })}
+                        </List>
+                      </>
+                    )}
                   </Box>
                 )}
               </Collapse>

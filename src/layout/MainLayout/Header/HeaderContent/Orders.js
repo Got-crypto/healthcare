@@ -12,12 +12,14 @@ const Orders = () => {
   const [customerOrders, setCustomerOrders] = useState([]);
   const dispatch = useDispatch();
 
+  const recent = customerOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
   const handleChange = async (e) => {
     setOrder(e.target.value);
     sessionStorage.setItem('userOrder', e.target.value);
     dispatch(selectOrder(JSON.parse(e.target.value)));
     try {
-      const response = await handleGetCustomerOrderById(JSON.parse(e.target.value).orderId);
+      const response = await handleGetCustomerOrderById(e.target.value);
       dispatch(setOrderDetails(response?.data));
       dispatch(getUnlockedSteps());
     } catch (error) {
@@ -44,7 +46,6 @@ const Orders = () => {
   }, [dispatch]);
   useEffect(() => {
     const selectRecentOrder = async () => {
-      const recent = customerOrders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       const userOrderExist = sessionStorage.getItem('userOrder') !== undefined ? true : false;
       if (!userOrderExist){
         sessionStorage.setItem('userOrder', JSON.stringify({orderId: recent[0].orderId, createdAt: recent[0].createdAt}));
@@ -55,22 +56,24 @@ const Orders = () => {
           dispatch(getUnlockedSteps());
         } catch (error) {
           console.log('error', error);
-          console.clear()
         } 
       } else {
         try {
-          const response = await handleGetCustomerOrderById(JSON.parse(sessionStorage.getItem('userOrder')).orderId);
+          const response = await handleGetCustomerOrderById(JSON.parse(sessionStorage.getItem('userOrder')));
           dispatch(setOrderDetails(response?.data));
           dispatch(getUnlockedSteps());
         } catch (error) {
           console.log('error', error);
-          console.clear()
         }
 
       }
     };
     selectRecentOrder();
-  }, [customerOrders, dispatch]);
+  }, [customerOrders, dispatch, recent]);
+
+  useEffect(() => {
+    setOrder(JSON.parse(sessionStorage.getItem('userOrder')));
+  }, [])
   return (
     <Box sx={{ width: '100%', ml: { xs: 2, md: 1 } }}>
       <FormControl variant="filled" sx={{ width: { xs: '100%', md: 224 } }}>
@@ -87,7 +90,7 @@ const Orders = () => {
           sx={{ backgroundColor: 'linear-gradient(232deg, rgba(247,194,228,1) 12%, rgba(53,192,233,1) 56%)' }}
         >
           {customerOrders?.map((order, index) => (
-            <MenuItem value={JSON.stringify({ orderId: order.orderId, date: order.createdAt })} key={`${index}-${order.orderId}`}>
+            <MenuItem value={order?.orderId} key={`${index}-${order.orderId}`}>
               {order?.orderId}
             </MenuItem>
           ))}

@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { Box, FormControlLabel, FormGroup, Grid, Switch, Typography } from '../../../node_modules/@mui/material/index';
+import { Box, Card, CardContent, FormControlLabel, FormGroup, Grid, Switch, Typography } from '../../../node_modules/@mui/material/index';
 import { ThumbUp } from '../../../node_modules/@mui/icons-material/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleConfirmPackageReceived, handleGetCustomerOrderById } from 'services/BeOne';
-import { setOrderDetails } from 'store/reducers/main';
+import { getUnlockedSteps, setOrderDetails } from 'store/reducers/main';
 import { LoadingButton } from '../../../node_modules/@mui/lab/index';
 import SectionWrapper from 'layout/MainLayout/HOC/SectionWrapper';
+import { formatDistance } from 'date-fns';
+import dayjs from 'dayjs';
 
 function KitArrival() {
   const { orderDetails, selectedOrder } = useSelector((state) => state.main);
@@ -18,10 +20,28 @@ function KitArrival() {
   };
   const stepTwoData = orderDetails && orderDetails[1];
 
+  const completion = () => {
+    let completedAt, completedIn, jsx;
+    try {
+      completedIn = formatDistance(0, parseInt(stepTwoData?.data?.completedIn));
+      completedAt = dayjs(stepTwoData?.data?.completedAt).format('MMMM DD, YYYY');
+    } catch {
+      console.log('completion time unavailable');
+    } finally {
+      if (completedAt && completedIn) {
+        jsx = `completed in ${completedIn} at ${completedAt}`;
+      } else {
+        jsx = `completed`;
+      }
+    }
+    return jsx;
+  };
+
   const getNewOrderDetails = async () => {
     try {
-      const response = await handleGetCustomerOrderById(selectedOrder?.orderId);
+      const response = await handleGetCustomerOrderById(selectedOrder);
       dispatch(setOrderDetails(response?.data));
+      dispatch(getUnlockedSteps());
     } catch (error) {
       console.log('error', error);
     }
@@ -30,7 +50,7 @@ function KitArrival() {
   const confirmPackageReceived = async () => {
     try {
       setIsLoading(true);
-      const response = await handleConfirmPackageReceived(selectedOrder?.orderId);
+      const response = await handleConfirmPackageReceived(selectedOrder);
       await getNewOrderDetails();
       setSuccessMessage(response?.data?.message);
       setIsLoading(false);
@@ -44,7 +64,7 @@ function KitArrival() {
     <>
       <Grid marginTop={10} item xs={12}>
         <span id="kit-arrival" />
-        <Box sx={{ flex: 'wrap' }}>
+        <Box sx={{ flex: 'wrap', width: '100%' }}>
           <Typography variant="h2" color="textPrimary">
             Kit Arrival
           </Typography>
@@ -90,6 +110,25 @@ function KitArrival() {
             ) : stepTwoData?.status.toLowerCase() === 'done' || successMessage ? (
               <>
                 <Typography sx={{ color: 'success.main' }}>Packages delivered!</Typography>
+                <Box sx={{ width: '100%' }}>
+                  <Card sx={{ width: '100%' }}>
+                    <CardContent>
+                      <Typography variant="h5" component="div">
+                        {stepTwoData?.data?.awbNumber}
+                      </Typography>
+                      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                        {stepTwoData?.data?.awbStatus}
+                      </Typography>
+                      <Typography sx={{ mb: 1.5 }}>Package Recepient Status: {stepTwoData?.data?.packageReceiptStatus}</Typography>
+                      <Typography sx={{ mb: 1.5 }}>
+                        Package Recepient Status Date: {dayjs(stepTwoData?.data?.packageReceiptStatusDate).format('MMMM DD, YYYY')}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        {completion()}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Box>
               </>
             ) : null}
           </>

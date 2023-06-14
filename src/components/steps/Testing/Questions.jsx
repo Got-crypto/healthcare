@@ -21,8 +21,9 @@ import { motion } from 'framer-motion';
 import { QuestionsUtils, additionalQuestions } from 'utils/TestingQuestions';
 import { useSelector } from '../../../../node_modules/react-redux/es/exports';
 import { useEffect } from 'react';
-import { handleOverallSampling } from 'services/BeOne';
+import { handleGetCustomerOrderById, handleOverallSampling } from 'services/BeOne';
 import { LoadingButton } from '../../../../node_modules/@mui/lab/index';
+import { getUnlockedSteps, setOrderDetails } from 'store/reducers/main';
 
 export function ToggleReplies({ response, setAdditionalQuestionsActivated, setKitsPackages, setContactForm }) {
   const [reply, setReply] = useState('');
@@ -101,14 +102,25 @@ export default function Testing() {
     setMarked(newMarked);
   };
 
+  const getNewOrderDetails = async () => {
+    try {
+      const response = await handleGetCustomerOrderById(selectedOrder);
+      dispatch(setOrderDetails(response?.data));
+      dispatch(getUnlockedSteps());
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
   const overallCompleteSampling = async () => {
     try {
       setIsLoading(true);
-      const response = await handleOverallSampling(selectedOrder?.orderId, true, true, ['']);
+      const response = await handleOverallSampling(selectedOrder, true, true, ['']);
       setIsLoading(false);
       console.log('response', response);
       setSuccessMessage(response?.data?.message);
       setErrorMessage();
+      await getNewOrderDetails();
     } catch (error) {
       setIsLoading(false);
       console.log('error', error);

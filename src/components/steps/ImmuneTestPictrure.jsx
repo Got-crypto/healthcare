@@ -1,4 +1,4 @@
-import { handleUploadPicture } from 'services/BeOne';
+import { handleGetCustomerOrderById, handleUploadPicture } from 'services/BeOne';
 import { Box, Button, Grid, Typography } from '../../../node_modules/@mui/material/index';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -9,6 +9,7 @@ import SectionWrapper from 'layout/MainLayout/HOC/SectionWrapper';
 import { baseUrl } from 'store/beOneApi';
 import handleArrayBuffer from 'utils/handleArrayBuffer';
 import axios from '../../../node_modules/axios/index';
+import { getUnlockedSteps, setOrderDetails } from 'store/reducers/main';
 
 const FileInput = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -39,15 +40,26 @@ const FileInput = () => {
     event.preventDefault();
   };
 
+  const getNewOrderDetails = async () => {
+    try {
+      const response = await handleGetCustomerOrderById(selectedOrder);
+      dispatch(setOrderDetails(response?.data));
+      dispatch(getUnlockedSteps());
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
   const uploadImmuneTestPicture = async () => {
     const formData = new FormData();
     try {
       setIsLoading(true);
       const resized = await resizeImage(selectedFile, 800, 800, 0.7);
       formData.append('file', resized);
-      const response = await handleUploadPicture(selectedOrder?.orderId, false, formData);
+      const response = await handleUploadPicture(selectedOrder, false, formData);
       setIsLoading(false);
       setErrorMessage();
+      await getNewOrderDetails();
       setSuccessMessage(response?.data?.message);
       console.log('first', response);
     } catch (error) {

@@ -4,10 +4,10 @@ import { Box, Paper } from '../../../../../node_modules/@mui/material/index';
 export default function OrderInfo() {
   const { selectedOrder } = useSelector((state) => state.main);
   return (
-    <Box sx={{ width: '100%', ml: { xs: 0, md: 1 } }}>
+    <Box sx={{ width: '100%'}}>
       {selectedOrder ? (
         <Paper sx={{ p: 1, backgroundColor: 'transparent', color: 'text.primary' }} elevation={1}>
-          Selected Order: {selectedOrder?.orderId}
+          Selected Order: {selectedOrder}
         </Paper>
       ) : (
         <Paper sx={{ p: 1, backgroundColor: 'transparent', color: 'text.primary' }} elevation={1}>
