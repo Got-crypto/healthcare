@@ -35,8 +35,8 @@ const Orders = () => {
         const recent = response?.data?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         const userOrderExist = sessionStorage.getItem('userOrder') || null;
         if (!userOrderExist){
-          sessionStorage.setItem('userOrder', JSON.stringify({orderId: recent[0].orderId, createdAt: recent[0].createdAt}));
-          dispatch(selectOrder(recent[0]));
+          sessionStorage.setItem('userOrder', recent[0].orderId);
+          dispatch(selectOrder(recent[0]?.orderId));
         }
       } catch (error) {
         console.log('error', error);
@@ -48,7 +48,7 @@ const Orders = () => {
     const selectRecentOrder = async () => {
       const userOrderExist = sessionStorage.getItem('userOrder') !== undefined ? true : false;
       if (!userOrderExist){
-        sessionStorage.setItem('userOrder', JSON.stringify({orderId: recent[0].orderId, createdAt: recent[0].createdAt}));
+        sessionStorage.setItem('userOrder', recent[0].orderId);
         dispatch(selectOrder(recent[0]));
         try {
           const response = await handleGetCustomerOrderById(recent[0]?.orderId);
@@ -56,7 +56,8 @@ const Orders = () => {
           dispatch(getUnlockedSteps());
         } catch (error) {
           console.log('error', error);
-        } 
+          console.clear()
+        }
       } else {
         try {
           const response = await handleGetCustomerOrderById(JSON.parse(sessionStorage.getItem('userOrder')));
@@ -64,6 +65,7 @@ const Orders = () => {
           dispatch(getUnlockedSteps());
         } catch (error) {
           console.log('error', error);
+          console.clear()
         }
 
       }

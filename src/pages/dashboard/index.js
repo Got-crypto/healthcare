@@ -1,9 +1,9 @@
 import { Grid } from '@mui/material';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { Box, Divider, Typography, useMediaQuery } from '../../../node_modules/@mui/material/index';
+import { Box, Divider, Typography, useMediaQuery } from '@mui/material';
 import { Components } from 'store/Components';
-import { useTheme } from '../../../node_modules/@mui/styles/index';
+import { useTheme } from '@mui/styles';
 import { useEffect } from 'react';
 import { createUserSession } from 'utils/handleUserStorage';
 import { setAuthUserDetails } from 'store/reducers/main';

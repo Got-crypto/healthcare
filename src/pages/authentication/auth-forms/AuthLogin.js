@@ -52,7 +52,6 @@ const AuthLogin = () => {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      setDisableButton(false);
       console.log('error', error);
     }
   }
