@@ -56,7 +56,7 @@ const Orders = () => {
           dispatch(getUnlockedSteps());
         } catch (error) {
           console.log('error', error);
-          console.clear()
+          // console.clear()
         }
       } else {
         try {
@@ -65,7 +65,7 @@ const Orders = () => {
           dispatch(getUnlockedSteps());
         } catch (error) {
           console.log('error', error);
-          console.clear()
+          // console.clear()
         }
 
       }

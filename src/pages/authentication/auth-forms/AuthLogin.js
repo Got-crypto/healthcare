@@ -22,11 +22,10 @@ import { Formik } from 'formik';
 import AnimateButton from 'components/@extended/AnimateButton';
 
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
-import { baseUrl } from 'store/beOneApi';
-import axios from '../../../../node_modules/axios/index';
 
 import logo from '../../../assets/images/Logo-header.png';
 import { LoadingButton } from '../../../../node_modules/@mui/lab/index';
+import { API } from 'utils/api';
 
 const AuthLogin = () => {
   const [checked, setChecked] = useState(false);
@@ -44,7 +43,7 @@ const AuthLogin = () => {
   async function loginUser(email, password) {
     try {
       setIsLoading(true);
-      const response = await axios.post(`${baseUrl}/auth`, { email, password });
+      const response = await API.post(`api/auth`, { email, password });
       localStorage.setItem('authUser', JSON.stringify(response?.data));
       if (response?.status === 200) {
         location.reload();

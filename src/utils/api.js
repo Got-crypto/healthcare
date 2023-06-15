@@ -1,7 +1,7 @@
 import axios from '../../node_modules/axios/index';
 
 const _instance = axios.create({
-  baseURL: 'https://2f74-2405-201-4036-c8bc-a52b-6f3c-ea5f-52c1.ngrok-free.app/'
+  baseURL: 'https://6578-2405-201-4036-c8bc-cc56-51b5-d2a8-da8f.ngrok-free.app/'
 });
 
 const globalData = {};
