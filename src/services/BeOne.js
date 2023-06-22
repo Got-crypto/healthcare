@@ -1,7 +1,7 @@
+import axios from 'axios';
 import { baseUrl } from 'store/beOneApi';
 import { API } from 'utils/api';
 import handleArrayBuffer from 'utils/handleArrayBuffer';
-import axios from 'axios';
 
 export async function handleGetUser() {
   const response = await API.get('api/user');
@@ -83,6 +83,22 @@ export async function handleOverallSampling(id, overAllSamplingStatus, overAllPr
     overallSamplingStatus: overAllSamplingStatus ? 'Y' : 'N',
     overAllPrepStatus: overAllPrepStatus ? 'Y' : 'N',
     reorderData: reorderData
+  });
+
+  return response;
+}
+
+export async function handlePopulateSchema() {
+  const response = await API.get('api/questionnaires?query=all');
+
+  return response;
+}
+
+export async function handleSubmitQuestions(id, answers) {
+  const response = await API.post(`api/dashboard/${id}/complete-questionnaire`, {
+    answers: {
+      answers
+    }
   });
 
   return response;

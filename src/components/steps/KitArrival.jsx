@@ -1,13 +1,13 @@
+import { formatDistance } from 'date-fns';
+import dayjs from 'dayjs';
+import SectionWrapper from 'layout/MainLayout/HOC/SectionWrapper';
 import { useState } from 'react';
-import { Box, Card, CardContent, FormControlLabel, FormGroup, Grid, Switch, Typography } from '../../../node_modules/@mui/material/index';
-import { ThumbUp } from '../../../node_modules/@mui/icons-material/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleConfirmPackageReceived, handleGetCustomerOrderById } from 'services/BeOne';
 import { getUnlockedSteps, setOrderDetails } from 'store/reducers/main';
+import { ThumbUp } from '../../../node_modules/@mui/icons-material/index';
 import { LoadingButton } from '../../../node_modules/@mui/lab/index';
-import SectionWrapper from 'layout/MainLayout/HOC/SectionWrapper';
-import { formatDistance } from 'date-fns';
-import dayjs from 'dayjs';
+import { Box, Card, CardContent, FormControlLabel, FormGroup, Grid, Switch, Typography } from '../../../node_modules/@mui/material/index';
 
 function KitArrival() {
   const { orderDetails, selectedOrder } = useSelector((state) => state.main);
@@ -33,6 +33,7 @@ function KitArrival() {
       } else {
         jsx = `completed`;
       }
+      console.clear();
     }
     return jsx;
   };
