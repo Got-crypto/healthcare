@@ -7,10 +7,10 @@ const SectionWrapper = (Component, id, reverse) =>
   function HOC() {
     return (
       <motion.div
-        whileInView={{ opacity: [0, 0, 1], y: [100, 50, 0] }}
+        whileInView={{ opacity: [0, 0, 1], y: [80, 30, 0] }}
         initial={{ y: 100, opacity: 0 }}
         layout
-        transition={{ duration: 0.7 }}
+        transition={{ duration: 0.3 }}
         style={{ padding: '5vh 0' }}
       >
         <span id={id} />

@@ -27,7 +27,9 @@ function HealthQuestionare() {
         if (component === 'sub-form') {
           const selectedFields = fields.filter((checkbox) => value[checkbox.name]);
 
-          return selectedFields.map((field) => field.label);
+          const finalSelectedAnswers = selectedFields.map((field) => field.label);
+        
+          return finalSelectedAnswers.length === 0 ? 'none' : finalSelectedAnswers;
         }
 
         return value[name];
@@ -40,6 +42,7 @@ function HealthQuestionare() {
     });
 
     const answers = submittedForm.filter(({ answer }) => answer !== null && answer !== undefined);
+    console.log('answers', answers);
 
     if (answers.length === schema.fields.length) {
       setFormValidation();

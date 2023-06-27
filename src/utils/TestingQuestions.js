@@ -1,5 +1,5 @@
-import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import dayjs from 'dayjs';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import { useSelector } from 'react-redux';
 
 dayjs.extend(isSameOrAfter);
@@ -8,6 +8,7 @@ export function QuestionsUtils() {
   const today = new Date();
   const { orderDetails } = useSelector((state) => state.main);
   const testingData = orderDetails && orderDetails[3]?.data;
+  console.log('testingData', testingData);
   const isYesterdayOrTomorrow = (day, forward) => {
     if (forward) {
       return dayjs(day).isSameOrAfter(today);
@@ -17,13 +18,17 @@ export function QuestionsUtils() {
   };
 
   const metabolicStatus = testingData?.StandardPackageMetabolicPrep__customerConfirmationStatus === 'Y' ? true : false;
+  const metabolicStatusIsNull = testingData?.StandardPackageMetabolicPrep__customerConfirmationStatus === null;
   const hormoneStatus = testingData?.StandardPackageHormonePrep__customerConfirmationStatus === 'Y' ? true : false;
+  const hormoneStatusIsNull = testingData?.StandardPackageHormonePrep__customerConfirmationStatus === null;
   const metabolicDate = testingData?.StandardPackageMetabolicPrep__customerConfirmationDate;
   const hormoneDate = testingData?.StandardPackageHormonePrep__customerConfirmationDate;
   const metabolicSampleDate = testingData?.StandardPackageMetabolicSampleCollect__customerConfirmationDate;
   const hormoneSampleDate = testingData?.StandardPackageHormoneSampleCollect__customerConfirmationDate;
   const hormoneSampleStatus = testingData?.StandardPackageHormoneSampleCollect__customerConfirmationStatus === 'Y' ? true : false;
+  const hormoneSampleStatusIsNull = testingData?.StandardPackageHormoneSampleCollect__customerConfirmationStatus === null;
   const metabollicSampleStatus = testingData?.StandardPackageMetabolicSampleCollect__customerConfirmationStatus === 'Y' ? true : false;
+  const metabollicSampleStatusIsNull = testingData?.StandardPackageMetabolicSampleCollect__customerConfirmationStatus === null;
   const metabolicDateAfterToday = isYesterdayOrTomorrow(metabolicSampleDate, true);
   const metabolicDateBeforeToday = isYesterdayOrTomorrow(metabolicSampleDate, false);
   const hormoneDateBeforeToday = isYesterdayOrTomorrow(hormoneSampleDate, false);
@@ -32,6 +37,12 @@ export function QuestionsUtils() {
   const completeStatus = metabolicStatus && metabollicSampleStatus && hormoneStatus && hormoneSampleStatus;
 
   const questions = [
+    {
+      content: `You have not confirmed yet if you are prepared for the Metabolic test on ${dayjs(metabolicDate).format(
+        'MMMM DD, YYYY'
+      )}. Please check you email for a reminder. Select "Yes" or "No" depending on how your test preparation happened.  `,
+      condition: metabolicStatusIsNull
+    },
     {
       content: `You confirmed that you are ready to go ahead with the sampling of Metabolic test on ${dayjs(metabolicDate).format(
         'MMMM DD, YYYY'
@@ -43,6 +54,12 @@ export function QuestionsUtils() {
         'MMMM DD, YYYY'
       )}`,
       condition: hormoneStatus
+    },
+    {
+      content: `You have not confirmed yet if you are prepared for the Hormone test on ${dayjs(hormoneDate).format(
+        'MMMM DD, YYYY'
+      )}. Please check you email for a reminder. Select "Yes" or "No" depending on how your test preparation happened.  `,
+      condition: hormoneStatusIsNull
     },
     {
       content: 'It seems that you need to reschedule your sampling for Metabolic Test?',
@@ -67,6 +84,12 @@ export function QuestionsUtils() {
       condition: !hormoneStatus
     },
     {
+      content: `Your Metabolic sampling date is on ${dayjs(metabolicSampleDate).format(
+        'MMMM DD, YYYY'
+      )} You can confirm only after that date. Please check you email for a reminder. Select "Yes" or "No" depending on how your test sampling happened.`,
+      condition: metabollicSampleStatusIsNull
+    },
+    {
       content: `You confirmed on ${dayjs(metabolicSampleDate).format(
         'MMMM DD, YYYY'
       )} that sampling of Metabolic test was successful. Great!!`,
@@ -75,6 +98,12 @@ export function QuestionsUtils() {
     {
       content: `You confirmed on ${dayjs(hormoneSampleDate).format('MMMM DD, YYYY')} that sampling of Hormone test was successful. Great!!`,
       condition: hormoneSampleStatus
+    },
+    {
+      content: `Your Hormone sampling date is on ${dayjs(hormoneSampleDate).format(
+        'MMMM DD, YYYY'
+      )} You can confirm only after that date. Please check you email for a reminder. Select "Yes" or "No" depending on how your test sampling happened.`,
+      condition: hormoneSampleStatusIsNull
     },
     {
       content: 'It seems that you ran into some problems with sampling of Metabolic test correct?',
