@@ -12,18 +12,18 @@ import {
   Typography
 } from '../../../../node_modules/@mui/material/index';
 // import { useSelector } from 'react-redux';
-import { Info, Inventory, Send, ThumbUp } from '../../../../node_modules/@mui/icons-material/index';
-import { useState } from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { Info, Inventory, Send, ThumbUp } from '../../../../node_modules/@mui/icons-material/index';
 
-import { QuestionsUtils, additionalQuestions } from 'utils/TestingQuestions';
-import { useSelector } from '../../../../node_modules/react-redux/es/exports';
 import { useEffect } from 'react';
 import { handleGetCustomerOrderById, handleOverallSampling } from 'services/BeOne';
-import { LoadingButton } from '../../../../node_modules/@mui/lab/index';
 import { getUnlockedSteps, setOrderDetails } from 'store/reducers/main';
+import { QuestionsUtils, additionalQuestions } from 'utils/TestingQuestions';
+import { LoadingButton } from '../../../../node_modules/@mui/lab/index';
+import { useSelector } from '../../../../node_modules/react-redux/es/exports';
 
 export function ToggleReplies({ response, setAdditionalQuestionsActivated, setKitsPackages, setContactForm }) {
   const [reply, setReply] = useState('');
@@ -237,7 +237,7 @@ export default function Testing() {
         </>
       )}
 
-      {completeStatus && (
+      {!completeStatus && (
         <LoadingButton
           loading={isLoading}
           variant="contained"
@@ -245,7 +245,7 @@ export default function Testing() {
           startIcon={<ThumbUp />}
           onClick={overallCompleteSampling}
         >
-          Completed
+          Confirm Complete
         </LoadingButton>
       )}
       {successMessage && (

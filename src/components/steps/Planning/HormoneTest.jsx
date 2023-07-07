@@ -1,3 +1,10 @@
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Day } from 'utils/CustomPickersDay';
+import { CheckBoxRounded, ExpandLess, ExpandMore, ThumbUp } from '../../../../node_modules/@mui/icons-material/index';
 import {
   Accordion,
   AccordionDetails,
@@ -18,13 +25,6 @@ import {
   Switch,
   Typography
 } from '../../../../node_modules/@mui/material/index';
-import { CheckBoxRounded, ExpandLess, ExpandMore, ThumbUp } from '../../../../node_modules/@mui/icons-material/index';
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import dayjs from 'dayjs';
-import { Day } from 'utils/CustomPickersDay';
 
 import { addPrepDates, setCompleteHormoneTest } from 'store/reducers/tests';
 
@@ -516,16 +516,18 @@ export default function HormoneTest() {
               </Grid>
             )}
           </Grid>
-          <Button
-            fullWidth
-            disabled={!hormoneTestComplete}
-            onClick={checkHormoneComplete}
-            startIcon={<ThumbUp />}
-            sx={{ mx: 'auto', mt: 5, backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' } }}
-            variant="contained"
-          >
-            Proceed
-          </Button>
+          {!planningComplete && (
+            <Button
+              fullWidth
+              disabled={!hormoneTestComplete}
+              onClick={checkHormoneComplete}
+              startIcon={<ThumbUp />}
+              sx={{ mx: 'auto', mt: 5, backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' } }}
+              variant="contained"
+            >
+              Proceed
+            </Button>
+          )}
           <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
             <Typography sx={{ color: hormoneTestComplete || planningComplete ? 'success.main' : 'warning.main' }} variant="caption">
               {planningComplete ? 'Complete' : !hormoneTestComplete ? 'Please finish all steps to proceed' : null}

@@ -1,3 +1,11 @@
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { handleFinishPlanning, handleGetCustomerOrderById } from 'services/BeOne';
+import { addPrepDates } from 'store/reducers/tests';
+import { ExpandLess, ExpandMore, ThumbUp } from '../../../../node_modules/@mui/icons-material/index';
+import { LoadingButton } from '../../../../node_modules/@mui/lab/index';
 import {
   Accordion,
   AccordionDetails,
@@ -9,17 +17,9 @@ import {
   ListItem,
   Typography
 } from '../../../../node_modules/@mui/material/index';
-import { ExpandLess, ExpandMore, ThumbUp } from '../../../../node_modules/@mui/icons-material/index';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import dayjs from 'dayjs';
-import { addPrepDates } from 'store/reducers/tests';
-import { handleFinishPlanning, handleGetCustomerOrderById } from 'services/BeOne';
-import { LoadingButton } from '../../../../node_modules/@mui/lab/index';
 
-import { Day } from 'utils/CustomPickersDay';
 import { getUnlockedSteps, setOrderDetails } from 'store/reducers/main';
+import { Day } from 'utils/CustomPickersDay';
 
 export default function MetabollicTest({ successMessage, setSuccessMessage }) {
   const [one, setOne] = useState(false);
@@ -335,17 +335,19 @@ export default function MetabollicTest({ successMessage, setSuccessMessage }) {
               prepDates?.metabolicSamplingSelectedDay
             ).format('MMMM DD, YYYY')}`}</Typography>
           )}
-          <LoadingButton
-            fullWidth
-            loading={isLoading}
-            disabled={planningComplete ? false : metabollicPlanningComplete && hormorneTestComplete ? false : true}
-            startIcon={<ThumbUp />}
-            sx={{ mx: 'auto', backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' }, mt: 5 }}
-            variant="contained"
-            onClick={finishPlanning}
-          >
-            Finish Planning
-          </LoadingButton>
+          {!planningComplete && (
+            <LoadingButton
+              fullWidth
+              loading={isLoading}
+              disabled={planningComplete ? false : metabollicPlanningComplete && hormorneTestComplete ? false : true}
+              startIcon={<ThumbUp />}
+              sx={{ mx: 'auto', backgroundColor: '#45d9c9', ':hover': { backgroundColor: '#45c0d9' }, mt: 5 }}
+              variant="contained"
+              onClick={finishPlanning}
+            >
+              Finish Planning
+            </LoadingButton>
+          )}
           <Box sx={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
             {successMessage && (
               <Typography variant="body1" sx={{ color: 'success.main' }}>

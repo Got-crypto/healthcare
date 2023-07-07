@@ -11,10 +11,8 @@ function TestingInstructions() {
             Testing Instructions
           </Typography>
           <Typography sx={{ mt: 2 }}>
-            The kits you received come with fully comprehensive instructions. For practicality we are providing a digital version of them{' '}
-            <Typography component="span" sx={{ cursor: 'pointer', ':hover': { textDecoration: 'underline' }, color: 'primary.main' }}>
-              HERE
-            </Typography>
+            The kits you received come with fully comprehensive instructions. For practicality we are providing a digital version of them
+            here.
           </Typography>
           <Typography sx={{ mt: 2 }}>And in addition we have made video companions to the instructions.</Typography>
           <Typography sx={{ mt: 2, color: 'warning.main' }}>

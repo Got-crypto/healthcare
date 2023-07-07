@@ -8,7 +8,6 @@ export function QuestionsUtils() {
   const today = new Date();
   const { orderDetails } = useSelector((state) => state.main);
   const testingData = orderDetails && orderDetails[3]?.data;
-  console.log('testingData', testingData);
   const isYesterdayOrTomorrow = (day, forward) => {
     if (forward) {
       return dayjs(day).isSameOrAfter(today);
