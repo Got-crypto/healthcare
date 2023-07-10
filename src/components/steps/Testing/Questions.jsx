@@ -22,7 +22,6 @@ import { useEffect } from 'react';
 import { handleGetCustomerOrderById, handleOverallSampling } from 'services/BeOne';
 import { getUnlockedSteps, setOrderDetails } from 'store/reducers/main';
 import { QuestionsUtils, additionalQuestions } from 'utils/TestingQuestions';
-import { LoadingButton } from '../../../../node_modules/@mui/lab/index';
 import { useSelector } from '../../../../node_modules/react-redux/es/exports';
 
 export function ToggleReplies({ response, setAdditionalQuestionsActivated, setKitsPackages, setContactForm }) {
@@ -84,10 +83,12 @@ export default function Testing() {
   const [contactForm, setContactForm] = useState(false);
   const { questions, completeStatus } = QuestionsUtils();
   const [marked, setMarked] = useState([0]);
-  const { selectedOrder } = useSelector(({ main }) => main);
+  const { selectedOrder, orderDetails } = useSelector(({ main }) => main);
   const [successMessage, setSuccessMessage] = useState();
   const [errorMessage, setErrorMessage] = useState();
-  const [isLoading, setIsLoading] = useState(false);
+
+  const testingData = orderDetails && orderDetails[3];
+  const testingComplete = testingData?.status.toLowerCase() === 'done' ? !0 : !1;
 
   const handleToggle = (value) => () => {
     const currentIndex = marked.indexOf(value);
@@ -114,15 +115,11 @@ export default function Testing() {
 
   const overallCompleteSampling = async () => {
     try {
-      setIsLoading(true);
       const response = await handleOverallSampling(selectedOrder, true, true, ['']);
-      setIsLoading(false);
-      console.log('response', response);
       setSuccessMessage(response?.data?.message);
       setErrorMessage();
       await getNewOrderDetails();
     } catch (error) {
-      setIsLoading(false);
       console.log('error', error);
       setErrorMessage(error?.data?.status === 500 ? 'Sorry, This step is not active' : error?.data?.errors);
     }
@@ -133,6 +130,18 @@ export default function Testing() {
     setKitsPackages(false);
     setContactForm(false);
   }, [selectedOrder]);
+
+  useEffect(() => {
+    const handleOverallCompleteSampling = async () => {
+      if (completeStatus && testingComplete) {
+        await overallCompleteSampling();
+      }
+    };
+
+    handleOverallCompleteSampling();
+
+    // eslint-disable-next-line
+  }, [completeStatus]);
 
   return (
     <motion.div layout style={{ width: '100%' }}>
@@ -235,18 +244,6 @@ export default function Testing() {
             Confirm
           </Button>
         </>
-      )}
-
-      {!completeStatus && (
-        <LoadingButton
-          loading={isLoading}
-          variant="contained"
-          sx={{ backgroundColor: '#45d9c9', mt: 2, ':hover': { backgroundColor: '#45c0d9' } }}
-          startIcon={<ThumbUp />}
-          onClick={overallCompleteSampling}
-        >
-          Confirm Complete
-        </LoadingButton>
       )}
       {successMessage && (
         <Typography variant="body1" sx={{ color: 'success.main', mt: 1 }}>
