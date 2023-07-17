@@ -33,7 +33,6 @@ function KitArrival() {
       } else {
         jsx = `completed`;
       }
-      console.clear();
     }
     return jsx;
   };

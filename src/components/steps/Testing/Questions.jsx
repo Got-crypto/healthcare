@@ -19,6 +19,7 @@ import { useState } from 'react';
 import { Info, Inventory, Send, ThumbUp } from '../../../../node_modules/@mui/icons-material/index';
 
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { handleGetCustomerOrderById, handleOverallSampling } from 'services/BeOne';
 import { getUnlockedSteps, setOrderDetails } from 'store/reducers/main';
 import { QuestionsUtils, additionalQuestions } from 'utils/TestingQuestions';
@@ -87,6 +88,8 @@ export default function Testing() {
   const [successMessage, setSuccessMessage] = useState();
   const [errorMessage, setErrorMessage] = useState();
 
+  const dispatch = useDispatch();
+
   const testingData = orderDetails && orderDetails[3];
   const testingComplete = testingData?.status.toLowerCase() === 'done' ? !0 : !1;
 
@@ -133,7 +136,7 @@ export default function Testing() {
 
   useEffect(() => {
     const handleOverallCompleteSampling = async () => {
-      if (completeStatus && testingComplete) {
+      if (completeStatus && !testingComplete) {
         await overallCompleteSampling();
       }
     };

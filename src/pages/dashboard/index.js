@@ -1,17 +1,19 @@
 import { Grid } from '@mui/material';
 
-import { useSelector, useDispatch } from 'react-redux';
 import { Box, Divider, Typography, useMediaQuery } from '@mui/material';
-import { Components } from 'store/Components';
 import { useTheme } from '@mui/styles';
 import { useEffect } from 'react';
-import { createUserSession } from 'utils/handleUserStorage';
+import { useDispatch, useSelector } from 'react-redux';
+import { Components } from 'store/Components';
 import { setAuthUserDetails } from 'store/reducers/main';
+import { createUserSession } from 'utils/handleUserStorage';
 
 const StepComponent = ({ Component }) => <Box>{Component}</Box>;
 
 const DashboardDefault = () => {
-  const { unlockedSteps, selectedOrder } = useSelector((state) => state.main);
+  const { unlockedSteps, selectedOrder, orderDetails } = useSelector((state) => state.main);
+  const lastStep = orderDetails && orderDetails[7];
+
   const dispatch = useDispatch();
   const theme = useTheme();
   const mdx = useMediaQuery(theme.breakpoints.down('mdx'));
@@ -50,7 +52,11 @@ const DashboardDefault = () => {
         <Box sx={{ mt: 30 }}>
           <Divider>
             <Typography variant="caption" sx={{ color: 'secondary.main' }}>
-              Please finish previous step to proceed to next step
+              {lastStep
+                ? lastStep.status?.toLowerCase() === 'done'
+                  ? `Current order "${selectedOrder}" is finished successfully`
+                  : 'Please finish previous step to proceed to next step'
+                : 'Loading'}
             </Typography>
           </Divider>
         </Box>

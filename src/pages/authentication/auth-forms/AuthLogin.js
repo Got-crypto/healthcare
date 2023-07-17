@@ -7,25 +7,26 @@ import {
   FormControlLabel,
   FormHelperText,
   Grid,
-  Link,
   IconButton,
   InputAdornment,
   InputLabel,
+  Link,
   OutlinedInput,
   Stack,
   Typography
 } from '@mui/material';
 
-import * as Yup from 'yup';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
 
 import AnimateButton from 'components/@extended/AnimateButton';
 
-import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
+import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 
-import logo from '../../../assets/images/Logo-header.png';
+import axios from 'axios';
+import { baseUrl } from 'store/beOneApi';
 import { LoadingButton } from '../../../../node_modules/@mui/lab/index';
-import { API } from 'utils/api';
+import logo from '../../../assets/images/Logo-header.png';
 
 const AuthLogin = () => {
   const [checked, setChecked] = useState(false);
@@ -43,7 +44,7 @@ const AuthLogin = () => {
   async function loginUser(email, password) {
     try {
       setIsLoading(true);
-      const response = await API.post(`api/auth`, { email, password });
+      const response = await axios.post(`${baseUrl}/auth`, { email, password });
       localStorage.setItem('authUser', JSON.stringify(response?.data));
       if (response?.status === 200) {
         location.reload();

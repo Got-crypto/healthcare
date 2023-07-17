@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { useRef, useState } from 'react';
 
-import { useTheme } from '@mui/material/styles';
 import {
   Avatar,
   Box,
@@ -17,15 +16,15 @@ import {
   Tabs,
   Typography
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
-import MainCard from 'components/MainCard';
 import Transitions from 'components/@extended/Transitions';
+import MainCard from 'components/MainCard';
 import ProfileTab from './ProfileTab';
-import SettingTab from './SettingTab';
 
-import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
-import { useDispatch, useSelector } from 'react-redux';
+import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { createUserSession } from 'utils/handleUserStorage';
 
 import { setAuthUserDetails } from 'store/reducers/main';
@@ -189,25 +188,10 @@ const Profile = () => {
                               label="Profile"
                               {...a11yProps(0)}
                             />
-                            <Tab
-                              sx={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                textTransform: 'capitalize'
-                              }}
-                              icon={<SettingOutlined style={{ marginBottom: 0, marginRight: '10px' }} />}
-                              label="Setting"
-                              {...a11yProps(1)}
-                            />
                           </Tabs>
                         </Box>
                         <TabPanel value={value} index={0} dir={theme.direction}>
                           <ProfileTab handleLogout={handleLogout} />
-                        </TabPanel>
-                        <TabPanel value={value} index={1} dir={theme.direction}>
-                          <SettingTab />
                         </TabPanel>
                       </>
                     )}

@@ -1,8 +1,7 @@
 import dashboard from './dashboard';
-import orderTabs from './orderTabs';
 
 const menuItems = {
-  items: [dashboard, orderTabs]
+  items: [dashboard]
 };
 
 export default menuItems;
